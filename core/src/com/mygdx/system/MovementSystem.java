@@ -6,8 +6,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
+import com.mygdx.components.SeekComponent;
+import com.mygdx.components.VelocityComponent;
 
 public class MovementSystem extends EntitySystem {
 
@@ -16,13 +20,16 @@ public class MovementSystem extends EntitySystem {
 	private ImmutableArray<Entity> entities;
 
 	private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+	private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
+	private ComponentMapper<SeekComponent> sm = ComponentMapper.getFor(SeekComponent.class);
+	private ComponentMapper<FleeComponent> fm = ComponentMapper.getFor(FleeComponent.class);
 
 	public MovementSystem() {
 	}
 
 	public void addedToEngine(Engine engine) {
 		// TODO: attache family rendercomponent
-		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class));
+		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class, VelocityComponent.class));		
 		System.out.println("MovementSystem added");
 	}
 
@@ -31,8 +38,7 @@ public class MovementSystem extends EntitySystem {
 			Entity entity = entities.get(i);
 			PositionComponent position = pm.get(entity);
 			updateVectors(entity, position);
-			setPositon();
-			
+			setPositon();			
 		}
 	}
 //SETs the Position after all Vectors are calculated
@@ -40,27 +46,51 @@ public class MovementSystem extends EntitySystem {
 		// TODO: generate resulting Vector
 
 	}
-
-	// TODO: Nik= center distance matchvc  Johann: seekflee
+	
 	private void updateVectors(Entity entity, PositionComponent position) {
 		
 		// Pseudocode Boid: http://www.kfish.org/boids/pseudocode.html
 		Vector2 vectorBoidCenter = calculateVectorBoidCenter(entity, position);
 		Vector2 vectorBoidDistance = calculateVectorBoidDistance(entity, position);
 		Vector2 vectorBoidMatchVC = calculateVectorBoidMatchVc();
-		Vector2 vectorSeekorFlee = calculateVectorSeekFlee();// deiner
-
+		Vector2 vectorSeekorFlee = calculateVectorSeekFlee(entity, position);		
 	}
 
-	private Vector2 calculateVectorSeekFlee() {
-		// TODO Auto-generated method stub
-		return null;
+	private Vector2 calculateVectorSeekFlee(Entity entity, PositionComponent positionComp) {
+		Vector2 result = new Vector2();
+		Vector2 position = positionComp.position;
+		Vector2 target = new Vector2(Gdx.input.getX(), Gdx.app.getGraphics().getHeight() - Gdx.input.getY());
+		SeekComponent seekComp = sm.get(entity);
+		FleeComponent fleeComp = fm.get(entity);
+		VelocityComponent velComp = vm.get(entity);
+		if(seekComp != null){
+			//Der Maus folgen			
+			Vector2 desired_velocity = target.sub(position).nor().scl(velComp.maxVelocity);
+			Vector2 steering = desired_velocity.sub(velComp.vectorVelocity);
+		    steering.clamp(0, velComp.maxForce);
+			//steering = steering / mass
+		    result = steering;
+		    pm.get(entity).position.x += result.x;
+			pm.get(entity).position.y += result.y;
+		}
+		else if(fleeComp != null){						
+			Vector2 desired_velocity = target.sub(position).nor().scl(velComp.maxVelocity * -1);
+			Vector2 steering = desired_velocity.sub(velComp.vectorVelocity);
+		    steering.clamp(0, velComp.maxForce);
+			//steering = steering / mass
+		    result = steering;
+		    pm.get(entity).position.x += result.x;
+			pm.get(entity).position.y += result.y;
+		}
+		//TODO:ARRIVAL
+		return result;
 	}
 
 	private Vector2 calculateVectorBoidMatchVc() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 	// DONE
 	private Vector2 calculateVectorBoidDistance(Entity entity, PositionComponent position) {
 		

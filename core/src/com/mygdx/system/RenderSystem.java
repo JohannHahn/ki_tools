@@ -16,10 +16,9 @@ public class RenderSystem extends EntitySystem {
 
     private ImmutableArray<Entity> entities;
     private SpriteBatch batch;
-    private ShapeRenderer shapeRenderer;
-    
+    private ShapeRenderer shapeRenderer;    
 
-    private ComponentMapper<com.mygdx.components.TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
+    //private ComponentMapper<com.mygdx.components.TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
     private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);    
 
     public RenderSystem(SpriteBatch batch) {
@@ -28,7 +27,7 @@ public class RenderSystem extends EntitySystem {
     }
 
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.getFor(TextureComponent.class, PositionComponent.class));
+        entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class));
         System.out.println("Rendersystem added");
                 
     }
@@ -39,7 +38,6 @@ public class RenderSystem extends EntitySystem {
             Entity entity = entities.get(i);
             PositionComponent positionComp = pm.get(entity);
             Vector2 position = positionComp.position;
-            TextureComponent texture = tm.get(entity);
             batch.begin();
             shapeRenderer.setAutoShapeType(true);
             shapeRenderer.begin();
