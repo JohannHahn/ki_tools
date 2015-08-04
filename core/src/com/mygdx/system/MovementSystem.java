@@ -30,7 +30,6 @@ public class MovementSystem extends EntitySystem {
 		for (int i = 0; i < entities.size(); ++i) {
 			Entity entity = entities.get(i);
 			PositionComponent position = pm.get(entity);
-
 			updateVectors(entity, position);
 			setPositon();
 			
@@ -66,7 +65,7 @@ public class MovementSystem extends EntitySystem {
 	private Vector2 calculateVectorBoidDistance(Entity entity, PositionComponent position) {
 		
 		Vector2 result = new Vector2();
-		Vector2 positionVectorBoid = new Vector2(position.x, position.y);
+		Vector2 positionVectorBoid = position.position;
 		boolean xDistanceToSmall=false;
 		boolean yDistanceToSmall=false;
 		float percentNearing = 70;
@@ -75,15 +74,15 @@ public class MovementSystem extends EntitySystem {
 		for (int i = 0; i < entities.size(); ++i) {
 			if (!entity.equals(entities.get(i))) {
 				
-				xDistanceToSmall=(OPTIMAL_BOID_DISTANCE*(-1))<(pm.get(entities.get(i)).x-positionVectorBoid.x) && (pm.get(entities.get(i)).x-positionVectorBoid.x)<OPTIMAL_BOID_DISTANCE;
-				yDistanceToSmall=(OPTIMAL_BOID_DISTANCE*(-1))<(pm.get(entities.get(i)).y-positionVectorBoid.y) && (pm.get(entities.get(i)).y-positionVectorBoid.y)<OPTIMAL_BOID_DISTANCE;
+				xDistanceToSmall=(OPTIMAL_BOID_DISTANCE*(-1))<(pm.get(entities.get(i)).position.x-positionVectorBoid.x) && (pm.get(entities.get(i)).position.x-positionVectorBoid.x)<OPTIMAL_BOID_DISTANCE;
+				yDistanceToSmall=(OPTIMAL_BOID_DISTANCE*(-1))<(pm.get(entities.get(i)).position.y-positionVectorBoid.y) && (pm.get(entities.get(i)).position.y-positionVectorBoid.y)<OPTIMAL_BOID_DISTANCE;
 				
 				if(xDistanceToSmall){
-					result.sub(pm.get(entities.get(i)).x-positionVectorBoid.x,0);
+					result.sub(pm.get(entities.get(i)).position.x-positionVectorBoid.x,0);
 				}
 				if(yDistanceToSmall)
 				{
-					result.sub(0, pm.get(entities.get(i)).y-positionVectorBoid.y);
+					result.sub(0, pm.get(entities.get(i)).position.y-positionVectorBoid.y);
 				}
 
 			}
@@ -91,8 +90,8 @@ public class MovementSystem extends EntitySystem {
 			result.y = result.y / percentNearing;
 			//if activeted in maipulats the position without using a vector
 			
-			pm.get(entity).x += result.x;
-			pm.get(entity).y += result.y;
+			pm.get(entity).position.x += result.x;
+			pm.get(entity).position.y += result.y;
 			
 		}
 		return result;
@@ -101,13 +100,13 @@ public class MovementSystem extends EntitySystem {
 	// DONE
 	private Vector2 calculateVectorBoidCenter(Entity entity, PositionComponent position) {
 
-		Vector2 positionVectorBoid = new Vector2(position.x, position.y);
+		Vector2 positionVectorBoid = position.position;
 		Vector2 result = new Vector2();
 		float percentNearing = 100;
 
 		for (int i = 0; i < entities.size(); ++i) {
 			if (!entity.equals(entities.get(i))) {
-				result.add(pm.get(entities.get(i)).x, pm.get(entities.get(i)).y);
+				result.add(pm.get(entities.get(i)).position.x, pm.get(entities.get(i)).position.y);
 
 			}
 
@@ -123,8 +122,8 @@ public class MovementSystem extends EntitySystem {
 
 		////if activeted in maipulats the position without using a vector
 		
-		pm.get(entity).x += result.x;
-		pm.get(entity).y += result.y;
+		pm.get(entity).position.x += result.x;
+		pm.get(entity).position.y += result.y;
 		
 		//System.out.println("x: " + pm.get(entity).x + "	y:" + pm.get(entity).y);
 		return result;

@@ -1,14 +1,14 @@
 package com.mygdx.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
 
 public class PositionComponent extends Component {
-	public float x = 0.0f;
-	public float y = 0.0f;
-//shoud be changed to a 2dvector
-	public PositionComponent() {}
+	public Vector2 position = null;
+	public PositionComponent() {
+		position = new Vector2(0, 0);
+	}
 	public PositionComponent(float x, float y) {
-		this.x = x;
-		this.y = y;
+		position = new Vector2(x,y);
 	}
 }

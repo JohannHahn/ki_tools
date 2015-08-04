@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.TextureComponent;
 
@@ -36,7 +37,8 @@ public class RenderSystem extends EntitySystem {
         
         for (int i = 0; i < entities.size(); ++i) {
             Entity entity = entities.get(i);
-            PositionComponent position = pm.get(entity);
+            PositionComponent positionComp = pm.get(entity);
+            Vector2 position = positionComp.position;
             TextureComponent texture = tm.get(entity);
             batch.begin();
             shapeRenderer.setAutoShapeType(true);
