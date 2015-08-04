@@ -7,8 +7,8 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.MainScreen.PositionComponent;
-import com.mygdx.game.MainScreen.TextureComponent;
+import com.mygdx.components.PositionComponent;
+import com.mygdx.components.TextureComponent;
 
 public class RenderSystem extends EntitySystem {
 
@@ -16,7 +16,7 @@ public class RenderSystem extends EntitySystem {
     private SpriteBatch batch;
     
 
-    private ComponentMapper<TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
+    private ComponentMapper<com.mygdx.components.TextureComponent> tm = ComponentMapper.getFor(TextureComponent.class);
     private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);    
 
     public RenderSystem(SpriteBatch batch) {
