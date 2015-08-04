@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.TextureComponent;
 import com.mygdx.system.MovementSystem;
+import com.mygdx.system.RenderSystem;
 
 public class MainScreen implements Screen {
     Engine engine;
@@ -33,6 +34,8 @@ public class MainScreen implements Screen {
         bild.add(new TextureComponent(text));
         this.game = game;   
         engine.addSystem(new MovementSystem());
+        engine.addSystem(new RenderSystem(game.batch));
+        engine.addEntity(bild);
     }
 
     @Override
@@ -43,9 +46,7 @@ public class MainScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        game.batch.begin();
-        game.batch.draw(bild.getComponent(TextureComponent.class).txt, 0, 0);
-        game.batch.end();
+        
         engine.update(delta);
         
         

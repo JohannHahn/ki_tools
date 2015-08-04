@@ -24,7 +24,8 @@ public class RenderSystem extends EntitySystem {
     }
 
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.getFor(TextureComponent.class, PositionComponent.class));
+         
+        entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class));
         System.out.println(entities.size());
                 
     }
