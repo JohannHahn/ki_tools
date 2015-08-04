@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.components.PositionComponent;
 
 public class MovementSystem extends EntitySystem {
@@ -17,6 +18,7 @@ public class MovementSystem extends EntitySystem {
     public MovementSystem() {}
 
     public void addedToEngine(Engine engine) {
+    	//TODO: attache family
         entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class));
     }
 
@@ -25,10 +27,54 @@ public class MovementSystem extends EntitySystem {
             Entity entity = entities.get(i);
             PositionComponent position = pm.get(entity);
 
-            position.x += 2 * deltaTime;
-            position.y += 2 * deltaTime;
+            updateVectors();
+            setPositon();
+            //kann am ende weg
+            position.x += 10 * deltaTime;
+            position.y += 10 * deltaTime;
         }
     }
+
+	private void setPositon() {
+		// TODO: generate resulting Vector
+		
+		
+	}
+
+	//TODO: Nik= center distance Johann:matchvc? seekflee
+	private void updateVectors() {
+		Vector2 vectorBoidCenter = calculateVectorBoidCenter();
+		Vector2 vectorBoidDistance = calculateVectorBoidDistance();
+		Vector2 vectorBoidMatchVC = calculateVectorBoidMatchVc();//kannst du den auch machen ??
+		Vector2 vectorSeekorFlee = calculateVectorSeekFlee();//deiner
+		
+		
+				
+				
+		
+	}
+
+	private Vector2 calculateVectorSeekFlee() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Vector2 calculateVectorBoidMatchVc() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Vector2 calculateVectorBoidDistance() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Vector2 calculateVectorBoidCenter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
+   
 
 }
 /*#include "../config/platform.h"
