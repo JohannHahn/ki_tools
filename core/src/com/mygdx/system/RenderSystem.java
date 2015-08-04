@@ -28,7 +28,7 @@ public class RenderSystem extends EntitySystem {
         System.out.println(entities.size());
                 
     }
-
+//
     public void update(float deltaTime) {
         
         for (int i = 0; i < entities.size(); ++i) {
