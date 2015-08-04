@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.system;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;

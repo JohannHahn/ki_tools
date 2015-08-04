@@ -21,9 +21,7 @@ public class MyGdxGame extends Game {
 		setScreen(new MainScreen(this));
 	}
 	
-	public class PositionComponent extends Component{
-	    
-	}
+	
 
 	@Override
 	public void render () {
