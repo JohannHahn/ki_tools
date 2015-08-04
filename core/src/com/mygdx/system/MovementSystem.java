@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.mygdx.game.MainScreen.PositionComponent;
+import com.mygdx.components.PositionComponent;
 
 public class MovementSystem extends EntitySystem {
 

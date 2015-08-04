@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.mygdx.components.PostionComponent;
+import com.mygdx.components.PositionComponent;
 import com.mygdx.components.TextureComponent;
 import com.mygdx.system.MovementSystem;
 
@@ -29,7 +29,7 @@ public class MainScreen implements Screen {
     public MainScreen(MyGdxGame game) {
         engine = new Engine();
         bild = new Entity();
-        bild.add(new PostionComponent());
+        bild.add(new PositionComponent());
         bild.add(new TextureComponent(text));
         this.game = game;   
         engine.addSystem(new MovementSystem());
