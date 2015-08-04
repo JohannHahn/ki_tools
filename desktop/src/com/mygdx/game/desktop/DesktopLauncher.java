@@ -8,6 +8,6 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new MyGdxGame(), config);
-		//LAPTOP COMMENT 2.0
+		//LAPTOP COMMENT 2.1
 	}
 }
