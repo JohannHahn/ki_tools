@@ -28,10 +28,10 @@ public class RenderSystem extends EntitySystem {
 
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.getFor(TextureComponent.class, PositionComponent.class));
-        System.out.println(entities.size());
+        System.out.println("Rendersystem added");
                 
     }
-//20€
+//Changed
     public void update(float deltaTime) {
         
         for (int i = 0; i < entities.size(); ++i) {
