@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.components.PositionComponent;
+import com.mygdx.components.RenderComponent;
 import com.mygdx.components.TextureComponent;
 
 public class RenderSystem extends EntitySystem {
@@ -27,7 +28,7 @@ public class RenderSystem extends EntitySystem {
     }
 
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class));
+        entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class,RenderComponent.class));
         System.out.println("Rendersystem added");
                 
     }
