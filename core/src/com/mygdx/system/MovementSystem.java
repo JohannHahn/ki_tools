@@ -133,10 +133,13 @@ public class MovementSystem extends EntitySystem {
 		Vector2 positionVectorBoid = position.position;
 		Vector2 result = new Vector2();
 		float percentNearing = 100;
-
+		
+		
 		for (int i = 0; i < entities.size(); ++i) {
 			if (!entity.equals(entities.get(i))) {
+
 				result.add(pm.get(entities.get(i)).position.x, pm.get(entities.get(i)).position.y);
+
 
 			}
 
