@@ -60,25 +60,37 @@ public class MovementSystem extends EntitySystem {
 		Vector2 result = new Vector2();
 		Vector2 position = positionComp.position;
 		Vector2 target = new Vector2(Gdx.input.getX(), Gdx.app.getGraphics().getHeight() - Gdx.input.getY());
+		float slowingRadius = OPTIMAL_BOID_DISTANCE;
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		VelocityComponent velComp = vm.get(entity);
 		if(seekComp != null){
 			//Der Maus folgen			
-			Vector2 desired_velocity = target.sub(position).nor().scl(velComp.maxVelocity);
-			Vector2 steering = desired_velocity.sub(velComp.vectorVelocity);
-		    steering.clamp(0, velComp.maxForce);
+			Vector2 desired_velocity = target.sub(position);
+			float distance = desired_velocity.len();
+			//slow down if inside slowing area
+			if (distance < slowingRadius) {
+			    // Inside the slowing area
+			    desired_velocity.nor().scl(velComp.maxVelocity * (distance / slowingRadius));
+			} else {
+			    // Outside the slowing area.
+			    desired_velocity.nor().scl(velComp.maxVelocity);
+			}
+			Vector2 steering = desired_velocity.sub(velComp.vectorVelocity);			
+		    steering = truncate(steering, velComp.maxForce);
 			//steering = steering / mass
-		    result = steering;
+		    velComp.vectorVelocity = truncate(velComp.vectorVelocity.add(steering), velComp.maxSpeed);
+		    result = velComp.vectorVelocity;
 		    pm.get(entity).position.x += result.x;
 			pm.get(entity).position.y += result.y;
 		}
-		else if(fleeComp != null){						
+		else if(fleeComp != null){			
 			Vector2 desired_velocity = target.sub(position).nor().scl(velComp.maxVelocity * -1);
 			Vector2 steering = desired_velocity.sub(velComp.vectorVelocity);
-		    steering.clamp(0, velComp.maxForce);
+		    steering = truncate(steering, velComp.maxForce);
 			//steering = steering / mass
-		    result = steering;
+		    velComp.vectorVelocity = truncate(velComp.vectorVelocity.add(steering), velComp.maxSpeed);
+		    result = velComp.vectorVelocity;
 		    pm.get(entity).position.x += result.x;
 			pm.get(entity).position.y += result.y;
 		}
@@ -160,6 +172,14 @@ public class MovementSystem extends EntitySystem {
 		
 		//System.out.println("x: " + pm.get(entity).x + "	y:" + pm.get(entity).y);
 		return result;
+	}
+	
+	private Vector2 truncate(Vector2 vector, float max){
+	    float i;
+	    i = max / vector.len();
+	    i = i < 1.0f ? i : 1.0f;
+	    vector.scl(i);
+	    return vector;
 	}
 
 }
