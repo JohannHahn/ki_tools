@@ -41,14 +41,14 @@ public class MainScreen implements Screen {
         
         bild2.add(new SeekComponent());
         bild2.add(new VelocityComponent());
-        bild2.add(new RenderComponent());
+        bild2.add(new RenderComponent(text,40,40));;
  
         bild3 = new Entity();
         bild3.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
         
         bild3.add(new VelocityComponent());
         bild3.add(new SeekComponent());
-        bild3.add(new RenderComponent());
+        bild3.add(new RenderComponent(text,40,40));
 
         bild4= new Entity();
         bild4.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));

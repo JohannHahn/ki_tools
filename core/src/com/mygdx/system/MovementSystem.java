@@ -12,12 +12,15 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
+import com.mygdx.components.RenderComponent;
 import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
 
 public class MovementSystem extends EntitySystem {
 
 	private static final float OPTIMAL_BOID_DISTANCE = 20;
+
+	private static final int GROUP_RANGE = 70;
 
 	private ImmutableArray<Entity> entities;
 
@@ -140,7 +143,8 @@ public class MovementSystem extends EntitySystem {
 		boolean xDistanceToSmall=false;
 		boolean yDistanceToSmall=false;
 		float percentNearing = 100;
-		
+		int entityWith=entity.getComponent(RenderComponent.class).getWidth();
+		int entityHeight=entity.getComponent(RenderComponent.class).getHeight();
 		
 		for (int i = 0; i < entities.size(); ++i) {
 			if (!entity.equals(entities.get(i))) {
@@ -148,8 +152,15 @@ public class MovementSystem extends EntitySystem {
 				xDistanceToSmall=(OPTIMAL_BOID_DISTANCE*(-1))<(pm.get(entities.get(i)).position.x-positionVectorBoid.x) && (pm.get(entities.get(i)).position.x-positionVectorBoid.x)<OPTIMAL_BOID_DISTANCE;
 				yDistanceToSmall=(OPTIMAL_BOID_DISTANCE*(-1))<(pm.get(entities.get(i)).position.y-positionVectorBoid.y) && (pm.get(entities.get(i)).position.y-positionVectorBoid.y)<OPTIMAL_BOID_DISTANCE;
 				
+				//near enought?
 				if(xDistanceToSmall&&yDistanceToSmall){
-					result.sub(pm.get(entities.get(i)).position.x-positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y);
+					
+
+					int entityIWith=entities.get(i).getComponent(RenderComponent.class).getWidth();
+					int entityIHeight=entities.get(i).getComponent(RenderComponent.class).getHeight();
+					
+					result.sub(pm.get(entities.get(i)).position.x-positionVectorBoid.x-entityIWith/2-entityWith/2,pm.get(entities.get(i)).position.y-positionVectorBoid.y-entityHeight-entityIHeight);
+					
 				}
 				//is not working tried to bigger the vector for smaller distances
 				//percentNearing=MathUtils.clamp(Math.min(pm.get(entities.get(i)).position.x-positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y),70,100);
@@ -172,13 +183,18 @@ public class MovementSystem extends EntitySystem {
 		Vector2 positionVectorBoid = position.position;
 		Vector2 result = new Vector2();
 		float percentNearing = 100;
-		
+		boolean xRange=false,yRange=false;
 		
 		for (int i = 0; i < entities.size(); ++i) {
 			if (!entity.equals(entities.get(i))) {
-
+				xRange=(GROUP_RANGE*(-1))<(pm.get(entities.get(i)).position.x-positionVectorBoid.x) && (pm.get(entities.get(i)).position.x-positionVectorBoid.x)<GROUP_RANGE;
+				yRange=(GROUP_RANGE*(-1))<(pm.get(entities.get(i)).position.y-positionVectorBoid.y) && (pm.get(entities.get(i)).position.y-positionVectorBoid.y)<GROUP_RANGE;
+				
+				//near enought?
+				if(xRange&&yRange){
+					
 				result.add(pm.get(entities.get(i)).position.x, pm.get(entities.get(i)).position.y);
-
+				}
 
 			}
 
