@@ -34,3 +34,10 @@ public class MyGdxGame extends Game {
 		
 	}
 }
+/*
+ *TODO:
+ *-normalize four max velocity has to be done after the "final" result vector is created
+ *- vectoren abstimmen distance muss immer gröser sein als 
+ *-distance vektor muss die breite seines und der anderen körper kennen
+ *-need a velocityvector for each boid to match the velocity(verschieben unserer vektor berechnung in der methode updateVector in die components)
+ */
