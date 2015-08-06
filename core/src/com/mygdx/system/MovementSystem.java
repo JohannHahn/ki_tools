@@ -7,6 +7,8 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
@@ -52,10 +54,23 @@ public class MovementSystem extends EntitySystem {
 		// Pseudocode Boid: http://www.kfish.org/boids/pseudocode.html
 		Vector2 vectorBoidCenter = calculateVectorBoidCenter(entity, position);
 		Vector2 vectorBoidDistance = calculateVectorBoidDistance(entity, position);
-		Vector2 vectorBoidMatchVC = calculateVectorBoidMatchVc();
-		Vector2 vectorSeekorFlee = calculateVectorSeekFlee(entity, position);		
+		Vector2 vectorBoidMatchVC = calculateVectorBoidMatchVc(entity, position);
+		
+		Vector2 vectorSeekorFlee = calculateVectorSeekFlee(entity, position);	
+		
+		//For debugging  press D
+		if(Gdx.input.isKeyJustPressed(Keys.D))
+		{	
+			System.out.println("/////////////////// Vectors of a Boide //////////////////////////");
+			System.out.println("VectorBoidCenter: " + vectorBoidCenter.x + " / " + vectorBoidCenter.y);
+			System.out.println("VectorBoidDistance: " + vectorBoidDistance.x + " / " + vectorBoidDistance.y);
+			System.out.println("VectorBoidMatchVc: " + vectorBoidMatchVC.x + " / " + vectorBoidMatchVC.y);
+			System.out.println("VectorSeekOrFlee: " + vectorSeekorFlee.x + " / " + vectorSeekorFlee.y);
+			System.out.println("////////////////////////////////////////////////////////////////");
+		}
+		
 	}
-
+	//DONE
 	private Vector2 calculateVectorSeekFlee(Entity entity, PositionComponent positionComp) {
 		Vector2 result = new Vector2();
 		Vector2 position = positionComp.position;
@@ -94,13 +109,27 @@ public class MovementSystem extends EntitySystem {
 		    pm.get(entity).position.x += result.x;
 			pm.get(entity).position.y += result.y;
 		}
-		//TODO:ARRIVAL
+		
 		return result;
 	}
-
-	private Vector2 calculateVectorBoidMatchVc() {
-		// TODO Auto-generated method stub
-		return null;
+//TODO
+	private Vector2 calculateVectorBoidMatchVc(Entity entity, PositionComponent positionComp) {
+		
+		Vector2 result = new Vector2();
+		float SMALLING_VELOCITY_FACTOR=8;
+		for (int i = 0; i < entities.size(); ++i) {
+			if (!entity.equals(entities.get(i))) {
+				//result =result.add(pm.get(entities.get(i)).position.x,pm.get(entities.get(i)).position.y);
+				//TODO:	pvJ = pvJ + b.velocity
+				
+			}
+			
+		}
+		
+		result= new Vector2(result.x/SMALLING_VELOCITY_FACTOR,result.y/SMALLING_VELOCITY_FACTOR);
+		
+		
+		return result;
 	}
 	
 	// DONE
@@ -110,7 +139,7 @@ public class MovementSystem extends EntitySystem {
 		Vector2 positionVectorBoid = position.position;
 		boolean xDistanceToSmall=false;
 		boolean yDistanceToSmall=false;
-		float percentNearing = 70;
+		float percentNearing = 100;
 		
 		
 		for (int i = 0; i < entities.size(); ++i) {
@@ -119,13 +148,11 @@ public class MovementSystem extends EntitySystem {
 				xDistanceToSmall=(OPTIMAL_BOID_DISTANCE*(-1))<(pm.get(entities.get(i)).position.x-positionVectorBoid.x) && (pm.get(entities.get(i)).position.x-positionVectorBoid.x)<OPTIMAL_BOID_DISTANCE;
 				yDistanceToSmall=(OPTIMAL_BOID_DISTANCE*(-1))<(pm.get(entities.get(i)).position.y-positionVectorBoid.y) && (pm.get(entities.get(i)).position.y-positionVectorBoid.y)<OPTIMAL_BOID_DISTANCE;
 				
-				if(xDistanceToSmall){
-					result.sub(pm.get(entities.get(i)).position.x-positionVectorBoid.x,0);
+				if(xDistanceToSmall&&yDistanceToSmall){
+					result.sub(pm.get(entities.get(i)).position.x-positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y);
 				}
-				if(yDistanceToSmall)
-				{
-					result.sub(0, pm.get(entities.get(i)).position.y-positionVectorBoid.y);
-				}
+				//is not working tried to bigger the vector for smaller distances
+				//percentNearing=MathUtils.clamp(Math.min(pm.get(entities.get(i)).position.x-positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y),70,100);
 
 			}
 			result.x = result.x / percentNearing;
