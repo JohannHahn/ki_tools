@@ -9,7 +9,9 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.BoidDistanceComponent;
 import com.mygdx.components.BoidMatchVelocityComponent;
@@ -21,7 +23,7 @@ import com.mygdx.components.VelocityComponent;
 
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 70;
+	private static final float OPTIMAL_BOID_DISTANCE = 20;
 
 	private static final int GROUP_RANGE = 70;
 
@@ -67,10 +69,10 @@ public class MovementSystem extends EntitySystem {
            // velComp.vectorVelocity.add(seekComp.vectorSeek);
         }
         if(fleeComp != null){
-            velComp.vectorVelocity.add(fleeComp.vectorFlee);
+            //velComp.vectorVelocity.add(fleeComp.vectorFlee);
         }
         
-        positionComp.position.add(velComp.vectorVelocity);
+        positionComp.position.add(truncate(velComp.vectorVelocity, velComp.maxVelocity));
 	}
 
 	private void updateVectors(Entity entity, PositionComponent position) {
@@ -104,6 +106,7 @@ public class MovementSystem extends EntitySystem {
 			System.out.println("VectorSeekOrFlee: " + calculateVectorSeekFlee(entity, position).x + " / "
 					+ calculateVectorSeekFlee(entity, position).y);
 			System.out.println("////////////////////////////////////////////////////////////////");
+		System.out.println(entity.getComponent(VelocityComponent.class).vectorVelocity);
 		}
 
 	}
@@ -153,22 +156,23 @@ public class MovementSystem extends EntitySystem {
 	private Vector2 calculateVectorBoidMatchVc(Entity entity, PositionComponent positionComp) {
 
 		Vector2 result = new Vector2();
+		
 		float SMALLING_VELOCITY_FACTOR = 8;
 		Vector2 positionVectorBoid = positionComp.position.cpy();
 		boolean xRange = false;
 		boolean yRange = false;
 		int boidCounter = 0;
+		
 		for (int i = 0; i < entities.size(); ++i) {
 			if (!entity.equals(entities.get(i))) {
-				xRange = (GROUP_RANGE * (-1)) < (pm.get(entities.get(i)).position.x - positionVectorBoid.x)
-						&& (pm.get(entities.get(i)).position.x - positionVectorBoid.x) < GROUP_RANGE;
-				yRange = (GROUP_RANGE * (-1)) < (pm.get(entities.get(i)).position.y - positionVectorBoid.y)
-						&& (pm.get(entities.get(i)).position.y - positionVectorBoid.y) < GROUP_RANGE;
-
+				
 				// near enought?
-				if (xRange && yRange) {
+				if (GROUP_RANGE>distance(positionVectorBoid, pm.get(entities.get(i)).position)) {
 					// pvJ = pvJ + b.velocity
+					float  d= distance(positionVectorBoid,pm.get(entities.get(i)).position);
+					
 					Vector2 entitiesVelocity = entities.get(i).getComponent(VelocityComponent.class).vectorVelocity;
+					
 					result = result.add(entitiesVelocity);
 
 					boidCounter++;
@@ -186,40 +190,43 @@ public class MovementSystem extends EntitySystem {
 		// Vector2(result.x/SMALLING_VELOCITY_FACTOR,result.y/SMALLING_VELOCITY_FACTOR);
 
 		//return result;
-		return new Vector2(0,0);
+	result.sub(entity.getComponent(VelocityComponent.class).vectorVelocity);
+		return result.scl(1/SMALLING_VELOCITY_FACTOR);
 	}
+
+	
 
 	// DONE
 	private Vector2 calculateVectorBoidDistance(Entity entity, PositionComponent position) {
 
 		Vector2 result = new Vector2();
+		
 		Vector2 positionVectorBoid = position.position.cpy();
-		boolean xDistanceToSmall = false;
-		boolean yDistanceToSmall = false;
+		
+		
 		float percentNearing = 100;
 		int entityWith = entity.getComponent(RenderComponent.class).getWidth();
 		int entityHeight = entity.getComponent(RenderComponent.class).getHeight();
 		int boidCounter = 0;
+		
+		
 		for (int i = 0; i < entities.size(); ++i) {
 			if (!entity.equals(entities.get(i))) {
 
-				xDistanceToSmall = (OPTIMAL_BOID_DISTANCE * (-1)) < (pm.get(entities.get(i)).position.x
-						- positionVectorBoid.x)
-						&& (pm.get(entities.get(i)).position.x - positionVectorBoid.x) < OPTIMAL_BOID_DISTANCE;
-				yDistanceToSmall = (OPTIMAL_BOID_DISTANCE * (-1)) < (pm.get(entities.get(i)).position.y
-						- positionVectorBoid.y)
-						&& (pm.get(entities.get(i)).position.y - positionVectorBoid.y) < OPTIMAL_BOID_DISTANCE;
-
 				// near enought?
-				if (xDistanceToSmall && yDistanceToSmall) {
+				if (OPTIMAL_BOID_DISTANCE>distance(positionVectorBoid,pm.get(entities.get(i)).position))
+				{
 
 					int entityIWith = entities.get(i).getComponent(RenderComponent.class).getWidth();
 					int entityIHeight = entities.get(i).getComponent(RenderComponent.class).getHeight();
-
+					
+					//float d= distance(position.position,pm.get(entities.get(i)).position);
 					result.sub(
-							pm.get(entities.get(i)).position.x - positionVectorBoid.x - entityIWith / 2
+							 positionVectorBoid.x - pm.get(entities.get(i)).position.x- entityIWith / 2
 									- entityWith / 2,
-							pm.get(entities.get(i)).position.y - positionVectorBoid.y - entityHeight / 2 - entityIHeight / 2);
+							positionVectorBoid.y - pm.get(entities.get(i)).position.y - entityHeight / 2 - entityIHeight / 2);
+					//result.nor();
+					//result.scl(1/d);
 					boidCounter++;
 				}
 				// is not working tried to bigger the vector for smaller
@@ -232,8 +239,8 @@ public class MovementSystem extends EntitySystem {
 		// durch n-1
 		if (--boidCounter != 0) // precrement
 			result.scl(1 / boidCounter);
-		result.x = result.x / percentNearing;
-		result.y = result.y / percentNearing;
+		//result.x = result.x / percentNearing;
+		//result.y = result.y / percentNearing;
 		
 		return result;
 	}
@@ -242,22 +249,21 @@ public class MovementSystem extends EntitySystem {
 	private Vector2 calculateVectorBoidCenter(Entity entity, PositionComponent position) {
 
 		Vector2 positionVectorBoid = position.position.cpy();
+		
 		Vector2 result = new Vector2();
+		
 		float percentNearing = 100;
 		boolean xRange = false, yRange = false;
 		int boidCounter=0;
 		
 		for (int i = 0; i < entities.size(); ++i) {
+			
 			if (!entity.equals(entities.get(i))) {
-				xRange = (GROUP_RANGE * (-1)) < (pm.get(entities.get(i)).position.x - positionVectorBoid.x)
-						&& (pm.get(entities.get(i)).position.x - positionVectorBoid.x) < GROUP_RANGE;
-				yRange = (GROUP_RANGE * (-1)) < (pm.get(entities.get(i)).position.y - positionVectorBoid.y)
-						&& (pm.get(entities.get(i)).position.y - positionVectorBoid.y) < GROUP_RANGE;
-
+				
 				// near enought?
-				if (xRange && yRange) {
+				if (GROUP_RANGE>=distance(positionVectorBoid,pm.get(entities.get(i)).position)) {
 
-					result.add(pm.get(entities.get(i)).position.x, pm.get(entities.get(i)).position.y);
+					result.add(pm.get(entities.get(i)).position);
 					boidCounter++;
 				}
 
@@ -270,8 +276,7 @@ public class MovementSystem extends EntitySystem {
 					result.scl(1/boidCounter);
 		result.sub(positionVectorBoid);
 
-		result.x = result.x / percentNearing;
-		result.y = result.y / percentNearing;
+		result.scl(1/percentNearing);
 
 		
 		
@@ -286,5 +291,10 @@ public class MovementSystem extends EntitySystem {
 		vector.scl(i);
 		return vector;
 	}
-
+	private float distance(Vector2 v1, Vector2 v2) {
+		Vector2 temp=v1.cpy();
+		temp= temp.sub(v2);
+		
+		return temp.len();
+	}
 }
