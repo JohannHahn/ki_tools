@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mygdx.components.BoidCenterComponent;
+import com.mygdx.components.BoidDistanceComponent;
+import com.mygdx.components.BoidMatchVelocityComponent;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RenderComponent;
@@ -35,13 +38,19 @@ public class MainScreen implements Screen {
         bild.add(new VelocityComponent());
         bild.add(new SeekComponent());  
         bild.add(new RenderComponent(text,40,40));
+        bild.add(new BoidCenterComponent());
+        bild.add(new BoidDistanceComponent());
+        bild.add(new BoidMatchVelocityComponent());
         
         bild2= new Entity();
         bild2.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
         
         bild2.add(new SeekComponent());
         bild2.add(new VelocityComponent());
-        bild2.add(new RenderComponent(text,40,40));;
+        bild2.add(new RenderComponent(text,40,40));
+        bild2.add(new BoidCenterComponent());
+        bild2.add(new BoidDistanceComponent());
+        bild2.add(new BoidMatchVelocityComponent());
  
         bild3 = new Entity();
         bild3.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
@@ -96,6 +105,8 @@ public class MainScreen implements Screen {
         
         
     }
+    
+    
 
     @Override
     public void render(float delta) {

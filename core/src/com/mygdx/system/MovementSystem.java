@@ -62,7 +62,7 @@ public class MovementSystem extends EntitySystem {
         
         velComp.vectorVelocity = bCenterComp.vectorCenter.add(bMVComp.vectorMatchVelocity.add(bDistanceComp.vectorDistance));
         if(seekComp != null){
-            velComp.vectorVelocity.add(seekComp.vectorSeek);
+            //velComp.vectorVelocity.add(seekComp.vectorSeek);
         }
         if(fleeComp != null){
             velComp.vectorVelocity.add(fleeComp.vectorFlee);
@@ -152,7 +152,7 @@ public class MovementSystem extends EntitySystem {
 
 		Vector2 result = new Vector2();
 		float SMALLING_VELOCITY_FACTOR = 8;
-		Vector2 positionVectorBoid = positionComp.position;
+		Vector2 positionVectorBoid = positionComp.position.cpy();
 		boolean xRange = false;
 		boolean yRange = false;
 		int boidCounter = 0;
@@ -183,14 +183,15 @@ public class MovementSystem extends EntitySystem {
 		// result= new
 		// Vector2(result.x/SMALLING_VELOCITY_FACTOR,result.y/SMALLING_VELOCITY_FACTOR);
 
-		return result;
+		//return result;
+		return new Vector2(0,0);
 	}
 
 	// DONE
 	private Vector2 calculateVectorBoidDistance(Entity entity, PositionComponent position) {
 
 		Vector2 result = new Vector2();
-		Vector2 positionVectorBoid = position.position;
+		Vector2 positionVectorBoid = position.position.cpy();
 		boolean xDistanceToSmall = false;
 		boolean yDistanceToSmall = false;
 		float percentNearing = 100;
@@ -221,7 +222,7 @@ public class MovementSystem extends EntitySystem {
 				}
 				// is not working tried to bigger the vector for smaller
 				// distances
-				// percentNearing=MathUtils.clamp(Math.min(pm.get(entities.get(i)).position.x-positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y),70,100);
+				 percentNearing=MathUtils.clamp(Math.min(pm.get(entities.get(i)).position.x-positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y),70,100);
 
 			}
 
@@ -238,7 +239,7 @@ public class MovementSystem extends EntitySystem {
 	// DONE
 	private Vector2 calculateVectorBoidCenter(Entity entity, PositionComponent position) {
 
-		Vector2 positionVectorBoid = position.position;
+		Vector2 positionVectorBoid = position.position.cpy();
 		Vector2 result = new Vector2();
 		float percentNearing = 100;
 		boolean xRange = false, yRange = false;
