@@ -10,6 +10,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.components.BoidCenterComponent;
+import com.mygdx.components.BoidDistanceComponent;
+import com.mygdx.components.BoidMatchVelocityComponent;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RenderComponent;
@@ -61,6 +64,18 @@ public class MovementSystem extends EntitySystem {
 		Vector2 vectorBoidMatchVC = calculateVectorBoidMatchVc(entity, position);
 		
 		Vector2 vectorSeekorFlee = calculateVectorSeekFlee(entity, position);	
+		
+		entity.getComponent(BoidCenterComponent.class).vectorCenter=vectorBoidCenter;
+		entity.getComponent(BoidDistanceComponent.class).vectorDistance=vectorBoidDistance;
+		entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity=vectorBoidMatchVC;
+		
+		SeekComponent seekComp = sm.get(entity);
+		FleeComponent fleeComp = fm.get(entity);
+		
+		if(seekComp!=null)			
+		entity.getComponent(SeekComponent.class).vectorSeek=vectorSeekorFlee;
+		if(fleeComp!=null)
+			entity.getComponent(FleeComponent.class).vectorFlee=vectorSeekorFlee;
 		
 		//For debugging  press D
 		if(Gdx.input.isKeyJustPressed(Keys.D))

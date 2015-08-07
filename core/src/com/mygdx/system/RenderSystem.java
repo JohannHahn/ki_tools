@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RenderComponent;
-import com.mygdx.components.TextureComponent;
 
 public class RenderSystem extends EntitySystem {
 

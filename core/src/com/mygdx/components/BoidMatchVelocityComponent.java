@@ -1,8 +1,9 @@
 package com.mygdx.components;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
 
-public class BoidMatchVelocityComponent {
+public class BoidMatchVelocityComponent extends Component{
 
-	Vector2 vectorMatchVelocity=null;
+public 	Vector2 vectorMatchVelocity=null;
 }
