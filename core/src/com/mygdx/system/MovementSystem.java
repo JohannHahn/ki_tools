@@ -47,14 +47,28 @@ public class MovementSystem extends EntitySystem {
 			Entity entity = entities.get(i);
 			PositionComponent position = pm.get(entity);
 			updateVectors(entity, position);
-			setPositon();
+			setPositon(entity, position);
 		}
 	}
 
 	// SETs the Position after all Vectors are calculated
-	private void setPositon() {
-		// TODO: generate resulting Vector
-
+	private void setPositon(Entity entity, PositionComponent positionComp) {
+        SeekComponent seekComp = sm.get(entity);
+        FleeComponent fleeComp = fm.get(entity);
+        VelocityComponent velComp = vm.get(entity);
+        BoidCenterComponent bCenterComp = entity.getComponent(BoidCenterComponent.class);
+        BoidMatchVelocityComponent bMVComp = entity.getComponent(BoidMatchVelocityComponent.class);
+        BoidDistanceComponent bDistanceComp = entity.getComponent(BoidDistanceComponent.class);
+        
+        velComp.vectorVelocity = bCenterComp.vectorCenter.add(bMVComp.vectorMatchVelocity.add(bDistanceComp.vectorDistance));
+        if(seekComp != null){
+            velComp.vectorVelocity.add(seekComp.vectorSeek);
+        }
+        if(fleeComp != null){
+            velComp.vectorVelocity.add(fleeComp.vectorFlee);
+        }
+        
+        positionComp.position.add(velComp.vectorVelocity);
 	}
 
 	private void updateVectors(Entity entity, PositionComponent position) {
@@ -101,6 +115,7 @@ public class MovementSystem extends EntitySystem {
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		VelocityComponent velComp = vm.get(entity);
+		Vector2 velocity = velComp.vectorVelocity.cpy();
 		if (seekComp != null) {
 			// Der Maus folgen
 			Vector2 desired_velocity = target.sub(position);
@@ -113,19 +128,19 @@ public class MovementSystem extends EntitySystem {
 				// Outside the slowing area.
 				desired_velocity.nor().scl(velComp.maxVelocity);
 			}
-			Vector2 steering = desired_velocity.sub(velComp.vectorVelocity);
+			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
 			// steering = steering / mass
-			velComp.vectorVelocity = truncate(velComp.vectorVelocity.add(steering), velComp.maxSpeed);
-			result = velComp.vectorVelocity;
+			velocity = truncate(velComp.vectorVelocity.add(steering), velComp.maxSpeed);
+			result = velocity;
 		
 		} else if (fleeComp != null) {
 			Vector2 desired_velocity = target.sub(position).nor().scl(velComp.maxVelocity * -1);
-			Vector2 steering = desired_velocity.sub(velComp.vectorVelocity);
+			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
 			// steering = steering / mass
-			velComp.vectorVelocity = truncate(velComp.vectorVelocity.add(steering), velComp.maxSpeed);
-			result = velComp.vectorVelocity;
+			velocity = truncate(velocity.add(steering), velComp.maxSpeed);
+			result = velocity;
 			
 		}
 
