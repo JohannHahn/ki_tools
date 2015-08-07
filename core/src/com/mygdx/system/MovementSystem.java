@@ -21,7 +21,7 @@ import com.mygdx.components.VelocityComponent;
 
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 20;
+	private static final float OPTIMAL_BOID_DISTANCE = 70;
 
 	private static final int GROUP_RANGE = 70;
 
@@ -56,13 +56,15 @@ public class MovementSystem extends EntitySystem {
         SeekComponent seekComp = sm.get(entity);
         FleeComponent fleeComp = fm.get(entity);
         VelocityComponent velComp = vm.get(entity);
-        BoidCenterComponent bCenterComp = entity.getComponent(BoidCenterComponent.class);
-        BoidMatchVelocityComponent bMVComp = entity.getComponent(BoidMatchVelocityComponent.class);
-        BoidDistanceComponent bDistanceComp = entity.getComponent(BoidDistanceComponent.class);
+        Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
+        Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
+        Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();
         
-        velComp.vectorVelocity = bCenterComp.vectorCenter.add(bMVComp.vectorMatchVelocity.add(bDistanceComp.vectorDistance));
+        velComp.vectorVelocity.add(bCenter);
+        velComp.vectorVelocity.add(bMV);
+        velComp.vectorVelocity.add(bDistance);
         if(seekComp != null){
-            //velComp.vectorVelocity.add(seekComp.vectorSeek);
+           // velComp.vectorVelocity.add(seekComp.vectorSeek);
         }
         if(fleeComp != null){
             velComp.vectorVelocity.add(fleeComp.vectorFlee);
@@ -217,12 +219,12 @@ public class MovementSystem extends EntitySystem {
 					result.sub(
 							pm.get(entities.get(i)).position.x - positionVectorBoid.x - entityIWith / 2
 									- entityWith / 2,
-							pm.get(entities.get(i)).position.y - positionVectorBoid.y - entityHeight - entityIHeight);
+							pm.get(entities.get(i)).position.y - positionVectorBoid.y - entityHeight / 2 - entityIHeight / 2);
 					boidCounter++;
 				}
 				// is not working tried to bigger the vector for smaller
 				// distances
-				 percentNearing=MathUtils.clamp(Math.min(pm.get(entities.get(i)).position.x-positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y),70,100);
+				 //percentNearing=MathUtils.clamp(Math.min(pm.get(entities.get(i)).position.x-positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y),70,100);
 
 			}
 
