@@ -37,7 +37,7 @@ public class MovementSystem extends EntitySystem {
 
 	public void addedToEngine(Engine engine) {
 		// TODO: attache family rendercomponent
-		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class, VelocityComponent.class));		
+		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class, VelocityComponent.class,BoidCenterComponent.class,BoidDistanceComponent.class,BoidMatchVelocityComponent.class));		
 		System.out.println("MovementSystem added");
 	}
 
@@ -56,35 +56,32 @@ public class MovementSystem extends EntitySystem {
 	}
 	
 	private void updateVectors(Entity entity, PositionComponent position) {
-		
+		//NODES:
 		// Pseudocode Boid: http://www.kfish.org/boids/pseudocode.html
-			//Perfect example: https://processing.org/examples/flocking.html
-		Vector2 vectorBoidCenter = calculateVectorBoidCenter(entity, position);
-		Vector2 vectorBoidDistance = calculateVectorBoidDistance(entity, position);
-		Vector2 vectorBoidMatchVC = calculateVectorBoidMatchVc(entity, position);
+		// Perfect example: https://processing.org/examples/flocking.html
 		
-		Vector2 vectorSeekorFlee = calculateVectorSeekFlee(entity, position);	
 		
-		entity.getComponent(BoidCenterComponent.class).vectorCenter=vectorBoidCenter;
-		entity.getComponent(BoidDistanceComponent.class).vectorDistance=vectorBoidDistance;
-		entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity=vectorBoidMatchVC;
-		
-		SeekComponent seekComp = sm.get(entity);
+		//Vector in Component schreiben
+		entity.getComponent(BoidCenterComponent.class).vectorCenter=				calculateVectorBoidCenter(entity, position);  
+		entity.getComponent(BoidDistanceComponent.class).vectorDistance=			calculateVectorBoidDistance(entity, position);
+		entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity=	calculateVectorBoidMatchVc(entity, position);
+		                                                                                                                          
+		SeekComponent seekComp = sm.get(entity);                                   	 
 		FleeComponent fleeComp = fm.get(entity);
 		
 		if(seekComp!=null)			
-		entity.getComponent(SeekComponent.class).vectorSeek=vectorSeekorFlee;
+		entity.getComponent(SeekComponent.class).vectorSeek= 						calculateVectorSeekFlee(entity, position);
 		if(fleeComp!=null)
-			entity.getComponent(FleeComponent.class).vectorFlee=vectorSeekorFlee;
+			entity.getComponent(FleeComponent.class).vectorFlee=					 calculateVectorSeekFlee(entity, position);
 		
 		//For debugging  press D
 		if(Gdx.input.isKeyJustPressed(Keys.D))
 		{	
 			System.out.println("/////////////////// Vectors of a Boide //////////////////////////");
-			System.out.println("VectorBoidCenter: " + vectorBoidCenter.x + " / " + vectorBoidCenter.y);
-			System.out.println("VectorBoidDistance: " + vectorBoidDistance.x + " / " + vectorBoidDistance.y);
-			System.out.println("VectorBoidMatchVc: " + vectorBoidMatchVC.x + " / " + vectorBoidMatchVC.y);
-			System.out.println("VectorSeekOrFlee: " + vectorSeekorFlee.x + " / " + vectorSeekorFlee.y);
+			System.out.println("VectorBoidCenter: " + calculateVectorBoidCenter(entity, position).x + " / " + calculateVectorBoidCenter(entity, position).y);
+			System.out.println("VectorBoidDistance: " + calculateVectorBoidDistance(entity, position).x + " / " + calculateVectorBoidDistance(entity, position).y);
+			System.out.println("VectorBoidMatchVc: " + calculateVectorBoidMatchVc(entity, position) + " / " + calculateVectorBoidMatchVc(entity, position).y);
+			System.out.println("VectorSeekOrFlee: " + calculateVectorSeekFlee(entity, position).x + " / " + calculateVectorSeekFlee(entity, position).y);
 			System.out.println("////////////////////////////////////////////////////////////////");
 		}
 		
@@ -136,16 +133,33 @@ public class MovementSystem extends EntitySystem {
 		
 		Vector2 result = new Vector2();
 		float SMALLING_VELOCITY_FACTOR=8;
+		Vector2 positionVectorBoid = positionComp.position;
+		boolean xRange=false;
+		boolean yRange=false;
+		int boidCounter=0;
 		for (int i = 0; i < entities.size(); ++i) {
 			if (!entity.equals(entities.get(i))) {
-				//result =result.add(pm.get(entities.get(i)).position.x,pm.get(entities.get(i)).position.y);
-				//TODO:	pvJ = pvJ + b.velocity
+				xRange=(GROUP_RANGE*(-1))<(pm.get(entities.get(i)).position.x-positionVectorBoid.x) && (pm.get(entities.get(i)).position.x-positionVectorBoid.x)<GROUP_RANGE;
+				yRange=(GROUP_RANGE*(-1))<(pm.get(entities.get(i)).position.y-positionVectorBoid.y) && (pm.get(entities.get(i)).position.y-positionVectorBoid.y)<GROUP_RANGE;
+				
+				//near enought?
+				if(xRange&&yRange){
+					//pvJ = pvJ + b.velocity
+				Vector2 entitiesVelocity=entities.get(i).getComponent(VelocityComponent.class).vectorVelocity;
+				result =result.add(entitiesVelocity);
+				
+				boidCounter++;
+				}
 				
 			}
 			
 		}
 		
-		result= new Vector2(result.x/SMALLING_VELOCITY_FACTOR,result.y/SMALLING_VELOCITY_FACTOR);
+		//durch n-1
+		if(--boidCounter != 0)//precrement
+			result.scl(1/boidCounter);
+		
+		//result= new Vector2(result.x/SMALLING_VELOCITY_FACTOR,result.y/SMALLING_VELOCITY_FACTOR);
 		
 		
 		return result;
@@ -232,7 +246,7 @@ public class MovementSystem extends EntitySystem {
 		//System.out.println("x: " + pm.get(entity).x + "	y:" + pm.get(entity).y);
 		return result;
 	}
-	
+	//like Clamp
 	private Vector2 truncate(Vector2 vector, float max){
 	    float i;
 	    i = max / vector.len();
