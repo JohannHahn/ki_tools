@@ -133,7 +133,7 @@ public class MovementSystem extends EntitySystem {
 			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
 			// steering = steering / mass
-			velocity = truncate(velComp.vectorVelocity.add(steering), velComp.maxSpeed);
+			velocity = truncate(velocity, velComp.maxSpeed);
 			result = velocity;
 		
 		} else if (fleeComp != null) {
