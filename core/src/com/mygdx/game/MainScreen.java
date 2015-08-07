@@ -33,19 +33,19 @@ public class MainScreen implements Screen {
         engine = new Engine();
         bild = new Entity();
 
-        bild.add(new PositionComponent(MathUtils.random(0,50 ),MathUtils.random(0,50 )));
+        bild.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500 )));
        
         bild.add(new VelocityComponent());
-      //  bild.add(new SeekComponent());  
+        bild.add(new SeekComponent());  
         bild.add(new RenderComponent(text,40,40));
         bild.add(new BoidCenterComponent());
         bild.add(new BoidDistanceComponent());
         bild.add(new BoidMatchVelocityComponent());
         
         bild2= new Entity();
-        bild2.add(new PositionComponent(MathUtils.random(0,50 ),MathUtils.random(0,50 )));
+        bild2.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500 )));
         
-       // bild2.add(new SeekComponent());
+        //bild2.add(new SeekComponent());
         bild2.add(new VelocityComponent());
         bild2.add(new RenderComponent(text,40,40));
         bild2.add(new BoidCenterComponent());
@@ -53,7 +53,7 @@ public class MainScreen implements Screen {
         bild2.add(new BoidMatchVelocityComponent());
  
         bild3 = new Entity();
-        bild3.add(new PositionComponent(MathUtils.random(0,50 ),MathUtils.random(0,50 )));
+        bild3.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500 )));
         
         bild3.add(new VelocityComponent());
        // bild3.add(new SeekComponent());
