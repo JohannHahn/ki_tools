@@ -36,7 +36,7 @@ public class MainScreen implements Screen {
         bild.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500 )));
        
         bild.add(new VelocityComponent());
-        bild.add(new SeekComponent());  
+        //bild.add(new SeekComponent());  
         bild.add(new RenderComponent(text,40,40));
         bild.add(new BoidCenterComponent());
         bild.add(new BoidDistanceComponent());
@@ -89,6 +89,10 @@ public class MainScreen implements Screen {
         bild7.add(new VelocityComponent());
         bild7.add(new SeekComponent());
         bild7.add(new RenderComponent());
+        bild7.add(new SeekComponent());  
+        bild7.add(new BoidCenterComponent());
+        bild7.add(new BoidDistanceComponent());
+        bild7.add(new BoidMatchVelocityComponent());
         
         this.game = game;   
         engine.addSystem(new MovementSystem());

@@ -62,21 +62,19 @@ public class MovementSystem extends EntitySystem {
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
 		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();
 
-		velComp.vectorVelocity.add(bCenter);
-		velComp.vectorVelocity.add(bMV);
-		velComp.vectorVelocity.add(bDistance);
-		if (velComp.vectorVelocity.x == 0) {
-			System.out.println("Gleichgewicht");
-		}
+		//velComp.vectorVelocity.add(bCenter);
+		//velComp.vectorVelocity.add(bMV);
+		//velComp.vectorVelocity.add(bDistance);
+	
 		if (seekComp != null) {
-			velComp.vectorVelocity.add(seekComp.vectorSeek);
+			velComp.vectorVelocity = seekComp.vectorSeek;
 			
 		}
 		if (fleeComp != null) {
-			velComp.vectorVelocity.add(fleeComp.vectorFlee);
+			velComp.vectorVelocity = fleeComp.vectorFlee;
 		}
-
-		positionComp.position.add(truncate(velComp.vectorVelocity, velComp.maxVelocity));
+		velComp.vectorVelocity = truncate(velComp.vectorVelocity, velComp.maxVelocity);
+		positionComp.position.add(velComp.vectorVelocity);
 		/*
 		positionComp.position.add(bCenter);
 		positionComp.position.add(bMV);
@@ -131,10 +129,11 @@ public class MovementSystem extends EntitySystem {
 		FleeComponent fleeComp = fm.get(entity);
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 velocity = velComp.vectorVelocity.cpy();
-		if (seekComp != null) {
-			// Der Maus folgen
+		
+		if (seekComp != null) {			
 			Vector2 desired_velocity = target.sub(position);
 			float distance = desired_velocity.len();
+			
 			// slow down if inside slowing area
 			if (distance < slowingRadius) {
 				// Inside the slowing area
@@ -146,19 +145,18 @@ public class MovementSystem extends EntitySystem {
 			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
 			// steering = steering / mass
-			velocity = truncate(velocity, velComp.maxSpeed);
+			velocity = truncate(velocity.add(steering), velComp.maxSpeed);
 			result = velocity;
-
-		} else if (fleeComp != null) {
+		}  
+		if (fleeComp != null) {
+			
 			Vector2 desired_velocity = target.sub(position).nor().scl(velComp.maxVelocity * -1);
 			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
 			// steering = steering / mass
 			velocity = truncate(velocity.add(steering), velComp.maxSpeed);
 			result = velocity;
-
 		}
-
 		return result;
 	}
 
@@ -205,7 +203,8 @@ public class MovementSystem extends EntitySystem {
 
 		// return result;
 		result.sub(entity.getComponent(VelocityComponent.class).vectorVelocity);
-		return result.scl(1 / SMALLING_VELOCITY_FACTOR);
+		result.scl(1 / SMALLING_VELOCITY_FACTOR);
+		return result;
 	}
 
 	// DONE
@@ -256,7 +255,6 @@ public class MovementSystem extends EntitySystem {
 			result.y = result.y / boidCounter;
 		} // result.x = result.x / percentNearing;
 			// result.y = result.y / percentNearing;
-
 		return result;
 	}
 
@@ -299,7 +297,6 @@ public class MovementSystem extends EntitySystem {
 		// result.scl(1.0f / percentNearing);
 		result.x = result.x / percentNearing;
 		result.y = result.y / percentNearing;
-
 		return result;
 	}
 
