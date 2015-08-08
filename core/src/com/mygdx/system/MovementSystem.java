@@ -23,7 +23,7 @@ import com.mygdx.components.VelocityComponent;
 
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 20;
+	private static final float OPTIMAL_BOID_DISTANCE = 35;
 
 	private static final int GROUP_RANGE = 500;
 
@@ -60,11 +60,7 @@ public class MovementSystem extends EntitySystem {
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
-		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();
-
-		//velComp.vectorVelocity.add(bCenter);
-		//velComp.vectorVelocity.add(bMV);
-		//velComp.vectorVelocity.add(bDistance);
+		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();		
 	
 		if (seekComp != null) {
 			velComp.vectorVelocity = seekComp.vectorSeek;
@@ -73,13 +69,23 @@ public class MovementSystem extends EntitySystem {
 		if (fleeComp != null) {
 			velComp.vectorVelocity = fleeComp.vectorFlee;
 		}
-		velComp.vectorVelocity = truncate(velComp.vectorVelocity, velComp.maxVelocity);
+		
+		Vector2 boidVector = new Vector2();
+		boidVector.add(bCenter);		
+		boidVector.add(bDistance);
+		boidVector.add(bMV);
+		
+		/*//Arrival
+		float distance = distance(new Vector2(bCenter).scl(100), positionComp.position);
+		float slowingRadius = OPTIMAL_BOID_DISTANCE * 2;
+		if(distance < slowingRadius){
+			boidVector.nor().scl(velComp.maxVelocity * (distance / slowingRadius));
+		}		*/
+		
+		velComp.vectorVelocity.add(boidVector);
+		velComp.vectorVelocity = truncate(velComp.vectorVelocity, velComp.maxSpeed);
 		positionComp.position.add(velComp.vectorVelocity);
-		/*
-		positionComp.position.add(bCenter);
-		positionComp.position.add(bMV);
-		positionComp.position.add(bDistance);
-		*/
+	
 		
 	}
 
@@ -189,7 +195,7 @@ public class MovementSystem extends EntitySystem {
 			}
 
 		}
-
+		
 		// durch n-1
 		if (boidCounter > 0) // precrement
 		// result.scl(1 / boidCounter);
@@ -231,8 +237,8 @@ public class MovementSystem extends EntitySystem {
 					// float d=
 					// distance(position.position,pm.get(entities.get(i)).position);
 					result.sub(
-							 pm.get(entities.get(i)).position.x -positionVectorBoid.x - entityIWith / 2	- entityWith / 2,
-							pm.get(entities.get(i)).position.y - positionVectorBoid.y  -entityHeight / 2- entityIHeight / 2) ;
+							 pm.get(entities.get(i)).position.x -positionVectorBoid.x,
+							pm.get(entities.get(i)).position.y - positionVectorBoid.y ) ;
 					
 					/*entityIWith / 2	- entityWith / 2
 					entityHeight / 2- entityIHeight / 2)*/

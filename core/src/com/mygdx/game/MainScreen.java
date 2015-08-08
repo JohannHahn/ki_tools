@@ -45,7 +45,7 @@ public class MainScreen implements Screen {
         bild2= new Entity();
         bild2.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500 )));
         
-        //bild2.add(new SeekComponent());
+      //  bild2.add(new SeekComponent());
         bild2.add(new VelocityComponent());
         bild2.add(new RenderComponent(text,40,40));
         bild2.add(new BoidCenterComponent());
@@ -87,9 +87,8 @@ public class MainScreen implements Screen {
         bild7.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
         
         bild7.add(new VelocityComponent());
-        bild7.add(new SeekComponent());
+        //bild7.add(new SeekComponent());
         bild7.add(new RenderComponent());
-        bild7.add(new SeekComponent());  
         bild7.add(new BoidCenterComponent());
         bild7.add(new BoidDistanceComponent());
         bild7.add(new BoidMatchVelocityComponent());
