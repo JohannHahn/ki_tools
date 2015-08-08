@@ -36,7 +36,7 @@ public class MainScreen implements Screen {
         bild.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500 )));
        
         bild.add(new VelocityComponent());
-        //bild.add(new SeekComponent());  
+        bild.add(new SeekComponent());  
         bild.add(new RenderComponent(text,40,40));
         bild.add(new BoidCenterComponent());
         bild.add(new BoidDistanceComponent());
@@ -45,7 +45,7 @@ public class MainScreen implements Screen {
         bild2= new Entity();
         bild2.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500 )));
         
-      //  bild2.add(new SeekComponent());
+        bild2.add(new SeekComponent());
         bild2.add(new VelocityComponent());
         bild2.add(new RenderComponent(text,40,40));
         bild2.add(new BoidCenterComponent());
@@ -56,7 +56,7 @@ public class MainScreen implements Screen {
         bild3.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500 )));
         
         bild3.add(new VelocityComponent());
-       // bild3.add(new SeekComponent());
+        bild3.add(new SeekComponent());
         bild3.add(new RenderComponent(text,40,40));
         bild3.add(new BoidCenterComponent());
         bild3.add(new BoidDistanceComponent());
@@ -68,13 +68,20 @@ public class MainScreen implements Screen {
         bild4.add(new VelocityComponent());
         bild4.add(new SeekComponent());
         bild4.add(new RenderComponent());
+        bild4.add(new RenderComponent(text,40,40));
+        bild4.add(new BoidCenterComponent());
+        bild4.add(new BoidDistanceComponent());
+        bild4.add(new BoidMatchVelocityComponent());
         
         bild5= new Entity();
-        bild5.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
-        
+        bild5.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));        
         bild5.add(new VelocityComponent());
         bild5.add(new SeekComponent());
         bild5.add(new RenderComponent());
+        bild5.add(new RenderComponent(text,40,40));
+        bild5.add(new BoidCenterComponent());
+        bild5.add(new BoidDistanceComponent());
+        bild5.add(new BoidMatchVelocityComponent());
         
         bild6 = new Entity();
         bild6.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
@@ -82,6 +89,9 @@ public class MainScreen implements Screen {
         bild6.add(new VelocityComponent());
         bild6.add(new SeekComponent());
         bild6.add(new RenderComponent());
+        bild6.add(new BoidCenterComponent());
+        bild6.add(new BoidDistanceComponent());
+        bild6.add(new BoidMatchVelocityComponent());
         
         bild7= new Entity();
         bild7.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));

@@ -23,9 +23,9 @@ import com.mygdx.components.VelocityComponent;
 
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 35;
+	private static final float OPTIMAL_BOID_DISTANCE = 50;
 
-	private static final int GROUP_RANGE = 500;
+	private static final int GROUP_RANGE = 100;
 
 	private ImmutableArray<Entity> entities;
 
@@ -63,7 +63,7 @@ public class MovementSystem extends EntitySystem {
 		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();		
 	
 		if (seekComp != null) {
-			velComp.vectorVelocity = seekComp.vectorSeek;
+			velComp.vectorVelocity = seekComp.vectorSeek.scl(1.0f / 3.0f);
 			
 		}
 		if (fleeComp != null) {
@@ -85,6 +85,7 @@ public class MovementSystem extends EntitySystem {
 		velComp.vectorVelocity.add(boidVector);
 		velComp.vectorVelocity = truncate(velComp.vectorVelocity, velComp.maxSpeed);
 		positionComp.position.add(velComp.vectorVelocity);
+		velComp.vectorVelocity.setZero();
 	
 		
 	}
@@ -209,7 +210,8 @@ public class MovementSystem extends EntitySystem {
 
 		// return result;
 		result.sub(entity.getComponent(VelocityComponent.class).vectorVelocity);
-		result.scl(1 / SMALLING_VELOCITY_FACTOR);
+		result.x = result.x / SMALLING_VELOCITY_FACTOR;
+		result.y = result.y / SMALLING_VELOCITY_FACTOR;
 		return result;
 	}
 
@@ -220,7 +222,7 @@ public class MovementSystem extends EntitySystem {
 
 		Vector2 positionVectorBoid = position.position.cpy();
 
-		float percentNearing = 100;
+		float percentNearing = 25f;
 		int entityWith = entity.getComponent(RenderComponent.class).getWidth();
 		int entityHeight = entity.getComponent(RenderComponent.class).getHeight();
 		int boidCounter = 0;
@@ -259,8 +261,8 @@ public class MovementSystem extends EntitySystem {
 		{
 			result.x = result.x / boidCounter;
 			result.y = result.y / boidCounter;
-		} // result.x = result.x / percentNearing;
-			// result.y = result.y / percentNearing;
+		}  result.x = result.x / percentNearing;
+			 result.y = result.y / percentNearing;
 		return result;
 	}
 
