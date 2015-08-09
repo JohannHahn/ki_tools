@@ -58,7 +58,7 @@ public class RenderSystem extends EntitySystem {
 			if (renderComp.getTexture() != null) {
 				Texture tempTexture = renderComp.getTexture();
 				batch.draw(tempTexture, position.x, position.y, renderComp.getWidth(), renderComp.getHeight());
-				batch.flush();
+				//batch.flush();
 			} else {
 				shapeRenderer.setAutoShapeType(true);
 				shapeRenderer.begin();

@@ -57,7 +57,7 @@ public class MainScreen implements Screen {
         
         bild3.add(new VelocityComponent());
         bild3.add(new SeekComponent());
-       // bild3.add(new RenderComponent(text,40,40));
+        bild3.add(new RenderComponent(text,40,40));
         bild3.add(new BoidCenterComponent());
         bild3.add(new BoidDistanceComponent());
         bild3.add(new BoidMatchVelocityComponent());
@@ -68,7 +68,7 @@ public class MainScreen implements Screen {
         bild4.add(new VelocityComponent());
         bild4.add(new SeekComponent());
       
-     //   bild4.add(new RenderComponent(text,40,40));
+        bild4.add(new RenderComponent(text,40,40));
         bild4.add(new BoidCenterComponent());
         bild4.add(new BoidDistanceComponent());
         bild4.add(new BoidMatchVelocityComponent());
@@ -77,7 +77,7 @@ public class MainScreen implements Screen {
         bild5.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));        
         bild5.add(new VelocityComponent());
         bild5.add(new SeekComponent());
-   //     bild5.add(new RenderComponent());
+        bild5.add(new RenderComponent());
         
         bild5.add(new BoidCenterComponent());
         bild5.add(new BoidDistanceComponent());
@@ -88,7 +88,7 @@ public class MainScreen implements Screen {
         
         bild6.add(new VelocityComponent());
         bild6.add(new SeekComponent());
-   //     bild6.add(new RenderComponent());
+        bild6.add(new RenderComponent());
         bild6.add(new BoidCenterComponent());
         bild6.add(new BoidDistanceComponent());
         bild6.add(new BoidMatchVelocityComponent());
@@ -98,7 +98,7 @@ public class MainScreen implements Screen {
         
         bild7.add(new VelocityComponent());
         bild7.add(new SeekComponent());
-      //  bild7.add(new RenderComponent());
+        bild7.add(new RenderComponent());
         bild7.add(new BoidCenterComponent());
         bild7.add(new BoidDistanceComponent());
         bild7.add(new BoidMatchVelocityComponent());

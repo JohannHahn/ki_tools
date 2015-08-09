@@ -23,7 +23,7 @@ import com.mygdx.components.VelocityComponent;
 
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 50;
+	private static final float OPTIMAL_BOID_DISTANCE = 40;
 
 	private static final int GROUP_RANGE = 100;
 
@@ -39,8 +39,9 @@ public class MovementSystem extends EntitySystem {
 
 	public void addedToEngine(Engine engine) {
 		// TODO: attache family rendercomponent
-		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class, VelocityComponent.class,
-				BoidCenterComponent.class, BoidDistanceComponent.class, BoidMatchVelocityComponent.class, RenderComponent.class));
+		entities = engine.getEntitiesFor(
+				Family.getFor(PositionComponent.class, VelocityComponent.class, BoidCenterComponent.class,
+						BoidDistanceComponent.class, BoidMatchVelocityComponent.class, RenderComponent.class));
 		System.out.println("MovementSystem added");
 	}
 
@@ -60,34 +61,34 @@ public class MovementSystem extends EntitySystem {
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
-		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();		
-	
+		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();
+
 		if (seekComp != null) {
 			velComp.vectorVelocity = seekComp.vectorSeek.scl(1.0f / 3.0f);
-			
+
 		}
 		if (fleeComp != null) {
 			velComp.vectorVelocity = fleeComp.vectorFlee;
 		}
-		
+
 		Vector2 boidVector = new Vector2();
-		boidVector.add(bCenter);		
+		boidVector.add(bCenter);
 		boidVector.add(bDistance);
 		boidVector.add(bMV);
-		
-		/*//Arrival
-		float distance = distance(new Vector2(bCenter).scl(100), positionComp.position);
-		float slowingRadius = OPTIMAL_BOID_DISTANCE * 2;
-		if(distance < slowingRadius){
-			boidVector.nor().scl(velComp.maxVelocity * (distance / slowingRadius));
-		}		*/
-		
+
+		/*
+		 * //Arrival float distance = distance(new Vector2(bCenter).scl(100),
+		 * positionComp.position); float slowingRadius = OPTIMAL_BOID_DISTANCE *
+		 * 2; if(distance < slowingRadius){
+		 * boidVector.nor().scl(velComp.maxVelocity * (distance /
+		 * slowingRadius)); }
+		 */
+
 		velComp.vectorVelocity.add(boidVector);
 		velComp.vectorVelocity = truncate(velComp.vectorVelocity, velComp.maxSpeed);
 		positionComp.position.add(velComp.vectorVelocity);
 		velComp.vectorVelocity.setZero();
-	
-		
+
 	}
 
 	private void updateVectors(Entity entity, PositionComponent position) {
@@ -136,11 +137,11 @@ public class MovementSystem extends EntitySystem {
 		FleeComponent fleeComp = fm.get(entity);
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 velocity = velComp.vectorVelocity.cpy();
-		
-		if (seekComp != null) {			
+
+		if (seekComp != null) {
 			Vector2 desired_velocity = target.sub(position);
 			float distance = desired_velocity.len();
-			
+
 			// slow down if inside slowing area
 			if (distance < slowingRadius) {
 				// Inside the slowing area
@@ -154,9 +155,9 @@ public class MovementSystem extends EntitySystem {
 			// steering = steering / mass
 			velocity = truncate(velocity.add(steering), velComp.maxSpeed);
 			result = velocity;
-		}  
+		}
 		if (fleeComp != null) {
-			
+
 			Vector2 desired_velocity = target.sub(position).nor().scl(velComp.maxVelocity * -1);
 			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
@@ -196,7 +197,7 @@ public class MovementSystem extends EntitySystem {
 			}
 
 		}
-		
+
 		// durch n-1
 		if (boidCounter > 0) // precrement
 		// result.scl(1 / boidCounter);
@@ -238,10 +239,13 @@ public class MovementSystem extends EntitySystem {
 					int entityIHeight = entities.get(i).getComponent(RenderComponent.class).getHeight();
 
 					// Calculate vector pointing away from neighbor
-			        Vector2 diff = sub(positionVectorBoid, pm.get(entities.get(i)).position);
+			        Vector2 diff = sub( positionVectorBoid,pm.get(entities.get(i)).position);
+			        //abziehen der umfang der einzelnen entities
+			        diff.sub(entityIWith/2 - entityWith/2, entityHeight/2-entityIHeight/2);
 			        
 			        diff.nor();
-			        diff.scl(30/d);        // Weight by distance
+			        
+			        diff.scl(OPTIMAL_BOID_DISTANCE/d);        // Weight by distance//wrong
 			        result.add(diff);
 					
 					
@@ -258,35 +262,39 @@ public class MovementSystem extends EntitySystem {
 		// durch n-1
 		if (boidCounter > 0) 
 			scaleVector(result,(1.0f/boidCounter));
-		/*
-		result.x = result.x / percentNearing;
-			 result.y = result.y / percentNearing;
-		*/	 
+		
 		return result;
 	}
 
-
-	// scaled bei distance //darf nur bis zu einer gewissen distance scaliert werden
+	// scaled bei distance //darf nur bis zu einer gewissen distance scaliert
+	// werden
 	private Vector2 calculateVectorBoidCenter(Entity entity, PositionComponent position) {
 
 		Vector2 positionVectorBoid = position.position.cpy();
-
 		Vector2 result = new Vector2();
-
+		int entityWith = entity.getComponent(RenderComponent.class).getWidth();
+		int entityHeight = entity.getComponent(RenderComponent.class).getHeight();
 		float percentNearing = 100;
 		boolean xRange = false, yRange = false;
 		int boidCounter = 0;
-		
-		float d=1;
-//for each
+
+		float d = 1;
+		// for each
 		for (int i = 0; i < entities.size(); ++i) {
-// not equals
+			// not equals
 			if (!entity.equals(entities.get(i))) {
 
+				int entityIWith = entities.get(i).getComponent(RenderComponent.class).getWidth();
+				int entityIHeight = entities.get(i).getComponent(RenderComponent.class).getHeight();
 				// near enought?
-				if (GROUP_RANGE >= (d=distance(positionVectorBoid, pm.get(entities.get(i)).position))) {
+				if (GROUP_RANGE >= (d = distance(positionVectorBoid, pm.get(entities.get(i)).position))) {
 
-					result.add(pm.get(entities.get(i)).position);
+					Vector2 diff= new Vector2();
+					diff=sub( pm.get(entities.get(i)).position , positionVectorBoid);
+					diff.sub(entityIWith/2 - entityWith/2, entityHeight/2-entityIHeight/2);
+					diff.nor();
+					diff.scl(d/OPTIMAL_BOID_DISTANCE);        // Weight by distance
+					result.add(diff);
 					boidCounter++;
 				}
 
@@ -297,17 +305,17 @@ public class MovementSystem extends EntitySystem {
 		// durch n-1
 		if (boidCounter > 0) // precrement
 		{
-			scaleVector(result, 1/boidCounter);
-			
+			scaleVector(result, 1 / boidCounter);
 
-			result.sub(positionVectorBoid);
+			//result.sub(positionVectorBoid);
 
 		}
 		/*
-		// result.scl(1.0f / percentNearing);
-		result.x = result.x / percentNearing;
-		result.y = result.y / percentNearing;
-		*/
+		 * // result.scl(1.0f / percentNearing); result.x = result.x /
+		 * percentNearing; result.y = result.y / percentNearing;
+		 */
+		
+		//returning a relativ vector
 		return result;
 	}
 
@@ -326,89 +334,71 @@ public class MovementSystem extends EntitySystem {
 
 		return temp.len();
 	}
-	
+
 	private void scaleVector(Vector2 result, float f) {
 		{
 			result.x = result.x * f;
 			result.y = result.y * f;
-		} 
-		
+		}
+
 	}
 
 	private Vector2 sub(Vector2 positionVectorBoid, Vector2 position) {
 		Vector2 temp;
-		temp= new Vector2(positionVectorBoid.x-position.x, positionVectorBoid.y-position.y);
+		temp = new Vector2(positionVectorBoid.x - position.x, positionVectorBoid.y - position.y);
 		return temp;
 	}
 
 }
 
-//preversion
+// preversion
 /*
  * 
-	// scaled bei distance
-	private Vector2 calculateVectorBoidDistance(Entity entity, PositionComponent position) {
+ * // scaled bei distance private Vector2 calculateVectorBoidDistance(Entity
+ * entity, PositionComponent position) {
+ * 
+ * Vector2 result = new Vector2();
+ * 
+ * Vector2 positionVectorBoid = position.position.cpy();
+ * 
+ * float percentNearing = 25f; int entityWith =
+ * entity.getComponent(RenderComponent.class).getWidth(); int entityHeight =
+ * entity.getComponent(RenderComponent.class).getHeight(); int boidCounter = 0;
+ * float d=1; for (int i = 0; i < entities.size(); ++i) { if
+ * (!entity.equals(entities.get(i))) {
+ * 
+ * // near enought? if (OPTIMAL_BOID_DISTANCE > (d=distance(positionVectorBoid,
+ * pm.get(entities.get(i)).position))) {
+ * 
+ * int entityIWith =
+ * entities.get(i).getComponent(RenderComponent.class).getWidth(); int
+ * entityIHeight =
+ * entities.get(i).getComponent(RenderComponent.class).getHeight();
+ * 
+ * 
+ * // distance(position.position,pm.get(entities.get(i)).position); result.sub(
+ * pm.get(entities.get(i)).position.x -positionVectorBoid.x,
+ * pm.get(entities.get(i)).position.y - positionVectorBoid.y ) ;
+ * 
+ * /* // Calculate vector pointing away from neighbor Vector2 diff =
+ * sub(positionVectorBoid, pm.get(entities.get(i)).position); diff.nor();
+ * diff.scl(d); // Weight by distance result.add(diff);
+ */
 
-		Vector2 result = new Vector2();
-
-		Vector2 positionVectorBoid = position.position.cpy();
-
-		float percentNearing = 25f;
-		int entityWith = entity.getComponent(RenderComponent.class).getWidth();
-		int entityHeight = entity.getComponent(RenderComponent.class).getHeight();
-		int boidCounter = 0;
-		float d=1;
-		for (int i = 0; i < entities.size(); ++i) {
-			if (!entity.equals(entities.get(i))) {
-
-				// near enought?
-				if (OPTIMAL_BOID_DISTANCE > (d=distance(positionVectorBoid, pm.get(entities.get(i)).position))) {
-
-					int entityIWith = entities.get(i).getComponent(RenderComponent.class).getWidth();
-					int entityIHeight = entities.get(i).getComponent(RenderComponent.class).getHeight();
-
-					
-					// distance(position.position,pm.get(entities.get(i)).position);
-					result.sub(
-							 pm.get(entities.get(i)).position.x -positionVectorBoid.x,
-							pm.get(entities.get(i)).position.y - positionVectorBoid.y ) ;
-					
-					/*
-					// Calculate vector pointing away from neighbor
-			        Vector2 diff = sub(positionVectorBoid, pm.get(entities.get(i)).position);
-			        diff.nor();
-			        diff.scl(d);        // Weight by distance
-			        result.add(diff);
-					*/
-					
-					
-					
-					
-					
-					
-					/*entityIWith / 2	- entityWith / 2
-					entityHeight / 2- entityIHeight / 2)
-					// result.nor();
-					// result.scl(1/d);
-					boidCounter++;
-				}
-				// is not working tried to bigger the vector for smaller
-				// distances
-				// percentNearing=MathUtils.clamp(Math.min(pm.get(entities.get(i)).position.x-positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y),70,100);
-
-			}
-
-		}
-		// durch n-1
-		if (boidCounter > 0) // precrement
-		// result.scl(1 / boidCounter);
-		{
-			result.x = result.x / boidCounter;
-			result.y = result.y / boidCounter;
-		}  result.x = result.x / percentNearing;
-			 result.y = result.y / percentNearing;
-			 
-		return result;
-	}
- * */
- 
+/*
+ * entityIWith / 2 - entityWith / 2 entityHeight / 2- entityIHeight / 2) //
+ * result.nor(); // result.scl(1/d); boidCounter++; } // is not working tried to
+ * bigger the vector for smaller // distances //
+ * percentNearing=MathUtils.clamp(Math.min(pm.get(entities.get(i)).position.x-
+ * positionVectorBoid.x,pm.get(entities.get(i)).position.y-positionVectorBoid.y)
+ * ,70,100);
+ * 
+ * }
+ * 
+ * } // durch n-1 if (boidCounter > 0) // precrement // result.scl(1 /
+ * boidCounter); { result.x = result.x / boidCounter; result.y = result.y /
+ * boidCounter; } result.x = result.x / percentNearing; result.y = result.y /
+ * percentNearing;
+ * 
+ * return result; }
+ */
