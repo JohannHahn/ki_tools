@@ -31,6 +31,7 @@ public enum BoidState implements State<BoidEntity> {
 			}
         }
 	},
+	
 	SEEKING(){
 		private ComponentMapper<SeekComponent> sm = ComponentMapper.getFor(SeekComponent.class);
 		private ComponentMapper<FleeComponent> fm = ComponentMapper.getFor(FleeComponent.class);

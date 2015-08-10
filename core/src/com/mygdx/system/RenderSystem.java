@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.BoidDistanceComponent;
@@ -30,14 +31,17 @@ public class RenderSystem extends EntitySystem {
 	// May be better deleted and use entity.getComponent
 	private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
 	private ComponentMapper<RenderComponent> rm = ComponentMapper.getFor(RenderComponent.class);
-
+	private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);	
+	private Vector2 up = new Vector2(0, 1);
+	private float rotation = 0f;
+	float alpha = 0f;
 	public RenderSystem(SpriteBatch batch) {
 		this.batch = batch;
 		shapeRenderer = new ShapeRenderer();
 	}
 
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, RenderComponent.class).get());
+		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, RenderComponent.class, VelocityComponent.class).get());
 		System.out.println("Rendersystem added");
 
 	}
@@ -46,15 +50,17 @@ public class RenderSystem extends EntitySystem {
 	public void update(float deltaTime) {
 		PositionComponent positionComp;
 		RenderComponent renderComp;
-		for (int i = 0; i < entities.size(); ++i) {
+		VelocityComponent velComp;
+		for (int i = 0; i < entities.size(); ++i) {			
 			Entity entity = entities.get(i);
 			positionComp = pm.get(entity);
 			renderComp = rm.get(entity);
-
+			velComp = vm.get(entity);				
+			
 			Vector2 position = positionComp.position;
-
-			batch.begin();
-
+			rotation = up.angle(velComp.vectorVelocity);
+			
+			batch.begin();			
 			if (renderComp.getTexture() != null) {
 				Texture tempTexture = renderComp.getTexture();
 				batch.draw(tempTexture, position.x, position.y, renderComp.getWidth(), renderComp.getHeight());
@@ -62,10 +68,14 @@ public class RenderSystem extends EntitySystem {
 			} else {
 				shapeRenderer.setAutoShapeType(true);
 				shapeRenderer.begin();
-
+				shapeRenderer.identity();
+				shapeRenderer.setColor(Color.BLUE);	
+				shapeRenderer.translate(position.x, position.y, 0);
+				shapeRenderer.rotate(0f, 0f, 1f, rotation);
+				shapeRenderer.translate(-position.x, -position.y, 0);
 				shapeRenderer.triangle(position.x, position.y, position.x + 10, position.y, position.x + 5,
-						position.y + 10);
-
+						position.y + 20);
+				
 				shapeRenderer.end();
 			}
 

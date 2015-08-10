@@ -24,7 +24,7 @@ import com.sun.corba.se.spi.orbutil.fsm.State;
 
 public class MainScreen implements Screen {
     Engine engine;
-    BoidEntity boid,boid2,boid3;
+    BoidEntity boid,boid2,boid3,boid4,boid5,boid6, boid7;
     Texture text = new Texture("smiley.png");
     Stage stage = new Stage();
     Image img = new Image(text);
@@ -39,7 +39,7 @@ public class MainScreen implements Screen {
         boid.add(new VelocityComponent());
         boid.add(new SeekComponent());  
         boid.add(new FleeComponent());
-        boid.add(new RenderComponent(text,40,40));
+        boid.add(new RenderComponent());
         boid.add(new BoidCenterComponent());
         boid.add(new BoidDistanceComponent());
         boid.add(new BoidMatchVelocityComponent());
@@ -49,7 +49,7 @@ public class MainScreen implements Screen {
         boid2.add(new SeekComponent());  
         boid2.add(new FleeComponent());
         boid2.add(new VelocityComponent());
-        boid2.add(new RenderComponent(text,40,40));
+        boid2.add(new RenderComponent());
         boid2.add(new BoidCenterComponent());
         boid2.add(new BoidDistanceComponent());
         boid2.add(new BoidMatchVelocityComponent());
@@ -59,49 +59,49 @@ public class MainScreen implements Screen {
         boid3.add(new VelocityComponent());
         boid3.add(new SeekComponent());  
         boid3.add(new FleeComponent());
-        boid3.add(new RenderComponent(text,40,40));
+        boid3.add(new RenderComponent());
         boid3.add(new BoidCenterComponent());
         boid3.add(new BoidDistanceComponent());
         boid3.add(new BoidMatchVelocityComponent());
  
-      /*  bild4= new Entity();
-        bild4.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));        
-        bild4.add(new VelocityComponent());
-      //  bild4.add(new SeekComponent());      
-        bild4.add(new RenderComponent(text,40,40));
-        bild4.add(new BoidCenterComponent());
-        bild4.add(new BoidDistanceComponent());
-        bild4.add(new BoidMatchVelocityComponent());
+        boid4= new BoidEntity(BoidEntity.Team.RED);
+        boid4.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));        
+        boid4.add(new VelocityComponent());
+        boid4.add(new SeekComponent());      
+        boid4.add(new RenderComponent(text,40,40));
+        boid4.add(new BoidCenterComponent());
+        boid4.add(new BoidDistanceComponent());
+        boid4.add(new BoidMatchVelocityComponent());
         
-        bild5= new Entity();
-        bild5.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));        
-        bild5.add(new VelocityComponent());
-        bild5.add(new SeekComponent());
-        bild5.add(new RenderComponent());
+        boid5= new BoidEntity(BoidEntity.Team.RED);
+        boid5.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));        
+        boid5.add(new VelocityComponent());
+        boid5.add(new SeekComponent());
+        boid5.add(new RenderComponent());
         
-        bild5.add(new BoidCenterComponent());
-        bild5.add(new BoidDistanceComponent());
-        bild5.add(new BoidMatchVelocityComponent());
+        boid5.add(new BoidCenterComponent());
+        boid5.add(new BoidDistanceComponent());
+        boid5.add(new BoidMatchVelocityComponent());
         
-        bild6 = new Entity();
-        bild6.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
+        boid6 =new BoidEntity(BoidEntity.Team.RED);
+        boid6.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
         
-        bild6.add(new VelocityComponent());
-        bild6.add(new SeekComponent());
-        bild6.add(new RenderComponent());
-        bild6.add(new BoidCenterComponent());
-        bild6.add(new BoidDistanceComponent());
-        bild6.add(new BoidMatchVelocityComponent());
+        boid6.add(new VelocityComponent());
+        boid6.add(new SeekComponent());
+        boid6.add(new RenderComponent());
+        boid6.add(new BoidCenterComponent());
+        boid6.add(new BoidDistanceComponent());
+        boid6.add(new BoidMatchVelocityComponent());
         
-        bild7= new Entity();
-        bild7.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
+        boid7= new BoidEntity(BoidEntity.Team.RED);
+        boid7.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
         
-        bild7.add(new VelocityComponent());
-        bild7.add(new SeekComponent());
-        bild7.add(new RenderComponent());
-        bild7.add(new BoidCenterComponent());
-        bild7.add(new BoidDistanceComponent());
-        bild7.add(new BoidMatchVelocityComponent());*/
+        boid7.add(new VelocityComponent());
+        boid7.add(new SeekComponent());
+        boid7.add(new RenderComponent());
+        boid7.add(new BoidCenterComponent());
+        boid7.add(new BoidDistanceComponent());
+        boid7.add(new BoidMatchVelocityComponent());
         
         this.game = game;   
         engine.addSystem(new MovementSystem());
@@ -110,6 +110,10 @@ public class MainScreen implements Screen {
         engine.addEntity(boid);
         engine.addEntity(boid2);
         engine.addEntity(boid3);
+        engine.addEntity(boid4);
+        engine.addEntity(boid5);
+        engine.addEntity(boid6);
+        engine.addEntity(boid7);
     }
 
     @Override

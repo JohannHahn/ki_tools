@@ -58,13 +58,16 @@ public class MovementSystem extends EntitySystem {
 
 	// SETs the Position after all Vectors are calculated
 	private void setPositon(BoidEntity entity, PositionComponent positionComp) {
+		
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
 		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();
-
+		
+		velComp.vectorVelocity.setZero();
+		
 		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
 			velComp.vectorVelocity = seekComp.vectorSeek;
 
@@ -88,8 +91,7 @@ public class MovementSystem extends EntitySystem {
 
 		velComp.vectorVelocity.add(boidVector);
 		velComp.vectorVelocity = truncate(velComp.vectorVelocity, velComp.maxSpeed);
-		positionComp.position.add(velComp.vectorVelocity);
-		velComp.vectorVelocity.setZero();
+		positionComp.position.add(velComp.vectorVelocity);		
 
 	}
 
