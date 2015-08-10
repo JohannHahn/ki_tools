@@ -13,6 +13,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.mygdx.Entities.BoidEntity;
+import com.mygdx.Entities.BoidState;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.BoidDistanceComponent;
 import com.mygdx.components.BoidMatchVelocityComponent;
@@ -46,15 +48,16 @@ public class MovementSystem extends EntitySystem {
 
 	public void update(float deltaTime) {
 		for (int i = 0; i < entities.size(); ++i) {
-			Entity entity = entities.get(i);
+			BoidEntity entity = (BoidEntity)entities.get(i);
 			PositionComponent position = pm.get(entity);
 			updateVectors(entity, position);
 			setPositon(entity, position);
+			entity.update(deltaTime);
 		}
 	}
 
 	// SETs the Position after all Vectors are calculated
-	private void setPositon(Entity entity, PositionComponent positionComp) {
+	private void setPositon(BoidEntity entity, PositionComponent positionComp) {
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		VelocityComponent velComp = vm.get(entity);
@@ -62,11 +65,11 @@ public class MovementSystem extends EntitySystem {
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
 		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();
 
-		if (seekComp != null) {
+		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
 			velComp.vectorVelocity = seekComp.vectorSeek;
 
 		}
-		if (fleeComp != null) {
+		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING) {
 			velComp.vectorVelocity = fleeComp.vectorFlee;
 		}
 
@@ -90,7 +93,7 @@ public class MovementSystem extends EntitySystem {
 
 	}
 
-	private void updateVectors(Entity entity, PositionComponent position) {
+	private void updateVectors(BoidEntity entity, PositionComponent position) {
 		// NODES:
 		// Pseudocode Boid: http://www.kfish.org/boids/pseudocode.html
 		// Perfect example: https://processing.org/examples/flocking.html
@@ -104,9 +107,9 @@ public class MovementSystem extends EntitySystem {
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 
-		if (seekComp != null)
+		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING)
 			entity.getComponent(SeekComponent.class).vectorSeek = calculateVectorSeekFlee(entity, position);
-		if (fleeComp != null)
+		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING)
 			entity.getComponent(FleeComponent.class).vectorFlee = calculateVectorSeekFlee(entity, position);
 
 		// For debugging press D
@@ -127,17 +130,19 @@ public class MovementSystem extends EntitySystem {
 	}
 
 	// DONE
-	private Vector2 calculateVectorSeekFlee(Entity entity, PositionComponent positionComp) {
+	private Vector2 calculateVectorSeekFlee(BoidEntity entity, PositionComponent positionComp) {
 		Vector2 result = new Vector2();
 		Vector2 position = positionComp.position;
-		Vector2 target = new Vector2(Gdx.input.getX(), Gdx.app.getGraphics().getHeight() - Gdx.input.getY());
 		float slowingRadius = OPTIMAL_BOID_DISTANCE;
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 velocity = velComp.vectorVelocity.cpy();
-
-		if (seekComp != null) {
+		Vector2 target;
+		
+		//Seek
+		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
+			target = seekComp.target;
 			Vector2 desired_velocity = target.sub(position);
 			float distance = desired_velocity.len();
 
@@ -149,14 +154,17 @@ public class MovementSystem extends EntitySystem {
 				// Outside the slowing area.
 				desired_velocity.nor().scl(velComp.maxVelocity);
 			}
+			
 			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
 			// steering = steering / mass
 			velocity = truncate(velocity.add(steering), velComp.maxSpeed);
 			result = velocity;
 		}
-		if (fleeComp != null) {
-
+		
+		//Flee
+		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING) {
+			target = fleeComp.target;
 			Vector2 desired_velocity = target.sub(position).nor().scl(velComp.maxVelocity * -1);
 			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
@@ -164,18 +172,15 @@ public class MovementSystem extends EntitySystem {
 			velocity = truncate(velocity.add(steering), velComp.maxSpeed);
 			result = velocity;
 		}
+		
 		return result;
 	}
-
-	// TODO
 	private Vector2 calculateVectorBoidMatchVc(Entity entity, PositionComponent positionComp) {
 
 		Vector2 result = new Vector2();
 
 		float SMALLING_VELOCITY_FACTOR = 8;
 		Vector2 positionVectorBoid = positionComp.position.cpy();
-		boolean xRange = false;
-		boolean yRange = false;
 		int boidCounter = 0;
 
 		for (int i = 0; i < entities.size(); ++i) {
@@ -221,8 +226,6 @@ public class MovementSystem extends EntitySystem {
 		Vector2 result = new Vector2();
 
 		Vector2 positionVectorBoid = position.position.cpy();
-
-		float percentNearing = 25f;
 		int entityWith = entity.getComponent(RenderComponent.class).getWidth();
 		int entityHeight = entity.getComponent(RenderComponent.class).getHeight();
 		int boidCounter = 0;
@@ -273,8 +276,6 @@ public class MovementSystem extends EntitySystem {
 		Vector2 result = new Vector2();
 		int entityWith = entity.getComponent(RenderComponent.class).getWidth();
 		int entityHeight = entity.getComponent(RenderComponent.class).getHeight();
-		float percentNearing = 100;
-		boolean xRange = false, yRange = false;
 		int boidCounter = 0;
 
 		float d = 1;
@@ -305,14 +306,7 @@ public class MovementSystem extends EntitySystem {
 		if (boidCounter > 0) // precrement
 		{
 			scaleVector(result, 1f / boidCounter);
-
-			//result.sub(positionVectorBoid);
-
 		}
-		/*
-		 * // result.scl(1.0f / percentNearing); result.x = result.x /
-		 * percentNearing; result.y = result.y / percentNearing;
-		 */
 		
 		//returning a relativ vector
 		return result;

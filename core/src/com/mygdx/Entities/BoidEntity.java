@@ -1,15 +1,25 @@
 package com.mygdx.Entities;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
+import com.badlogic.gdx.ai.fsm.StateMachine;
+import com.badlogic.gdx.math.Vector2;
 
-enum Team {
-    RED, GREEN
-}
+
 public class BoidEntity extends Entity {
-
-	private Team team;
+	public enum Team {
+	    RED, GREEN
+	}
+	public Team team;
+	public StateMachine<BoidEntity> stateMachine;
+	
 	public BoidEntity(Team team)
 	{
 		this.team= team;
+		stateMachine = new DefaultStateMachine<BoidEntity>(this, BoidState.NO_TARGET);
+	}
+	
+	public void update (float delta){
+		stateMachine.update();
 	}
 }
