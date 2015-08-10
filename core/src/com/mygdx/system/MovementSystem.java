@@ -25,9 +25,9 @@ import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 50;
+	private static final float OPTIMAL_BOID_DISTANCE = 80;
 
-	private static final int GROUP_RANGE = 500;
+	private static final int GROUP_RANGE = 100;
 
 	private ImmutableArray<Entity> entities;
 
@@ -64,12 +64,12 @@ public class MovementSystem extends EntitySystem {
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
-		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();
+		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy().scl(1f / 3f);
 		
 		velComp.vectorVelocity.setZero();
 		
 		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
-			velComp.vectorVelocity = seekComp.vectorSeek;
+			velComp.vectorVelocity = seekComp.vectorSeek.scl(1f / 2f);
 
 		}
 		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING) {
