@@ -19,6 +19,7 @@ import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
 import com.mygdx.system.MovementSystem;
 import com.mygdx.system.RenderSystem;
+import com.sun.corba.se.spi.orbutil.fsm.State;
 
 public class MainScreen implements Screen {
     Engine engine;
@@ -41,7 +42,6 @@ public class MainScreen implements Screen {
         bild.add(new BoidCenterComponent());
         bild.add(new BoidDistanceComponent());
         bild.add(new BoidMatchVelocityComponent());
-        
         bild2= new Entity();
         bild2.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500 )));
         

@@ -23,9 +23,9 @@ import com.mygdx.components.VelocityComponent;
 
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 40;
+	private static final float OPTIMAL_BOID_DISTANCE = 50;
 
-	private static final int GROUP_RANGE = 100;
+	private static final int GROUP_RANGE = 500;
 
 	private ImmutableArray<Entity> entities;
 
@@ -305,7 +305,7 @@ public class MovementSystem extends EntitySystem {
 		// durch n-1
 		if (boidCounter > 0) // precrement
 		{
-			scaleVector(result, 1 / boidCounter);
+			scaleVector(result, 1f / boidCounter);
 
 			//result.sub(positionVectorBoid);
 
