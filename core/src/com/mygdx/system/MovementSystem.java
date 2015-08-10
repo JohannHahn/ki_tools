@@ -1,5 +1,4 @@
 package com.mygdx.system;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -8,6 +7,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
+import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
@@ -20,7 +21,6 @@ import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RenderComponent;
 import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
-
 public class MovementSystem extends EntitySystem {
 
 	private static final float OPTIMAL_BOID_DISTANCE = 50;
@@ -39,9 +39,8 @@ public class MovementSystem extends EntitySystem {
 
 	public void addedToEngine(Engine engine) {
 		// TODO: attache family rendercomponent
-		entities = engine.getEntitiesFor(
-				Family.getFor(PositionComponent.class, VelocityComponent.class, BoidCenterComponent.class,
-						BoidDistanceComponent.class, BoidMatchVelocityComponent.class, RenderComponent.class));
+		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, VelocityComponent.class, BoidCenterComponent.class,
+						BoidDistanceComponent.class, BoidMatchVelocityComponent.class, RenderComponent.class).get());
 		System.out.println("MovementSystem added");
 	}
 
@@ -64,7 +63,7 @@ public class MovementSystem extends EntitySystem {
 		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();
 
 		if (seekComp != null) {
-			velComp.vectorVelocity = seekComp.vectorSeek.scl(1.0f / 3.0f);
+			velComp.vectorVelocity = seekComp.vectorSeek;
 
 		}
 		if (fleeComp != null) {

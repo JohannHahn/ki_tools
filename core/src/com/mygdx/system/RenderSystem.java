@@ -37,7 +37,7 @@ public class RenderSystem extends EntitySystem {
 	}
 
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFor(PositionComponent.class, RenderComponent.class));
+		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, RenderComponent.class).get());
 		System.out.println("Rendersystem added");
 
 	}
