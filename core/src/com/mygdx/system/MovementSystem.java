@@ -69,7 +69,7 @@ public class MovementSystem extends EntitySystem {
 		//velComp.vectorVelocity.setZero();
 		
 		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
-			velComp.vectorVelocity = seekComp.vectorSeek;
+			velComp.vectorVelocity = seekComp.vectorSeek.scl(1f / 1.5f);
 
 		}
 		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING) {
@@ -79,23 +79,26 @@ public class MovementSystem extends EntitySystem {
 		Vector2 boidVector = new Vector2();
 		boidVector.add(bCenter);
 		boidVector.add(bDistance);
-		boidVector.add(bMV);
-
-		/*
-		 * //Arrival float distance = distance(new Vector2(bCenter).scl(100),
-		 * positionComp.position); float slowingRadius = OPTIMAL_BOID_DISTANCE *
-		 * 2; if(distance < slowingRadius){
-		 * boidVector.nor().scl(velComp.maxVelocity * (distance /
-		 * slowingRadius)); }
-		 */
-		
+		boidVector.add(bMV);		
 		velComp.vectorVelocity.add(boidVector);
-		velComp.vectorVelocity.clamp(0, velComp.maxSpeed);
+		
+		 //Arrival 
+		if(entity.target != null){
+			float distance = distance(entity.target,
+			positionComp.position); float slowingRadius = 20f; 
+			if(distance < slowingRadius){
+				velComp.vectorVelocity.clamp(0, velComp.maxSpeed * (distance / slowingRadius)); 
+			}
+			else {
+				velComp.vectorVelocity.clamp(0, velComp.maxSpeed);
+			}
+		}		
+		
 		positionComp.position.add(velComp.vectorVelocity);	
 		//rotate to velocity direction
 		float angle = velComp.direction.angle(velComp.vectorVelocity);
 		velComp.direction.rotate(angle);
-		velComp.direction.nor();
+		//velComp.direction.nor();
 
 	}
 
@@ -155,12 +158,12 @@ public class MovementSystem extends EntitySystem {
 			// slow down if inside slowing area
 			if (distance < slowingRadius) {
 				// Inside the slowing area
-				desired_velocity.nor().scl(velComp.maxVelocity * (distance / slowingRadius));
+				//desired_velocity.nor().scl(velComp.maxVelocity * (distance / slowingRadius));
 			} else {
 				// Outside the slowing area.
-				desired_velocity.nor().scl(velComp.maxVelocity);
+				//desired_velocity.nor().scl(velComp.maxVelocity);
 			}
-			
+			desired_velocity.nor().scl(velComp.maxVelocity);
 			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
 			// steering = steering / mass

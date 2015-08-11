@@ -12,6 +12,7 @@ public class BoidEntity extends Entity {
 	}
 	public Team team;
 	public StateMachine<BoidEntity> stateMachine;
+	public Vector2 target;
 	
 	public BoidEntity(Team team)
 	{

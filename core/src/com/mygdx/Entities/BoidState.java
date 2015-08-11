@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.SeekComponent;
 
@@ -16,16 +17,20 @@ public enum BoidState implements State<BoidEntity> {
 		@Override
 		public void enter(BoidEntity boid) {
 			sc = sm.get(boid);
-			if(sc != null)
+			if(sc != null){
 				sc.target = mouseCoordinates();
+				boid.target = mouseCoordinates();
+			}
 			System.out.println("Entered State: SEEK");
 		}			
 		
 		@Override		
         public void update(BoidEntity boid) {
 			sc = sm.get(boid);
-			if(sc != null)
+			if(sc != null){
 				sc.target = mouseCoordinates();
+				boid.target = mouseCoordinates();
+			}
 			checkInput(boid);
 			
         }
@@ -36,11 +41,13 @@ public enum BoidState implements State<BoidEntity> {
 		@Override
 		public void enter(BoidEntity boid) {
 			System.out.println("Entered State: " + boid.stateMachine.getCurrentState());
+			boid.target = boid.getComponent(BoidCenterComponent.class).vectorCenter;
 		}
 		
 		@Override
         public void update(BoidEntity boid) {
 			checkInput(boid);
+			boid.target = boid.getComponent(BoidCenterComponent.class).vectorCenter;
         }
 	},	
 	
@@ -50,16 +57,19 @@ public enum BoidState implements State<BoidEntity> {
 		@Override
 		public void enter(BoidEntity boid) {		
 			fc = fm.get(boid);
-			if(fc != null)
-				fc.target = mouseCoordinates();
+			boid.target = null;
+			if(fc != null){
+				fc.target = mouseCoordinates();				
+			}
 			System.out.println("Entered State: FLEE");			
 		}	
 		
 		@Override		
         public void update(BoidEntity boid) {			
 			fc = fm.get(boid);
-			if(fc != null)
+			if(fc != null){
 				fc.target = mouseCoordinates();
+			}
 			checkInput(boid);
 			
         }
