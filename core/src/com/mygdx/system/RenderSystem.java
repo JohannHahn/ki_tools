@@ -35,6 +35,8 @@ public class RenderSystem extends EntitySystem {
 	private Vector2 up = new Vector2(0, 1);
 	private float rotation = 0f;
 	float alpha = 0f;
+	float width = 10f;
+	float height = 20f;
 	public RenderSystem(SpriteBatch batch) {
 		this.batch = batch;
 		shapeRenderer = new ShapeRenderer();
@@ -58,7 +60,7 @@ public class RenderSystem extends EntitySystem {
 			velComp = vm.get(entity);				
 			
 			Vector2 position = positionComp.position;
-			rotation = up.angle(velComp.vectorVelocity);
+			rotation = up.angle(velComp.direction);
 			
 			batch.begin();			
 			if (renderComp.getTexture() != null) {
@@ -72,9 +74,8 @@ public class RenderSystem extends EntitySystem {
 				shapeRenderer.setColor(Color.BLUE);	
 				shapeRenderer.translate(position.x, position.y, 0);
 				shapeRenderer.rotate(0f, 0f, 1f, rotation);
-				shapeRenderer.translate(-position.x, -position.y, 0);
-				shapeRenderer.triangle(position.x, position.y, position.x + 10, position.y, position.x + 5,
-						position.y + 20);
+				shapeRenderer.triangle(-width/2f, 0, width/2, 0, 0,
+						height);
 				
 				shapeRenderer.end();
 			}

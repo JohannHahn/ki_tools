@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
@@ -35,7 +36,7 @@ public class MainScreen implements Screen {
         engine = new Engine();
         
         boid = new BoidEntity(BoidEntity.Team.RED);
-        boid.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500)));       
+        boid.add(new PositionComponent(200, 200));       
         boid.add(new VelocityComponent());
         boid.add(new SeekComponent());  
         boid.add(new FleeComponent());
@@ -45,7 +46,7 @@ public class MainScreen implements Screen {
         boid.add(new BoidMatchVelocityComponent());
         
         boid2= new BoidEntity(BoidEntity.Team.RED);
-        boid2.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500)));        
+        boid2.add(new PositionComponent(250, 200));        
         boid2.add(new SeekComponent());  
         boid2.add(new FleeComponent());
         boid2.add(new VelocityComponent());
@@ -55,7 +56,7 @@ public class MainScreen implements Screen {
         boid2.add(new BoidMatchVelocityComponent());
  
         boid3 = new BoidEntity(BoidEntity.Team.RED);
-        boid3.add(new PositionComponent(MathUtils.random(0,500 ),MathUtils.random(0,500)));        
+        boid3.add(new PositionComponent(225, 250));        
         boid3.add(new VelocityComponent());
         boid3.add(new SeekComponent());  
         boid3.add(new FleeComponent());
@@ -129,10 +130,23 @@ public class MainScreen implements Screen {
     	Gdx.gl.glClearColor(1, 1, 1.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         engine.update(delta);
+      if(Gdx.input.isKeyPressed(Keys.B)){  
+	       	BoidEntity boidR= new BoidEntity(BoidEntity.Team.RED);
+	        boidR.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));	        
+	        boidR.add(new VelocityComponent());
+	        boidR.add(new SeekComponent());
+	        boidR.add(new FleeComponent());
+	        boidR.add(new RenderComponent());
+	        boidR.add(new BoidCenterComponent());
+	        boidR.add(new BoidDistanceComponent());
+	        boidR.add(new BoidMatchVelocityComponent());
+	        engine.addEntity(boidR);
+      }
         
         
         
     }
+    
 
     @Override
     public void resize(int width, int height) {
