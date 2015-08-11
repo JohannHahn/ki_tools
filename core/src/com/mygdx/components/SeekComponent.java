@@ -5,6 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class SeekComponent extends Component {
 	public Vector2 vectorSeek = null;	
-	public Vector2 target;
+	public Vector2 target = new Vector2();
 	
 }

@@ -16,7 +16,8 @@ public class BoidEntity extends Entity {
 	public BoidEntity(Team team)
 	{
 		this.team= team;
-		stateMachine = new DefaultStateMachine<BoidEntity>(this, BoidState.NO_TARGET);
+		stateMachine = new DefaultStateMachine<BoidEntity>(this, BoidState.SEEKING);
+		
 	}
 	
 	public void update (float delta){
