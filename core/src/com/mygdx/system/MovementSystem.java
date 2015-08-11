@@ -27,7 +27,7 @@ public class MovementSystem extends EntitySystem {
 
 	private static final float OPTIMAL_BOID_DISTANCE = 90;
 
-	private static final int GROUP_RANGE = 500;
+	private static final int GROUP_RANGE = 200;
 
 	private ImmutableArray<Entity> entities;
 
@@ -64,12 +64,12 @@ public class MovementSystem extends EntitySystem {
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
-		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();
+		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();		
 		
-		velComp.vectorVelocity.setZero();
+		//velComp.vectorVelocity.setZero();
 		
 		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
-			velComp.vectorVelocity = seekComp.vectorSeek.scl(1f / 3f);
+			velComp.vectorVelocity = seekComp.vectorSeek;
 
 		}
 		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING) {
@@ -88,9 +88,9 @@ public class MovementSystem extends EntitySystem {
 		 * boidVector.nor().scl(velComp.maxVelocity * (distance /
 		 * slowingRadius)); }
 		 */
-
+		
 		velComp.vectorVelocity.add(boidVector);
-		velComp.vectorVelocity = truncate(velComp.vectorVelocity, velComp.maxSpeed);
+		velComp.vectorVelocity.clamp(0, velComp.maxSpeed);
 		positionComp.position.add(velComp.vectorVelocity);	
 		//rotate to velocity direction
 		float angle = velComp.direction.angle(velComp.vectorVelocity);
