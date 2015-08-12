@@ -25,7 +25,7 @@ import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 90;
+	private static final float OPTIMAL_BOID_DISTANCE = 80;
 
 	private static final int GROUP_RANGE = 200;
 
@@ -69,18 +69,20 @@ public class MovementSystem extends EntitySystem {
 		//velComp.vectorVelocity.setZero();
 		
 		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
-			velComp.vectorVelocity = seekComp.vectorSeek.scl(1f / 1.5f);
+			velComp.vectorVelocity.add(seekComp.vectorSeek.scl(1f / 1.5f));
 
 		}
 		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING) {
-			velComp.vectorVelocity = fleeComp.vectorFlee;
+			velComp.vectorVelocity.add(fleeComp.vectorFlee);
 		}
 
 		Vector2 boidVector = new Vector2();
 		boidVector.add(bCenter);
 		boidVector.add(bDistance);
 		boidVector.add(bMV);		
-		velComp.vectorVelocity.add(boidVector);
+		velComp.vectorVelocity.add(boidVector);		
+				
+		velComp.vectorVelocity.clamp(0, velComp.maxSpeed);
 		
 		 //Arrival 
 		if(entity.target != null){
@@ -89,10 +91,7 @@ public class MovementSystem extends EntitySystem {
 			if(distance < slowingRadius){
 				velComp.vectorVelocity.clamp(0, velComp.maxSpeed * (distance / slowingRadius)); 
 			}
-			else {
-				velComp.vectorVelocity.clamp(0, velComp.maxSpeed);
-			}
-		}		
+		}
 		
 		positionComp.position.add(velComp.vectorVelocity);	
 		//rotate to velocity direction
@@ -142,7 +141,6 @@ public class MovementSystem extends EntitySystem {
 	private Vector2 calculateVectorSeekFlee(BoidEntity entity, PositionComponent positionComp) {
 		Vector2 result = new Vector2();
 		Vector2 position = positionComp.position;
-		float slowingRadius = OPTIMAL_BOID_DISTANCE;
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		VelocityComponent velComp = vm.get(entity);
@@ -152,17 +150,7 @@ public class MovementSystem extends EntitySystem {
 		//Seek
 		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
 			target = seekComp.target;
-			Vector2 desired_velocity = target.sub(position);
-			float distance = desired_velocity.len();
-
-			// slow down if inside slowing area
-			if (distance < slowingRadius) {
-				// Inside the slowing area
-				//desired_velocity.nor().scl(velComp.maxVelocity * (distance / slowingRadius));
-			} else {
-				// Outside the slowing area.
-				//desired_velocity.nor().scl(velComp.maxVelocity);
-			}
+			Vector2 desired_velocity = target.sub(position);		
 			desired_velocity.nor().scl(velComp.maxVelocity);
 			Vector2 steering = desired_velocity.sub(velocity);
 			steering = truncate(steering, velComp.maxForce);
