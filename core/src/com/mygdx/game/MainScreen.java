@@ -30,99 +30,35 @@ public class MainScreen implements Screen {
     Stage stage = new Stage();
     Image img = new Image(text);
     MyGdxGame game;
+    int boidCount = 50;
     
     
     public MainScreen(MyGdxGame game) {
         engine = new Engine();
         
-        boid = new BoidEntity(BoidEntity.Team.RED);
-        boid.add(new PositionComponent(200, 200));       
-        boid.add(new VelocityComponent());
-        boid.add(new SeekComponent());  
-        boid.add(new FleeComponent());
-        boid.add(new RenderComponent());
-        boid.add(new BoidCenterComponent());
-        boid.add(new BoidDistanceComponent());
-        boid.add(new BoidMatchVelocityComponent());
-        
-        boid2= new BoidEntity(BoidEntity.Team.RED);
-        boid2.add(new PositionComponent(250, 200));        
-        boid2.add(new SeekComponent());  
-        boid2.add(new FleeComponent());
-        boid2.add(new VelocityComponent());
-        boid2.add(new RenderComponent());
-        boid2.add(new BoidCenterComponent());
-        boid2.add(new BoidDistanceComponent());
-        boid2.add(new BoidMatchVelocityComponent());
- 
-        boid3 = new BoidEntity(BoidEntity.Team.RED);
-        boid3.add(new PositionComponent(225, 250));        
-        boid3.add(new VelocityComponent());
-        boid3.add(new SeekComponent());  
-        boid3.add(new FleeComponent());
-        boid3.add(new RenderComponent());
-        boid3.add(new BoidCenterComponent());
-        boid3.add(new BoidDistanceComponent());
-        boid3.add(new BoidMatchVelocityComponent());
- 
-        boid4= new BoidEntity(BoidEntity.Team.RED);
-        boid4.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));        
-        boid4.add(new VelocityComponent());
-        boid4.add(new SeekComponent());      
-        boid4.add(new RenderComponent(text,40,40));
-        boid4.add(new BoidCenterComponent());
-        boid4.add(new BoidDistanceComponent());
-        boid4.add(new BoidMatchVelocityComponent());
-        
-        boid5= new BoidEntity(BoidEntity.Team.RED);
-        boid5.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));        
-        boid5.add(new VelocityComponent());
-        boid5.add(new SeekComponent());
-        boid5.add(new RenderComponent());
-        
-        boid5.add(new BoidCenterComponent());
-        boid5.add(new BoidDistanceComponent());
-        boid5.add(new BoidMatchVelocityComponent());
-        
-        boid6 =new BoidEntity(BoidEntity.Team.RED);
-        boid6.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
-        
-        boid6.add(new VelocityComponent());
-        boid6.add(new SeekComponent());
-        boid6.add(new RenderComponent());
-        boid6.add(new BoidCenterComponent());
-        boid6.add(new BoidDistanceComponent());
-        boid6.add(new BoidMatchVelocityComponent());
-        
-        boid7= new BoidEntity(BoidEntity.Team.RED);
-        boid7.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));
-        
-        boid7.add(new VelocityComponent());
-        boid7.add(new SeekComponent());
-        boid7.add(new RenderComponent());
-        boid7.add(new BoidCenterComponent());
-        boid7.add(new BoidDistanceComponent());
-        boid7.add(new BoidMatchVelocityComponent());
+        for(int i = 0; i < boidCount; i++){
+        	BoidEntity boidR= new BoidEntity(BoidEntity.Team.RED);
+	        boidR.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));	        
+	        boidR.add(new VelocityComponent());
+	        boidR.add(new SeekComponent());
+	        boidR.add(new FleeComponent());
+	        boidR.add(new RenderComponent());
+	        boidR.add(new BoidCenterComponent());
+	        boidR.add(new BoidDistanceComponent());
+	        boidR.add(new BoidMatchVelocityComponent());
+	        engine.addEntity(boidR);
+        }
         
         this.game = game;   
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RenderSystem(game.batch));
-        
-        engine.addEntity(boid);
-        engine.addEntity(boid2);
-        engine.addEntity(boid3);
-        engine.addEntity(boid4);
-        engine.addEntity(boid5);
-        engine.addEntity(boid6);
-        engine.addEntity(boid7);
     }
 
     @Override
     public void show() {
         
         
-    }
-    
+    }    
     
 
     @Override
@@ -146,6 +82,8 @@ public class MainScreen implements Screen {
         
         
     }
+    
+    
     
 
     @Override

@@ -35,8 +35,13 @@ public class MovementSystem extends EntitySystem {
 	private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
 	private ComponentMapper<SeekComponent> sm = ComponentMapper.getFor(SeekComponent.class);
 	private ComponentMapper<FleeComponent> fm = ComponentMapper.getFor(FleeComponent.class);
+	
+	private int windowWidth;
+	private int windowHeight;
 
 	public MovementSystem() {
+		windowWidth = Gdx.graphics.getWidth();
+		windowHeight = Gdx.graphics.getHeight();
 	}
 
 	public void addedToEngine(Engine engine) {
@@ -62,14 +67,14 @@ public class MovementSystem extends EntitySystem {
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		VelocityComponent velComp = vm.get(entity);
-		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
+		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy().scl(1f / 1.025f);
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
-		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();		
+		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy().scl(1.5f);		
 		
 		//velComp.vectorVelocity.setZero();
 		
 		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
-			velComp.vectorVelocity.add(seekComp.vectorSeek.scl(1f / 1.5f));
+			velComp.vectorVelocity.add(seekComp.vectorSeek);
 
 		}
 		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING) {
@@ -87,13 +92,17 @@ public class MovementSystem extends EntitySystem {
 		 //Arrival 
 		if(entity.target != null){
 			float distance = distance(entity.target,
-			positionComp.position); float slowingRadius = 20f; 
+			positionComp.position); float slowingRadius = 40f; 
 			if(distance < slowingRadius){
 				velComp.vectorVelocity.clamp(0, velComp.maxSpeed * (distance / slowingRadius)); 
 			}
 		}
 		
 		positionComp.position.add(velComp.vectorVelocity);	
+		
+		//Clamp in screen
+		boundCoordinates(positionComp.position);		
+		
 		//rotate to velocity direction
 		float angle = velComp.direction.angle(velComp.vectorVelocity);
 		velComp.direction.rotate(angle);
@@ -354,6 +363,28 @@ public class MovementSystem extends EntitySystem {
 		Vector2 temp;
 		temp = new Vector2(positionVectorBoid.x - position.x, positionVectorBoid.y - position.y);
 		return temp;
+	}
+	
+	private void boundCoordinates(Vector2 pos){
+		if(pos.x > windowWidth)
+		{
+			pos.x -= windowWidth;
+		}
+		
+		if(pos.x < 0)
+		{
+			pos.x += windowWidth;
+		}
+		
+		if(pos.y > windowHeight)
+		{
+			pos.y -= windowHeight;
+		}
+		
+		if(pos.y < 0)
+		{
+			pos.y += windowHeight;
+		}
 	}
 
 }
