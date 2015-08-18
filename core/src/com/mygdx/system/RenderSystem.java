@@ -35,8 +35,8 @@ public class RenderSystem extends EntitySystem {
 	private Vector2 up = new Vector2(0, 1);
 	private float rotation = 0f;
 	float alpha = 0f;
-	float width = 10f;
-	float height = 20f;
+	float width = 8f;
+	float height = 16f;
 	public RenderSystem(SpriteBatch batch) {
 		this.batch = batch;
 		shapeRenderer = new ShapeRenderer();

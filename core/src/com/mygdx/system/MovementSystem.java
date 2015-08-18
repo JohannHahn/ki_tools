@@ -69,7 +69,7 @@ public class MovementSystem extends EntitySystem {
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy().scl(1f / 1.025f);
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
-		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy().scl(1.5f);		
+		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy().scl(1.8f);		
 		
 		//velComp.vectorVelocity.setZero();
 		
