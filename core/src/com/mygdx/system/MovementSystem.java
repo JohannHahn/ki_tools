@@ -369,21 +369,25 @@ public class MovementSystem extends EntitySystem {
 		if(pos.x > windowWidth)
 		{
 			pos.x -= windowWidth;
+			pos.y = windowHeight - pos.y;
 		}
 		
 		if(pos.x < 0)
 		{
 			pos.x += windowWidth;
+			pos.y = windowHeight - pos.y;
 		}
 		
 		if(pos.y > windowHeight)
 		{
 			pos.y -= windowHeight;
+			pos.x = windowWidth - pos.x;
 		}
 		
 		if(pos.y < 0)
 		{
 			pos.y += windowHeight;
+			pos.x = windowWidth - pos.x;
 		}
 	}
 
