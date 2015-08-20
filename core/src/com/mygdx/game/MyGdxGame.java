@@ -40,4 +40,7 @@ public class MyGdxGame extends Game {
  *- vectoren abstimmen distance muss immer gröser sein als 
  *-distance vektor muss die breite seines und der anderen körper kennen
  *-need a velocityvector for each boid to match the velocity(verschieben unserer vektor berechnung in der methode updateVector in die components)
+ *
+ *SeekFlee mehrere objekte für teambeahviour
+ *Velocity muss abnehmen überzeit trägheit simulation
  */
