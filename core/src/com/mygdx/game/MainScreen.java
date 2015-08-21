@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.Entities.BoidEntity;
+import com.mygdx.Entities.BoidState;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.BoidDistanceComponent;
 import com.mygdx.components.BoidMatchVelocityComponent;
@@ -30,18 +31,34 @@ public class MainScreen implements Screen {
     Stage stage = new Stage();
     Image img = new Image(text);
     MyGdxGame game;
-    int boidCount = 50;
-    
+    int boidTeamSize = 1;
+    private int windowWidth = Gdx.graphics.getWidth();
+	private int windowHeight = Gdx.graphics.getHeight();    
     
     public MainScreen(MyGdxGame game) {
-        engine = new Engine();
+    	
+        engine = new Engine();        
+        //Create Team Red
+        for(int i = 0; i < boidTeamSize; i++){
+        	BoidEntity boidR= new BoidEntity(BoidEntity.Team.RED, engine, BoidState.PURSUIT);
+	        boidR.add(new PositionComponent(MathUtils.random(0,  windowWidth / 4f), MathUtils.random(0, windowHeight / 4f)));	        
+	        boidR.add(new VelocityComponent());
+	      //  boidR.add(new SeekComponent());
+	     //   boidR.add(new FleeComponent());
+	        boidR.add(new RenderComponent());
+	        boidR.add(new BoidCenterComponent());
+	        boidR.add(new BoidDistanceComponent());
+	        boidR.add(new BoidMatchVelocityComponent());
+	        engine.addEntity(boidR);
+        }
         
-        for(int i = 0; i < boidCount; i++){
-        	BoidEntity boidR= new BoidEntity(BoidEntity.Team.RED);
-	        boidR.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));	        
+      //Create Team Green
+        for(int i = 0; i < boidTeamSize; i++){
+        	BoidEntity boidR= new BoidEntity(BoidEntity.Team.GREEN, engine, BoidState.SEEKING);
+	        boidR.add(new PositionComponent(MathUtils.random(windowWidth,  windowWidth - windowWidth / 4f), MathUtils.random(windowHeight, windowHeight - windowHeight / 4f)));	        
 	        boidR.add(new VelocityComponent());
 	        boidR.add(new SeekComponent());
-	        boidR.add(new FleeComponent());
+	       // boidR.add(new FleeComponent());
 	        boidR.add(new RenderComponent());
 	        boidR.add(new BoidCenterComponent());
 	        boidR.add(new BoidDistanceComponent());
@@ -66,20 +83,6 @@ public class MainScreen implements Screen {
     	Gdx.gl.glClearColor(1, 1, 1.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         engine.update(delta);
-      if(Gdx.input.isKeyPressed(Keys.B)){  
-	       	BoidEntity boidR= new BoidEntity(BoidEntity.Team.RED);
-	        boidR.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));	        
-	        boidR.add(new VelocityComponent());
-	        boidR.add(new SeekComponent());
-	        boidR.add(new FleeComponent());
-	        boidR.add(new RenderComponent());
-	        boidR.add(new BoidCenterComponent());
-	        boidR.add(new BoidDistanceComponent());
-	        boidR.add(new BoidMatchVelocityComponent());
-	        engine.addEntity(boidR);
-      }
-        
-        
         
     }
     

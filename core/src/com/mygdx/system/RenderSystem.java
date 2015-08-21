@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.Entities.BoidEntity;
+import com.mygdx.Entities.BoidEntity.Team;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.BoidDistanceComponent;
 import com.mygdx.components.BoidMatchVelocityComponent;
@@ -53,12 +55,13 @@ public class RenderSystem extends EntitySystem {
 		PositionComponent positionComp;
 		RenderComponent renderComp;
 		VelocityComponent velComp;
+		Color fillColor;
 		for (int i = 0; i < entities.size(); ++i) {			
-			Entity entity = entities.get(i);
+			BoidEntity entity = (BoidEntity)entities.get(i);
 			positionComp = pm.get(entity);
 			renderComp = rm.get(entity);
 			velComp = vm.get(entity);				
-			
+			fillColor = entity.team == Team.GREEN ? Color.GREEN : Color.RED;
 			Vector2 position = positionComp.position;
 			rotation = up.angle(velComp.direction);
 			
@@ -69,13 +72,14 @@ public class RenderSystem extends EntitySystem {
 				//batch.flush();
 			} else {
 				shapeRenderer.setAutoShapeType(true);
-				shapeRenderer.begin();
-				shapeRenderer.identity();
-				shapeRenderer.setColor(Color.BLUE);	
+				shapeRenderer.begin();				
+				
+				shapeRenderer.set(ShapeType.Filled);
+				shapeRenderer.identity();				
 				shapeRenderer.translate(position.x, position.y, 0);
 				shapeRenderer.rotate(0f, 0f, 1f, rotation);
-				shapeRenderer.triangle(-width/2f, 0, width/2, 0, 0,
-						height);
+				shapeRenderer.triangle(-width/2f, 0, width/2, 0, 0,						
+						height, fillColor, fillColor, fillColor);
 				
 				shapeRenderer.end();
 			}

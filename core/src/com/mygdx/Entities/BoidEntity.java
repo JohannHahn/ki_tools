@@ -1,9 +1,9 @@
 package com.mygdx.Entities;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
-import com.badlogic.gdx.math.Vector2;
 
 
 public class BoidEntity extends Entity {
@@ -12,13 +12,13 @@ public class BoidEntity extends Entity {
 	}
 	public Team team;
 	public StateMachine<BoidEntity> stateMachine;
-	public Vector2 target;
+	public Engine engine;
 	
-	public BoidEntity(Team team)
+	public BoidEntity(Team team, Engine engine, BoidState state)
 	{
 		this.team= team;
-		stateMachine = new DefaultStateMachine<BoidEntity>(this, BoidState.SEEKING);
-		
+		this.engine = engine;
+		stateMachine = new DefaultStateMachine<BoidEntity>(this, state);		
 	}
 	
 	public void update (float delta){

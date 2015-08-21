@@ -7,27 +7,22 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
-import com.badlogic.gdx.ai.fsm.StateMachine;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.mygdx.Entities.BoidEntity;
-import com.mygdx.Entities.BoidState;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.BoidDistanceComponent;
 import com.mygdx.components.BoidMatchVelocityComponent;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
+import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.RenderComponent;
 import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 80;
+	private static final float OPTIMAL_BOID_DISTANCE = 40;
 
-	private static final int GROUP_RANGE = 200;
+	private static final int GROUP_RANGE = 100;
 
 	private ImmutableArray<Entity> entities;
 
@@ -35,6 +30,7 @@ public class MovementSystem extends EntitySystem {
 	private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
 	private ComponentMapper<SeekComponent> sm = ComponentMapper.getFor(SeekComponent.class);
 	private ComponentMapper<FleeComponent> fm = ComponentMapper.getFor(FleeComponent.class);
+	private ComponentMapper<PursuitComponent> purMapper = ComponentMapper.getFor(PursuitComponent.class);
 	
 	private int windowWidth;
 	private int windowHeight;
@@ -66,6 +62,7 @@ public class MovementSystem extends EntitySystem {
 		
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
+		PursuitComponent purComp = purMapper.get(entity);
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy().scl(1f / 1.025f);
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
@@ -73,12 +70,15 @@ public class MovementSystem extends EntitySystem {
 		
 		//velComp.vectorVelocity.setZero();
 		
-		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
+		if (seekComp != null) {
 			velComp.vectorVelocity.add(seekComp.vectorSeek);
-
 		}
-		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING) {
+		if (fleeComp != null) {
 			velComp.vectorVelocity.add(fleeComp.vectorFlee);
+		}
+		
+		if (purComp != null) {
+			velComp.vectorVelocity.add(purComp.vectorPersuit);
 		}
 
 		Vector2 boidVector = new Vector2();
@@ -89,14 +89,9 @@ public class MovementSystem extends EntitySystem {
 				
 		velComp.vectorVelocity.clamp(0, velComp.maxSpeed);
 		
-		 //Arrival 
-		if(entity.target != null){
-			float distance = distance(entity.target,
-			positionComp.position); float slowingRadius = 40f; 
-			if(distance < slowingRadius){
-				velComp.vectorVelocity.clamp(0, velComp.maxSpeed * (distance / slowingRadius)); 
-			}
-		}
+		arrival(entity);
+		
+		
 		
 		positionComp.position.add(velComp.vectorVelocity);	
 		
@@ -123,11 +118,15 @@ public class MovementSystem extends EntitySystem {
 
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
+		PursuitComponent purComp = purMapper.get(entity);
 
-		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING)
-			entity.getComponent(SeekComponent.class).vectorSeek = calculateVectorSeekFlee(entity, position);
-		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING)
-			entity.getComponent(FleeComponent.class).vectorFlee = calculateVectorSeekFlee(entity, position);
+		if (seekComp != null)
+			seekComp.vectorSeek = calculateVectorSeekFlee(entity, position);
+		if (fleeComp != null)
+			fleeComp.vectorFlee = calculateVectorSeekFlee(entity, position);
+		if (purComp != null){
+			purComp.vectorPersuit = calculatePursuit(entity);
+		}
 
 		// For debugging press D
 		if (Gdx.input.isKeyJustPressed(Keys.D)) {
@@ -146,7 +145,20 @@ public class MovementSystem extends EntitySystem {
 
 	}
 
-	// DONE
+
+	private Vector2 calculatePursuit(BoidEntity boid){
+		PursuitComponent pc = purMapper.get(boid);
+		PositionComponent targetPos = pm.get(pc.target);
+		VelocityComponent targetVel = vm.get(pc.target);
+		
+		float T = targetPos.position.dst(pm.get(boid).position) / targetVel.maxVelocity;		
+		Vector2 futurePosition  = targetPos.position.cpy();
+		Vector2 futureVelocity = targetVel.vectorVelocity.cpy();
+		futureVelocity.scl(T);
+		futurePosition.add(futureVelocity);
+		
+		return vectorSeek(boid, futurePosition);
+	}
 	private Vector2 calculateVectorSeekFlee(BoidEntity entity, PositionComponent positionComp) {
 		Vector2 result = new Vector2();
 		Vector2 position = positionComp.position;
@@ -157,31 +169,22 @@ public class MovementSystem extends EntitySystem {
 		Vector2 target;
 		
 		//Seek
-		if (seekComp != null && entity.stateMachine.getCurrentState() == BoidState.SEEKING) {
-			target = seekComp.target;
-			Vector2 desired_velocity = target.sub(position);		
-			desired_velocity.nor().scl(velComp.maxVelocity);
-			Vector2 steering = desired_velocity.sub(velocity);
-			steering = truncate(steering, velComp.maxForce);
-			// steering = steering / mass
-			velocity = truncate(velocity.add(steering), velComp.maxSpeed);
-			result = velocity;
+		if (seekComp != null) {
+			target = seekComp.target.cpy();
+			result = vectorSeek(entity, target);
 		}
 		
 		//Flee
-		if (fleeComp != null && entity.stateMachine.getCurrentState() == BoidState.FLEEING) {
-			target = fleeComp.target;
-			Vector2 desired_velocity = target.sub(position).nor().scl(velComp.maxVelocity * -1);
-			Vector2 steering = desired_velocity.sub(velocity);
-			steering = truncate(steering, velComp.maxForce);
-			// steering = steering / mass
-			velocity = truncate(velocity.add(steering), velComp.maxSpeed);
-			result = velocity;
+		if (fleeComp != null) {
+			target = fleeComp.target.cpy();	
+			//Flee = -1 * Seek
+			result = vectorSeek(entity, target);
+			result.scl(-1);
 		}
 		
 		return result;
 	}
-	private Vector2 calculateVectorBoidMatchVc(Entity entity, PositionComponent positionComp) {
+	private Vector2 calculateVectorBoidMatchVc(BoidEntity entity, PositionComponent positionComp) {
 
 		Vector2 result = new Vector2();
 
@@ -190,7 +193,10 @@ public class MovementSystem extends EntitySystem {
 		int boidCounter = 0;
 
 		for (int i = 0; i < entities.size(); ++i) {
-			if (!entity.equals(entities.get(i))) {
+			BoidEntity currentEntity = (BoidEntity)entities.get(i);
+			
+			//Betrachte nur andere Boids und nur aus dem selben Team
+			if (!entity.equals(currentEntity) && entity.team == currentEntity.team) {
 				//Im Sichtfeld?
 				Vector2 connectionVector = new Vector2(positionComp.position);
 				connectionVector.sub(pm.get(entities.get(i)).position).scl(-1);
@@ -232,7 +238,7 @@ public class MovementSystem extends EntitySystem {
 	}
 
 	// scaled bei distance
-	private Vector2 calculateVectorBoidDistance(Entity entity, PositionComponent position) {
+	private Vector2 calculateVectorBoidDistance(BoidEntity entity, PositionComponent position) {
 
 		Vector2 result = new Vector2();
 
@@ -242,8 +248,11 @@ public class MovementSystem extends EntitySystem {
 		int boidCounter = 0;
 		float d=1;
 		//for each boid
-		for (int i = 0; i < entities.size(); ++i) {
-			if (!entity.equals(entities.get(i))) {				
+		for (int i = 0; i < entities.size(); ++i) {			
+			BoidEntity currentEntity = (BoidEntity)entities.get(i);
+			
+			//Betrachte nur andere Boids und nur aus dem selben Team			
+			if (!entity.equals(currentEntity) && entity.team == currentEntity.team){				
 				//Im Sichtfeld?
 				Vector2 connectionVector = new Vector2(position.position);
 				connectionVector.sub(pm.get(entities.get(i)).position).scl(-1);
@@ -286,7 +295,7 @@ public class MovementSystem extends EntitySystem {
 
 	// scaled bei distance //darf nur bis zu einer gewissen distance scaliert
 	// werden
-	private Vector2 calculateVectorBoidCenter(Entity entity, PositionComponent position) {
+	private Vector2 calculateVectorBoidCenter(BoidEntity entity, PositionComponent position) {
 
 		Vector2 positionVectorBoid = position.position.cpy();
 		Vector2 result = new Vector2();
@@ -297,8 +306,10 @@ public class MovementSystem extends EntitySystem {
 		float d = 1;
 		// for each
 		for (int i = 0; i < entities.size(); ++i) {
-			// not equals
-			if (!entity.equals(entities.get(i))) {
+			BoidEntity currentEntity = (BoidEntity)entities.get(i);
+			
+			//Betrachte nur andere Boids und nur aus dem selben Team
+			if (!entity.equals(currentEntity) && entity.team == currentEntity.team) {
 
 				int entityIWith = entities.get(i).getComponent(RenderComponent.class).getWidth();
 				int entityIHeight = entities.get(i).getComponent(RenderComponent.class).getHeight();
@@ -388,6 +399,40 @@ public class MovementSystem extends EntitySystem {
 		{
 			pos.y += windowHeight;
 			pos.x = windowWidth - pos.x;
+		}
+	}
+	
+	private Vector2 vectorSeek(Entity entity, Vector2 target){		
+		Vector2 position = entity.getComponent(PositionComponent.class).position;		
+				
+		VelocityComponent velComp = vm.get(entity);
+		Vector2 velocity = velComp.vectorVelocity.cpy();		
+		
+		Vector2 desired_velocity = target.sub(position);		
+		desired_velocity.nor().scl(velComp.maxVelocity);
+		
+		Vector2 steering = desired_velocity.sub(velocity);
+		steering = truncate(steering, velComp.maxForce);
+		
+		// steering = steering / mass
+		velocity = truncate(velocity.add(steering), velComp.maxSpeed);
+		return velocity;
+	}
+	
+	private void arrival(Entity entity){
+		SeekComponent seekComp = sm.get(entity);
+		PursuitComponent purComp = purMapper.get(entity);
+		PositionComponent positionComp = pm.get(entity);
+		VelocityComponent velComp = vm.get(entity);
+		
+		Vector2 target = seekComp != null ? seekComp.target : purComp != null ? pm.get(purComp.target).position : null;
+		
+		if(target != null){
+			float distance = target.dst(positionComp.position); 
+			float slowingRadius = 50f; 
+			if(distance < slowingRadius){
+				velComp.vectorVelocity.clamp(0, velComp.maxSpeed * (distance / slowingRadius)); 
+			}
 		}
 	}
 
