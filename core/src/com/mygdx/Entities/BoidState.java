@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.components.EvadeComponent;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.PositionComponent;
@@ -38,8 +39,7 @@ public enum BoidState implements State<BoidEntity> {
 					pc = new PursuitComponent();
 					boid.add(pc);
 				}
-				pc.target = target;		
-				
+				pc.target = target;				
 			}			
         }
 		
@@ -48,28 +48,51 @@ public enum BoidState implements State<BoidEntity> {
 		}
 	},
 	
-	SEEKING(){
+	EVADE(){
+		private ComponentMapper<EvadeComponent> pm = ComponentMapper.getFor(EvadeComponent.class);
+		private EvadeComponent ec;
 		private ComponentMapper<SeekComponent> sm = ComponentMapper.getFor(SeekComponent.class);
 		private SeekComponent sc;
 		@Override
-		public void enter(BoidEntity boid) {		
+		public void enter(BoidEntity boid) {
+			Entity target = searchTarget(boid);
+			
 			sc = new SeekComponent();	
 			sc.target = mouseCoordinates();
 			boid.add(sc);
-						
-			System.out.println("Entered State: SEEK");
-		}			
+			
+			if(target != null){
+				ec = new EvadeComponent();
+				ec.target = target;
+				boid.add(ec);
+			}			
+			System.out.println("Entered State: EVADE");
+		}
 		
 		@Override		
         public void update(BoidEntity boid) {
-			sc = sm.get(boid);
-			sc.target = mouseCoordinates();		
+			Entity target = searchTarget(boid);
+			if(target != null){				
+				ec = pm.get(boid);
+				if(ec == null){
+					ec = new EvadeComponent();
+					boid.add(ec);
+				}
+				ec.target = target;		
 				
+				//Update Seek target
+				sc = sm.get(boid);
+				sc.target = mouseCoordinates();		
+			}			
         }
 		
 		public void exit(BoidEntity boid){
-			boid.remove(SeekComponent.class);
+			boid.remove(EvadeComponent.class);
 		}
+	},
+	
+	WANDER(){
+		
 	},
 	
 	NO_TARGET(){		
@@ -82,54 +105,25 @@ public enum BoidState implements State<BoidEntity> {
         public void update(BoidEntity boid) {
 			checkInput(boid);		
         }
-	},	
-	
-	FLEEING(){
-		private ComponentMapper<FleeComponent> fm = ComponentMapper.getFor(FleeComponent.class);
-		private FleeComponent fc;
-		@Override
-		public void enter(BoidEntity boid) {		
-			fc = fm.get(boid);			
-			if(fc == null){
-				fc = new FleeComponent();				
-			}
-			
-			fc.target = mouseCoordinates();
-			System.out.println("Entered State: FLEE");			
-		}	
-		
-		@Override		
-        public void update(BoidEntity boid) {			
-			fc = fm.get(boid);
-			if(fc == null){
-				fc = new FleeComponent();				
-			}
-			fc.target = mouseCoordinates();
-			checkInput(boid);			
-        }
-		
-		public void exit(BoidEntity boid){
-			boid.remove(SeekComponent.class);
-		}
-	}
-	;
+	};
 	
 	
 	public static int sightRadius = 150;
 	
 	@Override
 	public void enter(BoidEntity boid) {
+		System.out.println("enter");
 	}	
 
 	@Override
 	public void exit(BoidEntity boid) {
-		// TODO Auto-generated method stub
+		System.out.println("exit");
 		
 	}
 
 	@Override
 	public boolean onMessage(BoidEntity boid, Telegram telegram) {
-		System.out.println(telegram);
+		System.out.println("message");
 		return false;
 	}
 
@@ -137,7 +131,7 @@ public enum BoidState implements State<BoidEntity> {
 
 	@Override
 	public void update(BoidEntity boid) {
-		checkInput(boid);
+		System.out.println("update");
 	}
 	
 	public void checkInput(BoidEntity boid){
@@ -147,14 +141,6 @@ public enum BoidState implements State<BoidEntity> {
 		if(Gdx.input.isKeyPressed(Keys.N)){
 			boid.stateMachine.changeState(BoidState.NO_TARGET);
 		}
-		
-		if(Gdx.input.isKeyPressed(Keys.S) && sm.get(boid) != null){
-			boid.stateMachine.changeState(BoidState.SEEKING);
-		}
-		
-		if(Gdx.input.isKeyPressed(Keys.F) && fm.get(boid) != null){
-			boid.stateMachine.changeState(BoidState.FLEEING);
-		}
 	}
 	
 	public Vector2 mouseCoordinates(){
@@ -162,7 +148,7 @@ public enum BoidState implements State<BoidEntity> {
 	}
 	
 	//Gibt Gegner Position zurück, die am nähersten ist, falls keiner im Sichtfeld = null
-	public Entity searchTarget(BoidEntity boid){
+	public static Entity searchTarget(BoidEntity boid){
 		ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
 		Entity result = null;
 		

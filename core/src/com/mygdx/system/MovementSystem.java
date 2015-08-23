@@ -12,6 +12,7 @@ import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.BoidDistanceComponent;
 import com.mygdx.components.BoidMatchVelocityComponent;
+import com.mygdx.components.EvadeComponent;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.PursuitComponent;
@@ -31,6 +32,7 @@ public class MovementSystem extends EntitySystem {
 	private ComponentMapper<SeekComponent> sm = ComponentMapper.getFor(SeekComponent.class);
 	private ComponentMapper<FleeComponent> fm = ComponentMapper.getFor(FleeComponent.class);
 	private ComponentMapper<PursuitComponent> purMapper = ComponentMapper.getFor(PursuitComponent.class);
+	private ComponentMapper<EvadeComponent> em = ComponentMapper.getFor(EvadeComponent.class);
 	
 	private int windowWidth;
 	private int windowHeight;
@@ -58,15 +60,16 @@ public class MovementSystem extends EntitySystem {
 	}
 
 	// SETs the Position after all Vectors are calculated
-	private void setPositon(BoidEntity entity, PositionComponent positionComp) {
-		
+	private void setPositon(BoidEntity entity, PositionComponent positionComp) {		
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		PursuitComponent purComp = purMapper.get(entity);
+		EvadeComponent evadeComp = em.get(entity);
 		VelocityComponent velComp = vm.get(entity);
-		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy().scl(1f / 1.025f);
+		
+		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
-		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy().scl(1.8f);		
+		Vector2 bDistance = entity.getComponent(BoidDistanceComponent.class).vectorDistance.cpy();		
 		
 		//velComp.vectorVelocity.setZero();
 		
@@ -75,10 +78,12 @@ public class MovementSystem extends EntitySystem {
 		}
 		if (fleeComp != null) {
 			velComp.vectorVelocity.add(fleeComp.vectorFlee);
-		}
-		
+		}		
 		if (purComp != null) {
 			velComp.vectorVelocity.add(purComp.vectorPersuit);
+		}
+		if (evadeComp != null) {
+			velComp.vectorVelocity.add(evadeComp.vectorEvade);
 		}
 
 		Vector2 boidVector = new Vector2();
@@ -89,9 +94,7 @@ public class MovementSystem extends EntitySystem {
 				
 		velComp.vectorVelocity.clamp(0, velComp.maxSpeed);
 		
-		arrival(entity);
-		
-		
+		arrival(entity);	
 		
 		positionComp.position.add(velComp.vectorVelocity);	
 		
@@ -102,7 +105,6 @@ public class MovementSystem extends EntitySystem {
 		float angle = velComp.direction.angle(velComp.vectorVelocity);
 		velComp.direction.rotate(angle);
 		//velComp.direction.nor();
-
 	}
 
 	private void updateVectors(BoidEntity entity, PositionComponent position) {
@@ -119,6 +121,7 @@ public class MovementSystem extends EntitySystem {
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		PursuitComponent purComp = purMapper.get(entity);
+		EvadeComponent evadeComp = em.get(entity);
 
 		if (seekComp != null)
 			seekComp.vectorSeek = calculateVectorSeekFlee(entity, position);
@@ -126,6 +129,10 @@ public class MovementSystem extends EntitySystem {
 			fleeComp.vectorFlee = calculateVectorSeekFlee(entity, position);
 		if (purComp != null){
 			purComp.vectorPersuit = calculatePursuit(entity);
+			purComp.vectorPersuit.scl(3f);
+		}
+		if(evadeComp != null){
+			evadeComp.vectorEvade = calculateEvade(entity);
 		}
 
 		// For debugging press D
@@ -144,6 +151,35 @@ public class MovementSystem extends EntitySystem {
 		}
 
 	}
+	
+	/*private Vector2 calculateWander(BoidEntity boid) {
+		   // Calculate the circle center
+		   Vector2 circleCenter;
+		   circleCenter = velocity.clone();
+		   circleCenter.normalize();
+		   circleCenter.scaleBy(CIRCLE_DISTANCE);
+		   //
+		   // Calculate the displacement force
+		   var displacement :Vector3D;
+		   displacement = new Vector3D(0, -1);
+		   displacement.scaleBy(CIRCLE_RADIUS);
+		   //
+		   // Randomly change the vector direction
+		   // by making it change its current angle
+		   setAngle(displacement, wanderAngle);
+		   //
+		   // Change wanderAngle just a bit, so it
+		   // won't have the same value in the
+		   // next game frame.
+		   wanderAngle += Math.random() * ANGLE_CHANGE - ANGLE_CHANGE * .5;
+		   //
+		   // Finally calculate and return the wander force
+		   var wanderForce :Vector3D;
+		   wanderForce = circleCenter.add(displacement);
+		   return wanderForce;
+		}*/
+		 
+		
 
 
 	private Vector2 calculatePursuit(BoidEntity boid){
@@ -159,6 +195,22 @@ public class MovementSystem extends EntitySystem {
 		
 		return vectorSeek(boid, futurePosition);
 	}
+	
+	private Vector2 calculateEvade(BoidEntity boid){
+		EvadeComponent ec = em.get(boid);
+		PositionComponent targetPos = pm.get(ec.target);
+		VelocityComponent targetVel = vm.get(ec.target);
+		
+		float T = targetPos.position.dst(pm.get(boid).position) / targetVel.maxVelocity;		
+		Vector2 futurePosition  = targetPos.position.cpy();
+		Vector2 futureVelocity = targetVel.vectorVelocity.cpy();
+		futureVelocity.scl(T);
+		futurePosition.add(futureVelocity);
+		Vector2 result = vectorSeek(boid, futurePosition);
+		result.scl(-1);
+		return result;
+	}
+	
 	private Vector2 calculateVectorSeekFlee(BoidEntity entity, PositionComponent positionComp) {
 		Vector2 result = new Vector2();
 		Vector2 position = positionComp.position;
@@ -435,6 +487,8 @@ public class MovementSystem extends EntitySystem {
 			}
 		}
 	}
+	
+	
 
 }
 
