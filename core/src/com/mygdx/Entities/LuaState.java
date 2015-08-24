@@ -1,13 +1,18 @@
 package com.mygdx.Entities;
 
+import org.luaj.vm2.LuaValue;
+
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.mygdx.Script.LuaScript;
 
 public class LuaState implements State<BoidEntity> {
 	private LuaScript script;
+	private String name = "";
 	public LuaState(LuaScript script){
 		this.script = script;
+		LuaValue nameValue = script.callForReturn("setName", name);
+		name = nameValue.tojstring();
 	}
 	
 
