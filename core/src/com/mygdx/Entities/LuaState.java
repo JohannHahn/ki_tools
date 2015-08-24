@@ -8,9 +8,10 @@ import com.mygdx.Script.LuaScript;
 
 public class LuaState implements State<BoidEntity> {
 	private LuaScript script;
-	private String name = "";
+	private String name = "null";
     public LuaState(LuaScript script){
         this.script = script;
+        //Supoptimal muss gaendert werden 
         LuaValue nameValue = script.callForReturn("setName", name);
         name = nameValue.tojstring();
     }
@@ -36,5 +37,8 @@ public class LuaState implements State<BoidEntity> {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	public String getName()
+	{return name;}
+	public void setName(String name)
+	{this.name=name;}
 }

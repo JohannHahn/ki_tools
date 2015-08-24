@@ -41,7 +41,9 @@ public enum BoidState implements State<BoidEntity> {
 					boid.add(pc);
 				}
 				pc.target = target;				
-			}			
+			}	
+			
+			
         }
 		
 		public void exit(BoidEntity boid){

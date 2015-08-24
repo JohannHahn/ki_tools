@@ -15,6 +15,7 @@ import com.mygdx.Entities.BoidState;
 import com.mygdx.Entities.LuaState;
 import com.mygdx.Entities.PointOfInterestEntity;
 import com.mygdx.Script.LuaScript;
+import com.mygdx.Script.ScriptHolder;
 import com.mygdx.Script.ScriptManager;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.BoidDistanceComponent;
@@ -29,6 +30,9 @@ import com.mygdx.system.RenderSystem;
 
 import com.sun.corba.se.spi.orbutil.fsm.State;
 import com.sun.org.apache.bcel.internal.generic.LUSHR;
+
+import javax.swing.JFileChooser;
+
 //new
 import org.luaj.*;
 import org.luaj.vm2.lib.TwoArgFunction;
@@ -46,7 +50,7 @@ public class MainScreen implements Screen {
     private int windowWidth = Gdx.graphics.getWidth();
 	private int windowHeight = Gdx.graphics.getHeight();
 	private LuaScript stateScript;
-	
+	private BoidEntity boidTest;
     
     public MainScreen(MyGdxGame game) {
     	stateScript = new LuaScript("data/scripts/wanderState.lua");
@@ -76,6 +80,8 @@ public class MainScreen implements Screen {
 	        boidR.add(new BoidCenterComponent());
 	        boidR.add(new BoidDistanceComponent());
 	        boidR.add(new BoidMatchVelocityComponent());
+	        //delete flowwing lines
+	        boidTest=boidR;
 	        engine.addEntity(boidR);
         }
         
@@ -104,29 +110,68 @@ public class MainScreen implements Screen {
     public void render(float delta) {
     	Gdx.gl.glClearColor(1, 1, 1.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        engine.update(delta);
-        /*
+        
+        
+        //AddBoidEntity
       if(Gdx.input.isKeyPressed(Keys.B)){  
-	       	BoidEntity boidR= new BoidEntity(BoidEntity.Team.RED);
-	        boidR.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));	        
-	        boidR.add(new VelocityComponent());
-	        boidR.add(new SeekComponent());
-	        boidR.add(new FleeComponent());
-	        boidR.add(new RenderComponent());
-	        boidR.add(new BoidCenterComponent());
-	        boidR.add(new BoidDistanceComponent());
-	        boidR.add(new BoidMatchVelocityComponent());
-	        engine.addEntity(boidR);
+	      addBoidEntity();
       }
         
-*/
+
         
+        //TODO: Pfad auf allgemin anpassen an den Loader angepasst
+        if(Gdx.input.isKeyJustPressed(Keys.S))
+        {
+        	//Create a file chooser
+        	final JFileChooser fc = new JFileChooser();
+        	
+        	//In response to a button click:
+        	int returnVal = fc.showOpenDialog(null);
+        	if(returnVal==JFileChooser.APPROVE_OPTION)
+        	{
+        		//Pfad ANpassen
+        		String path;
+        		String absoulutPath= fc.getSelectedFile().getAbsolutePath();
+        		 int cut =absoulutPath.indexOf("assets\\")+7;//	"assets//"=8
+        		 path=absoulutPath.substring(cut);
+        		 path=path.replace("\\","/");
+        		 
+        		//System.out.println("PAth: " + path);
+        		 LuaScript newScript= new LuaScript(path);
+        		 if(newScript.canExecute())
+        			 ScriptHolder.scriptStatesList.add(new LuaState(newScript));
+        		 boidTest.stateMachine.changeState(ScriptHolder.scriptStatesList.get(0));
+        		 
+        		 System.out.println("State Changed to " + ScriptHolder.scriptStatesList.get(0).getName());
+        	}
+        	
+        	
+        }  
+        
+        engine.update(delta);
     }
     
     
     
 
-    @Override
+    private void addBoidEntity() {
+    	
+    	BoidEntity boidR= new BoidEntity(BoidEntity.Team.RED,engine,ScriptHolder.scriptStatesList.get(0));
+        boidR.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));	        
+        boidR.add(new VelocityComponent());
+        boidR.add(new SeekComponent());
+        boidR.add(new FleeComponent());
+        boidR.add(new RenderComponent());
+        boidR.add(new BoidCenterComponent());
+        boidR.add(new BoidDistanceComponent());
+        boidR.add(new BoidMatchVelocityComponent());
+        engine.addEntity(boidR);
+		
+	}
+
+
+
+	@Override
     public void resize(int width, int height) {
         // TODO Auto-generated method stub
         
