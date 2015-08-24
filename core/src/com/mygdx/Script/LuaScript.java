@@ -114,6 +114,16 @@ public class LuaScript implements Script {
         }
         return false;
     }
+    
+    public LuaValue callForReturn(String functionName, Object object){
+        LuaValue[] parameter = new LuaValue[1];
+        parameter[0] = CoerceJavaToLua.coerce(object);
+        
+        LuaValue luaFunction = globals.get(functionName);
+        LuaValue result = luaFunction.call(parameter[0]);
+        return result;
+        
+    }
 
     // With this we register a Java function that we can call from the Lua script
     public void registerJavaFunction(TwoArgFunction javaFunction) {
