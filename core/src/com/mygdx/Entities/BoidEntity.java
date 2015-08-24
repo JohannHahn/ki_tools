@@ -1,5 +1,6 @@
 package com.mygdx.Entities;
 
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -24,8 +25,8 @@ public class BoidEntity extends Entity {
 	{
 		this.team= team;
 		this.engine = engine;
-		stateMachine = new DefaultStateMachine<BoidEntity>(this, state);	
 		
+		stateMachine = new DefaultStateMachine<BoidEntity>(this, state);	
 	}
 	
 	public void update (float delta){

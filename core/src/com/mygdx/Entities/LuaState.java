@@ -12,9 +12,8 @@ public class LuaState implements State<BoidEntity> {
 		this.script = script;
 		script.executeFunction("init", name);
 		System.out.println("Script " + name + "initialisiert");
-		
+
 	}
-	
 
 	@Override
 	public void enter(BoidEntity entity) {		

@@ -55,7 +55,11 @@ project(":core") {
         compile "com.badlogicgames.ashley:ashley:1.5.0"
         compile "com.badlogicgames.gdx:gdx-ai:1.5.0"
 <<<<<<< HEAD
+<<<<<<< HEAD
 		compile fileTree(dir: '../libs', include: '*.jar', exclude: '*-sources*.jar')
+=======
+        compile fileTree(dir: '../luaj-3.0.1/lib', include: '*.jar', exclude: '*-sources*.jar')
+>>>>>>> branch 'master' of https://github.com/wanische/ki_tools.git
 =======
         compile fileTree(dir: '../luaj-3.0.1/lib', include: '*.jar', exclude: '*-sources*.jar')
 >>>>>>> branch 'master' of https://github.com/wanische/ki_tools.git

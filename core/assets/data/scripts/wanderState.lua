@@ -1,4 +1,5 @@
 -- INIT --
+<<<<<<< HEAD
 function init(name)
 	name="wanderState"
 end
@@ -11,6 +12,15 @@ function update(entity)
 	print("true")
 	entity.stateMachine.changeState(BoidState.NO_TARGET);
 	end
+=======
+function init(character)
+	print("Character init")
+end
+
+-- UPDATE --
+function update(entity)   	
+	print(entity.team)
+>>>>>>> branch 'master' of https://github.com/wanische/ki_tools.git
 end
 
 
