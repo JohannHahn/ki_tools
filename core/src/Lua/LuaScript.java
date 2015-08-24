@@ -8,10 +8,12 @@ package Lua;
 
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.*;
+import org.luaj.vm2.lib.PackageLib.lua_searcher;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.jse.*;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.Entities.LuaState;
 
 /*
  *  Lua script file loader and function executer
@@ -81,7 +83,9 @@ public class LuaScript implements Script {
     // Call a function in the Lua script with the given parameters passed 
     @Override
     public boolean executeFunction(String functionName, Object... objects) {
+    	
     	return executeFunctionParamsAsArray(functionName, objects);
+    	
     }
     
     // Now this function takes the parameters as an array instead, mostly meant so we can call other Lua script functions from Lua itself 
