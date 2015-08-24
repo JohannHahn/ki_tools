@@ -122,29 +122,8 @@ public class MainScreen implements Screen {
         //TODO: Pfad auf allgemin anpassen an den Loader angepasst
         if(Gdx.input.isKeyJustPressed(Keys.S))
         {
-        	//Create a file chooser
-        	final JFileChooser fc = new JFileChooser();
-        	
-        	//In response to a button click:
-        	int returnVal = fc.showOpenDialog(null);
-        	if(returnVal==JFileChooser.APPROVE_OPTION)
-        	{
-        		//Pfad ANpassen
-        		String path;
-        		String absoulutPath= fc.getSelectedFile().getAbsolutePath();
-        		 int cut =absoulutPath.indexOf("assets\\")+7;//	"assets//"=8
-        		 path=absoulutPath.substring(cut);
-        		 path=path.replace("\\","/");
-        		 
-        		//System.out.println("PAth: " + path);
-        		 LuaScript newScript= new LuaScript(path);
-        		 if(newScript.canExecute())
-        			 ScriptHolder.scriptStatesList.add(new LuaState(newScript));
-        		 boidTest.stateMachine.changeState(ScriptHolder.scriptStatesList.get(0));
-        		 
-        		 System.out.println("State Changed to " + ScriptHolder.scriptStatesList.get(0).getName());
-        	}
-        	
+        	game.setScreen(new SkriptScreen(game));
+        	addScript();
         	
         }  
         
@@ -154,7 +133,35 @@ public class MainScreen implements Screen {
     
     
 
-    private void addBoidEntity() {
+    private void addScript() {
+    	//Create a file chooser
+    	final JFileChooser fc = new JFileChooser();
+    	
+    	//In response to a button click:
+    	int returnVal = fc.showOpenDialog(null);
+    	if(returnVal==JFileChooser.APPROVE_OPTION)
+    	{
+    		//Pfad ANpassen
+    		String path;
+    		String absoulutPath= fc.getSelectedFile().getAbsolutePath();
+    		 int cut =absoulutPath.indexOf("assets\\")+7;//	"assets//"=8
+    		 path=absoulutPath.substring(cut);
+    		 path=path.replace("\\","/");
+    		 
+    		//System.out.println("PAth: " + path);
+    		 LuaScript newScript= new LuaScript(path);
+    		 if(newScript.canExecute())
+    			 ScriptHolder.scriptStatesList.add(new LuaState(newScript));
+    		 boidTest.stateMachine.changeState(ScriptHolder.scriptStatesList.get(0));
+    		 
+    		 System.out.println("State Changed to " + ScriptHolder.scriptStatesList.get(0).getName());
+    	}
+		
+	}
+
+
+
+	private void addBoidEntity() {
     	
     	BoidEntity boidR= new BoidEntity(BoidEntity.Team.RED,engine,ScriptHolder.scriptStatesList.get(0));
         boidR.add(new PositionComponent(MathUtils.random(0,600 ),MathUtils.random(0,600 )));	        
