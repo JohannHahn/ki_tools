@@ -33,6 +33,18 @@ public class ScriptHolder {
 	{
 		return scriptStatesList.get(index);
 	}
+	public LuaState getLuaStateByName(String name)
+	{
+		
+		
+		return getLuaState(getIndexOfScript(name));
+		
+	}
+	
+	public static void insertScript(String realtiveScriptPath)
+	{
+		scriptStatesList.add(new LuaState(new LuaScript(realtiveScriptPath)));
+	}
 
 	public static void addScript(int index) {
 		// Create a file chooser

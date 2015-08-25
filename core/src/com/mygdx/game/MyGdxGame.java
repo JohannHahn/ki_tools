@@ -12,8 +12,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.Entities.BoidEntity;
+import com.mygdx.Script.ScriptHolder;
 
 public class MyGdxGame extends Game {
+	private static final String SCRIPTPATH_EVADE     = "data/scripts/Evade.lua";
+	private static final String SCRIPTPATH_PURSUIT   = "data/scripts/PursuitBehaviour.lua";
+	private static final String SCRIPTPATH_NO_TARGET = "data/scripts/No_Target.lua";
+	private static final String SCRIPTPATH_WANDER    = "data/scripts/Wander.lua";
 	public SpriteBatch batch;
 	public Texture img;
 	public ArrayList<BoidEntity> boids= new ArrayList<BoidEntity>();
@@ -23,6 +28,10 @@ public class MyGdxGame extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		ScriptHolder.insertScript(SCRIPTPATH_EVADE);
+		ScriptHolder.insertScript(SCRIPTPATH_PURSUIT);
+		ScriptHolder.insertScript(SCRIPTPATH_NO_TARGET);
+		ScriptHolder.insertScript(SCRIPTPATH_WANDER);
 		setScreen(new MainScreen(this));
 	}
 	

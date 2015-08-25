@@ -11,7 +11,7 @@ function update(entity)
 	entity:setState("string");
 	
 	
-	entity.stateMachine.changeState(BoidState.NO_TARGET);
+	entity.stateMachine.changeState(BoidState.WANDER);
 	
 end
 
