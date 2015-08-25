@@ -79,7 +79,7 @@ public class MainScreen implements Screen {
 			boidR.add(new BoidDistanceComponent());
 			boidR.add(new BoidMatchVelocityComponent());
 			boidR.add(new RessourceComponent());
-			//engine.addEntity(boidR);
+			engine.addEntity(boidR);
 		}
 
 		// Create Team Green
