@@ -29,9 +29,12 @@ public enum BoidState implements State<BoidEntity> {
 				pc = new PursuitComponent();
 				pc.target = target;
 				boid.add(pc);
+				System.out.println("Entered State: PERSUIT");
+			}else {
+				boid.stateMachine.changeState(WANDER);
 			}
 			
-			System.out.println("Entered State: PERSUIT");
+			
 		}			
 		
 		@Override		
@@ -66,23 +69,24 @@ public enum BoidState implements State<BoidEntity> {
 		public void enter(BoidEntity boid) {
 			Entity target = boid.searchTarget();
 			
-			sc = new SeekComponent();	
-			sc.target = mouseCoordinates();
-		//	boid.add(sc);
-			
 			if(target != null){
-				ec = new EvadeComponent();
+				sc = new SeekComponent();
+				sc.target = mouseCoordinates();
+				boid.add(sc);	
+				
+				ec = new EvadeComponent();				
 				ec.target = target;
-				boid.add(ec);
+				boid.add(ec);		
+				System.out.println("Entered State: EVADE");
 			}			
-			System.out.println("Entered State: EVADE");
+			else {
+				boid.stateMachine.changeState(WANDER);
+			}			
+			
 		}
 		
 		@Override		
         public void update(BoidEntity boid) {
-			if(Gdx.input.isKeyPressed(Keys.SPACE)){
-				boid.stateMachine.changeState(WANDER);
-			}
 			Entity target = boid.searchTarget();
 			if(target != null){				
 				ec = pm.get(boid);
@@ -93,8 +97,8 @@ public enum BoidState implements State<BoidEntity> {
 				ec.target = target;		
 				
 				//Update Seek target
-				//sc = sm.get(boid);
-				//sc.target = mouseCoordinates();		
+				sc = sm.get(boid);
+				sc.target = mouseCoordinates();		
 			}
 			else{
 				boid.stateMachine.changeState(WANDER);
@@ -109,40 +113,26 @@ public enum BoidState implements State<BoidEntity> {
 	WANDER(){
 		private ComponentMapper<WanderComponent> pm = ComponentMapper.getFor(WanderComponent.class);
 		private WanderComponent wc;
-		private ComponentMapper<SeekComponent> sm = ComponentMapper.getFor(SeekComponent.class);
-		private SeekComponent sc;
 		
 		@Override
 		public void enter(BoidEntity boid) {
-			Entity target = boid.searchTarget();
-			
-			sc = new SeekComponent();	
-			sc.target = mouseCoordinates();
-			//boid.add(sc);
-			
+			Entity target = boid.searchTarget();			
 			if(target == null){
 				wc = new WanderComponent();
 				boid.add(wc);
+				System.out.println("Entered State: WANDER");
 			}
 			else{
 				boid.stateMachine.changeState(boid.team == Team.GREEN ? EVADE : PURSUIT);
 			}
-			System.out.println("Entered State: WANDER");
+			
 		}
 	
 		@Override		
 	    public void update(BoidEntity boid) {
 			Entity target = boid.searchTarget();
-			if(Gdx.input.isKeyPressed(Keys.SPACE)){
-				boid.stateMachine.changeState(EVADE);
-			}
 			if(target != null){				
 				boid.stateMachine.changeState(boid.team == Team.GREEN ? EVADE : PURSUIT);				
-			}
-			else{
-				//Update Seek target
-				//sc = sm.get(boid);
-				//sc.target = mouseCoordinates();	
 			}
 	    }
 		

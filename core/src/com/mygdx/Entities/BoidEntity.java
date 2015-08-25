@@ -1,5 +1,6 @@
 package com.mygdx.Entities;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -71,5 +72,7 @@ public class BoidEntity extends Entity {
 
 		return ComponentMapper.getFor(PositionComponent.class);
 	}
+	
+	
 
 }

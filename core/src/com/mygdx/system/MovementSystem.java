@@ -138,7 +138,6 @@ public class MovementSystem extends EntitySystem {
 			fleeComp.vectorFlee = calculateVectorSeekFlee(entity, position);
 		if (purComp != null){
 			purComp.vectorPersuit = calculatePursuit(entity);
-			purComp.vectorPersuit.scl(3f);
 		}
 		if(evadeComp != null){
 			evadeComp.vectorEvade = calculateEvade(entity);
@@ -184,11 +183,11 @@ public class MovementSystem extends EntitySystem {
 	    // Change wanderAngle just a bit, so it
 	    // won't have the same value in the
 	    // next game frame.
-	    wandComp.wanderAngle += Math.random() * wandComp.angleChange - wandComp.angleChange * .5;
+	    wandComp.wanderAngle += MathUtils.random() * wandComp.angleChange - wandComp.angleChange * .5;
 	    //
 	    // Finally calculate and return the wander force
 	    Vector2 wanderForce = new Vector2();
-	    wanderForce = circleCenter;
+	    wanderForce = circleCenter.cpy();
 	    wanderForce.add(displacement);
 	    
 	    return wanderForce;
@@ -202,7 +201,7 @@ public class MovementSystem extends EntitySystem {
 		PositionComponent targetPos = pm.get(pc.target);
 		VelocityComponent targetVel = vm.get(pc.target);
 		
-		float T = targetPos.position.dst(pm.get(boid).position) / targetVel.maxVelocity;		
+		float T = targetPos.position.cpy().dst(pm.get(boid).position.cpy()) / targetVel.maxVelocity;		
 		Vector2 futurePosition  = targetPos.position.cpy();
 		Vector2 futureVelocity = targetVel.vectorVelocity.cpy();
 		futureVelocity.scl(T);
@@ -216,14 +215,17 @@ public class MovementSystem extends EntitySystem {
 		PositionComponent targetPos = pm.get(ec.target);
 		VelocityComponent targetVel = vm.get(ec.target);
 		
-		float T = targetPos.position.dst(pm.get(boid).position) / targetVel.maxVelocity;		
+		float T = targetPos.position.cpy().dst(pm.get(boid).position.cpy()) / targetVel.maxVelocity;		
 		Vector2 futurePosition  = targetPos.position.cpy();
 		Vector2 futureVelocity = targetVel.vectorVelocity.cpy();
 		futureVelocity.scl(T);
 		futurePosition.add(futureVelocity);
+		
+		//Vector2 result = vectorSeek(boid, targetPos.position);
 		Vector2 result = vectorSeek(boid, futurePosition);
 		result.scl(-1);
 		return result;
+		
 	}
 	
 	private Vector2 calculateVectorSeekFlee(BoidEntity entity, PositionComponent positionComp) {
@@ -469,20 +471,24 @@ public class MovementSystem extends EntitySystem {
 		}
 	}
 	
-	private Vector2 vectorSeek(Entity entity, Vector2 target){		
+	private Vector2 vectorSeek(Entity entity, Vector2 target){	
+		
 		Vector2 position = entity.getComponent(PositionComponent.class).position;		
 				
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 velocity = velComp.vectorVelocity.cpy();		
 		
-		Vector2 desired_velocity = target.sub(position);		
+		Vector2 desired_velocity = target.cpy();
+		desired_velocity.sub(position);
 		desired_velocity.nor().scl(velComp.maxVelocity);
 		
-		Vector2 steering = desired_velocity.sub(velocity);
+		Vector2 steering = desired_velocity.cpy();
+		steering.sub(velocity);
 		steering = truncate(steering, velComp.maxForce);
 		
 		// steering = steering / mass
-		velocity = truncate(velocity.add(steering), velComp.maxSpeed);
+		velocity.add(steering);
+		velocity = truncate(velocity, velComp.maxSpeed);
 		return velocity;
 	}
 	
