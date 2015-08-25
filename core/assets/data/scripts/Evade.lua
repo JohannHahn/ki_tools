@@ -1,22 +1,23 @@
 -- INIT --
 
 function init(name)
-	name="StateExample1"
-	--print(entity.team ,"entered State", name)--
+	name="Evade"
+	
 end
 
 -- UPDATE --
 function update(entity)   	
 	
 	
-	entity:switchTeams();
+		entity.stateMachine.changeState(BoidState.EVADE);
+	
+	
 	
 end
 
 
 function setName(name)
-	name = "StateExample"
+	name = "Evade"
 	return name
 end
-	
 	

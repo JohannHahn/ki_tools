@@ -35,8 +35,8 @@ public class SkriptScreen implements Screen {
 	private VerticalGroup verticalGroup;
 	private Table table;
 	private TextButton textButtonBack;
-	private ArrayList<CheckBox> checkBoxArrayListGreen= new ArrayList<CheckBox>();
-	private ArrayList<CheckBox> checkBoxArrayListRed= new ArrayList<CheckBox>();
+	private ArrayList<CheckBox> checkBoxArrayListGreen = new ArrayList<CheckBox>();
+	private ArrayList<CheckBox> checkBoxArrayListRed = new ArrayList<CheckBox>();
 	private TextButton textButtonDefault;
 
 	public SkriptScreen(MyGdxGame game) {
@@ -54,12 +54,8 @@ public class SkriptScreen implements Screen {
 
 	}
 
-	
-
-	
-
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1,1,0.5f, 1);//clear the screen	
+		Gdx.gl.glClearColor(0.8f, 1, 0.8f, 1);// clear the screen
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act(delta);
 		stage.draw();
@@ -71,29 +67,26 @@ public class SkriptScreen implements Screen {
 
 	@Override
 	public void show() {
-		checkBoxArrayListGreen= new ArrayList<CheckBox>();  
-		checkBoxArrayListRed= new ArrayList<CheckBox>();    
-		
+		checkBoxArrayListGreen = new ArrayList<CheckBox>();
+		checkBoxArrayListRed = new ArrayList<CheckBox>();
+
 		stage = new Stage(new ScreenViewport());
 		verticalGroup = new VerticalGroup();
 		table = new Table(defaultSkin);
 		table.setFillParent(true);
 
-		
-
 		for (int i = 0; i < ScriptHolder.size(); i++) {
-			
+
 			HorizontalGroup hg = new HorizontalGroup();
-			Label labelNumber=  new Label(i + ",   ", defaultSkin);
+			Label labelNumber = new Label(i + ",   ", defaultSkin);
 			TextArea ta = new TextArea(ScriptHolder.getName(i), defaultSkin);
 			TextButton bt = new TextButton("Select", defaultSkin);
-			CheckBox cbGreen= new CheckBox("Start State Green", defaultSkin);
-			CheckBox cbRed= new CheckBox("Start State Red", defaultSkin);
+			CheckBox cbGreen = new CheckBox("Start State Green", defaultSkin);
+			CheckBox cbRed = new CheckBox("Start State Red", defaultSkin);
 			checkBoxArrayListGreen.add(cbGreen);
 			checkBoxArrayListRed.add(cbRed);
-			bt.addListener(new ClickListenerWithIndex(i,ta));
+			bt.addListener(new ClickListenerWithIndex(i, ta));
 
-			
 			hg.addActor(labelNumber);
 			hg.addActor(ta);
 			hg.addActor(bt);
@@ -101,39 +94,38 @@ public class SkriptScreen implements Screen {
 			hg.addActor(cbRed);
 			verticalGroup.addActor(hg);
 		}
-		
+
 		textButtonAddScript = new TextButton("Add Script", defaultSkin);
 		textButtonAddScript.addListener(new ClickListener() {
-			public void clicked(InputEvent event, float x, float y)  {
+			public void clicked(InputEvent event, float x, float y) {
 				ScriptHolder.addScript();
 				show();
 			}
 		});
 		verticalGroup.addActor(textButtonAddScript);
-		
+
 		textButtonDefault = new TextButton("Default behaviour", defaultSkin);
 		textButtonDefault.addListener(new ClickListener() {
-			//Set the Start states for MainScreen
-			public void clicked(InputEvent event, float x, float y)  {
-				
-				
-				MainScreen.startStateGreen=null;
-				MainScreen.startStateRed=null;
+			// Set the Start states for MainScreen
+			public void clicked(InputEvent event, float x, float y) {
+
+				MainScreen.startStateGreen = null;
+				MainScreen.startStateRed = null;
 			}
 		});
 		verticalGroup.addActor(textButtonDefault);
-		
+
 		textButtonBack = new TextButton("Back", defaultSkin);
 		textButtonBack.addListener(new ClickListener() {
-			//Set the Start states for MainScreen
-			public void clicked(InputEvent event, float x, float y)  {
-				
-				int indexTemp=getSelectedCheckBoxIndex(checkBoxArrayListGreen);
-				if(indexTemp!=-1)
-				MainScreen.startStateGreen=ScriptHolder.getLuaState(indexTemp);
-					indexTemp=getSelectedCheckBoxIndex(checkBoxArrayListRed);
-					if(indexTemp!=-1)
-				MainScreen.startStateRed=ScriptHolder.getLuaState(indexTemp);
+			// Set the Start states for MainScreen
+			public void clicked(InputEvent event, float x, float y) {
+
+				int indexTemp = getSelectedCheckBoxIndex(checkBoxArrayListGreen);
+				if (indexTemp != -1)
+					MainScreen.startStateGreen = ScriptHolder.getLuaState(indexTemp);
+				indexTemp = getSelectedCheckBoxIndex(checkBoxArrayListRed);
+				if (indexTemp != -1)
+					MainScreen.startStateRed = ScriptHolder.getLuaState(indexTemp);
 				game.setScreen(new MainScreen(game));
 			}
 		});
@@ -145,10 +137,8 @@ public class SkriptScreen implements Screen {
 	}
 
 	protected int getSelectedCheckBoxIndex(ArrayList<CheckBox> checkBoxArrayList) {
-		for(int i=0;i<checkBoxArrayList.size();i++)
-		{
-			if(checkBoxArrayList.get(i).isChecked())
-			{
+		for (int i = 0; i < checkBoxArrayList.size(); i++) {
+			if (checkBoxArrayList.get(i).isChecked()) {
 				return i;
 			}
 		}

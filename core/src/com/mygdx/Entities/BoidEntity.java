@@ -32,8 +32,6 @@ public class BoidEntity extends Entity {
 		stateMachine.update();
 	}
 
-	
-
 	public void switchTeams() {
 		if (team == Team.GREEN) {
 			team = Team.RED;
@@ -42,27 +40,34 @@ public class BoidEntity extends Entity {
 		}
 	}
 
-	//Gibt Gegner Position zur�ueck, die am naechersten ist, falls keiner im Sichtfeld = null
-		public Entity searchTarget(){
-			ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
-			Entity result = null;			
-			ImmutableArray<Entity> entities = engine.getEntities();			
-			float smallestDistance = sightRadius * sightRadius;
-			
-			for(Entity entity : entities){			
-				if(entity.getComponent(BoidCenterComponent.class)==null)
-					continue;
-				
-				BoidEntity currentBoid = (BoidEntity)entity;
-				
-				float newDistance = pm.get(this).position.dst2(pm.get(currentBoid).position);
-				//Checke falls Gegner in Sicht => pursue Gegner
-				if(this.team != currentBoid.team && newDistance < smallestDistance){
-					smallestDistance = newDistance;
-					result = currentBoid;
-				}
+	// Gibt Gegner Position zur�ueck, die am naechersten ist, falls keiner im
+	// Sichtfeld = null
+	public Entity searchTarget() {
+		ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+		Entity result = null;
+		ImmutableArray<Entity> entities = engine.getEntities();
+		float smallestDistance = sightRadius * sightRadius;
+
+		for (Entity entity : entities) {
+			if (entity.getComponent(BoidCenterComponent.class) == null)
+				continue;
+
+			BoidEntity currentBoid = (BoidEntity) entity;
+
+			float newDistance = pm.get(this).position.dst2(pm.get(currentBoid).position);
+			// Checke falls Gegner in Sicht => pursue Gegner
+			if (this.team != currentBoid.team && newDistance < smallestDistance) {
+				smallestDistance = newDistance;
+				result = currentBoid;
 			}
-			
-			return result;
 		}
+
+		return result;
+	}
+
+	public ComponentMapper<PositionComponent> getPostionComponentMapper() {
+
+		return ComponentMapper.getFor(PositionComponent.class);
+	}
+
 }

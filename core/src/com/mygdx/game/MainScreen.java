@@ -59,11 +59,13 @@ public class MainScreen implements Screen {
 		stateScript = new LuaScript("data/scripts/wanderState.lua");
 		System.out.println(stateScript.canExecute());
 		engine = new Engine();
+		
 		// Create Team Red
 		for (int i = 0; i < boidTeamSize; i++) {
 			BoidEntity boidR;
 			if (startStateRed == null) {
 				boidR = new BoidEntity(BoidEntity.Team.RED, engine, BoidState.PURSUIT);
+				
 			} else {
 				boidR = new BoidEntity(BoidEntity.Team.RED, engine, startStateRed);
 			}
