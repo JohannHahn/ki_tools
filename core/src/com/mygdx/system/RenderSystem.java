@@ -37,8 +37,6 @@ public class RenderSystem extends EntitySystem {
 	private Vector2 up = new Vector2(0, 1);
 	private float rotation = 0f;
 	float alpha = 0f;
-	float width = 8f;
-	float height = 16f;
 
 	public RenderSystem(SpriteBatch batch) {
 		this.batch = batch;
@@ -61,12 +59,7 @@ public class RenderSystem extends EntitySystem {
 		for (int i = 0; i < entities.size(); ++i) {
 			Entity entity = entities.get(i);
 			positionComp = pm.get(entity);
-			renderComp = rm.get(entity);
-			if (entity.getComponent(VelocityComponent.class) != null) {
-				velComp = vm.get(entity);
-				rotation = up.angle(velComp.direction);
-				fillColor = ((BoidEntity)entity).team == Team.GREEN ? Color.GREEN : Color.RED;
-			}
+			renderComp = rm.get(entity);			
 			
 			Vector2 position = positionComp.position;
 
@@ -76,16 +69,23 @@ public class RenderSystem extends EntitySystem {
 				batch.draw(tempTexture, position.x, position.y, renderComp.getWidth(), renderComp.getHeight());
 				batch.flush();
 			} else {
-				shapeRenderer.setAutoShapeType(true);
-				shapeRenderer.begin();
-
-				shapeRenderer.set(ShapeType.Filled);
-				shapeRenderer.identity();
-				shapeRenderer.translate(position.x, position.y, 0);
-				shapeRenderer.rotate(0f, 0f, 1f, rotation);
-				shapeRenderer.triangle(-width / 2f, 0, width / 2, 0, 0, height, fillColor, fillColor, fillColor);
-
-				shapeRenderer.end();
+				if (entity.getComponent(VelocityComponent.class) != null) {
+					BoidEntity boid = (BoidEntity)entity;
+					velComp = vm.get(entity);
+					rotation = up.angle(velComp.direction);
+					fillColor = boid.team == Team.GREEN ? Color.GREEN : Color.RED;
+					
+					shapeRenderer.setAutoShapeType(true);
+					shapeRenderer.begin();
+	
+					shapeRenderer.set(ShapeType.Filled);
+					shapeRenderer.identity();
+					shapeRenderer.translate(position.x, position.y, 0);
+					shapeRenderer.rotate(0f, 0f, 1f, rotation);
+					shapeRenderer.triangle(-boid.width / 2f, 0, boid.width / 2, 0, 0, boid.height, fillColor, fillColor, fillColor);
+	
+					shapeRenderer.end();
+				}
 			}
 
 			// SHows the vectors of each boid //is not working

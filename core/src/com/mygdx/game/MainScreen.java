@@ -47,7 +47,7 @@ public class MainScreen implements Screen {
 	Stage stage = new Stage();
 	Image img = new Image(text);
 	MyGdxGame game;
-	int boidTeamSize = 5;
+	int boidTeamSize = 1;
 	private int windowWidth = Gdx.graphics.getWidth();
 	private int windowHeight = Gdx.graphics.getHeight();
 	private LuaScript stateScript;
@@ -77,7 +77,7 @@ public class MainScreen implements Screen {
 			boidR.add(new BoidDistanceComponent());
 			boidR.add(new BoidMatchVelocityComponent());
 			boidR.add(new RessourceComponent());
-			engine.addEntity(boidR);
+			//engine.addEntity(boidR);
 		}
 
 		// Create Team Green

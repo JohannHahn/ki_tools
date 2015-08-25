@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.BoidCenterComponent;
@@ -20,6 +21,7 @@ import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.RenderComponent;
 import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
+import com.mygdx.components.WanderComponent;
 public class MovementSystem extends EntitySystem {
 
 	private static final float OPTIMAL_BOID_DISTANCE = 40;
@@ -34,6 +36,7 @@ public class MovementSystem extends EntitySystem {
 	private ComponentMapper<FleeComponent> fm = ComponentMapper.getFor(FleeComponent.class);
 	private ComponentMapper<PursuitComponent> purMapper = ComponentMapper.getFor(PursuitComponent.class);
 	private ComponentMapper<EvadeComponent> em = ComponentMapper.getFor(EvadeComponent.class);
+	private ComponentMapper<WanderComponent> wm = ComponentMapper.getFor(WanderComponent.class);
 	
 	private int windowWidth;
 	private int windowHeight;
@@ -67,6 +70,7 @@ public class MovementSystem extends EntitySystem {
 		PursuitComponent purComp = purMapper.get(entity);
 		EvadeComponent evadeComp = em.get(entity);
 		VelocityComponent velComp = vm.get(entity);
+		WanderComponent wandComp = wm.get(entity);
 		
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
@@ -85,6 +89,9 @@ public class MovementSystem extends EntitySystem {
 		}
 		if (evadeComp != null) {
 			velComp.vectorVelocity.add(evadeComp.vectorEvade);
+		}
+		if (wandComp != null) {
+			velComp.vectorVelocity.add(wandComp.wanderVector);
 		}
 
 		Vector2 boidVector = new Vector2();
@@ -123,6 +130,7 @@ public class MovementSystem extends EntitySystem {
 		FleeComponent fleeComp = fm.get(entity);
 		PursuitComponent purComp = purMapper.get(entity);
 		EvadeComponent evadeComp = em.get(entity);
+		WanderComponent wandComp = wm.get(entity);
 
 		if (seekComp != null)
 			seekComp.vectorSeek = calculateVectorSeekFlee(entity, position);
@@ -134,6 +142,9 @@ public class MovementSystem extends EntitySystem {
 		}
 		if(evadeComp != null){
 			evadeComp.vectorEvade = calculateEvade(entity);
+		}
+		if(wandComp != null){
+			wandComp.wanderVector = calculateWander(entity);
 		}
 
 		// For debugging press D
@@ -153,32 +164,35 @@ public class MovementSystem extends EntitySystem {
 
 	}
 	
-	/*private Vector2 calculateWander(BoidEntity boid) {
-		   // Calculate the circle center
-		   Vector2 circleCenter;
-		   circleCenter = velocity.clone();
-		   circleCenter.normalize();
-		   circleCenter.scaleBy(CIRCLE_DISTANCE);
-		   //
-		   // Calculate the displacement force
-		   var displacement :Vector3D;
-		   displacement = new Vector3D(0, -1);
-		   displacement.scaleBy(CIRCLE_RADIUS);
-		   //
-		   // Randomly change the vector direction
-		   // by making it change its current angle
-		   setAngle(displacement, wanderAngle);
-		   //
-		   // Change wanderAngle just a bit, so it
-		   // won't have the same value in the
-		   // next game frame.
-		   wanderAngle += Math.random() * ANGLE_CHANGE - ANGLE_CHANGE * .5;
-		   //
-		   // Finally calculate and return the wander force
-		   var wanderForce :Vector3D;
-		   wanderForce = circleCenter.add(displacement);
-		   return wanderForce;
-		}*/
+	private Vector2 calculateWander(BoidEntity boid) {
+		// Calculate the circle center
+		VelocityComponent velComp = vm.get(boid);
+		WanderComponent wandComp = wm.get(boid);
+	    Vector2 circleCenter;
+	    circleCenter = velComp.vectorVelocity.cpy();
+	    circleCenter.nor();
+	    circleCenter.scl(wandComp.circleDistance);
+	    //
+	    // Calculate the displacement force
+	    Vector2 displacement = new Vector2(1, 0);
+	    displacement.scl(wandComp.circleRadius);
+	    //
+	    // Randomly change the vector direction
+	    // by making it change its current angle
+	    displacement.rotate(wandComp.wanderAngle);
+	    //
+	    // Change wanderAngle just a bit, so it
+	    // won't have the same value in the
+	    // next game frame.
+	    wandComp.wanderAngle += Math.random() * wandComp.angleChange - wandComp.angleChange * .5;
+	    //
+	    // Finally calculate and return the wander force
+	    Vector2 wanderForce = new Vector2();
+	    wanderForce = circleCenter;
+	    wanderForce.add(displacement);
+	    
+	    return wanderForce;
+	}
 		 
 		
 
@@ -432,25 +446,25 @@ public class MovementSystem extends EntitySystem {
 	private void boundCoordinates(Vector2 pos){
 		if(pos.x > windowWidth)
 		{
-			pos.x -= windowWidth;
+			pos.x -= windowWidth - BoidEntity.width;
 			pos.y = windowHeight - pos.y;
 		}
 		
 		if(pos.x < 0)
 		{
-			pos.x += windowWidth;
+			pos.x += windowWidth - BoidEntity.width;
 			pos.y = windowHeight - pos.y;
 		}
 		
 		if(pos.y > windowHeight)
 		{
-			pos.y -= windowHeight;
+			pos.y -= windowHeight - BoidEntity.height;
 			pos.x = windowWidth - pos.x;
 		}
 		
 		if(pos.y < 0)
 		{
-			pos.y += windowHeight;
+			pos.y += windowHeight - BoidEntity.height;
 			pos.x = windowWidth - pos.x;
 		}
 	}

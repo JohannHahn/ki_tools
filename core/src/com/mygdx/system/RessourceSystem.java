@@ -56,7 +56,6 @@ public class RessourceSystem extends EntitySystem{
 						if(rc.health <= 0){
 							entity.engine.removeEntity(entity);
 						}
-						System.out.println("Collision! Health: " + rc.health);
 					}
 				}
 			}

@@ -20,6 +20,8 @@ public class BoidEntity extends Entity {
 	public StateMachine<BoidEntity> stateMachine;
 	public Engine engine;
 	public boolean enemyInSight = false;
+	public static int width = 8; 
+	public static int height = 16;
 
 	public BoidEntity(Team team, Engine engine, State state) {
 		this.team = team;
