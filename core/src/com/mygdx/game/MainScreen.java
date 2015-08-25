@@ -23,11 +23,12 @@ import com.mygdx.components.BoidMatchVelocityComponent;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RenderComponent;
+import com.mygdx.components.RessourceComponent;
 import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
 import com.mygdx.system.MovementSystem;
 import com.mygdx.system.RenderSystem;
-
+import com.mygdx.system.RessourceSystem;
 import com.sun.corba.se.spi.orbutil.fsm.State;
 import com.sun.org.apache.bcel.internal.generic.LUSHR;
 
@@ -46,7 +47,7 @@ public class MainScreen implements Screen {
     Stage stage = new Stage();
     Image img = new Image(text);
     MyGdxGame game;
-    int boidTeamSize = 5;
+    int boidTeamSize = 10;
     private int windowWidth = Gdx.graphics.getWidth();
 	private int windowHeight = Gdx.graphics.getHeight();
 	private LuaScript stateScript;
@@ -67,12 +68,13 @@ public class MainScreen implements Screen {
 	        boidR.add(new BoidCenterComponent());
 	        boidR.add(new BoidDistanceComponent());
 	        boidR.add(new BoidMatchVelocityComponent());
+	        boidR.add(new RessourceComponent());
 	        engine.addEntity(boidR);
         }
         
       //Create Team Green
         for(int i = 0; i < boidTeamSize; i++){
-        	BoidEntity boidR= new BoidEntity(BoidEntity.Team.GREEN, engine, new LuaState(stateScript));
+        	BoidEntity boidR= new BoidEntity(BoidEntity.Team.GREEN, engine, BoidState.EVADE);
 	        boidR.add(new PositionComponent(MathUtils.random(windowWidth,  windowWidth - windowWidth / 4f), MathUtils.random(windowHeight, windowHeight - windowHeight / 4f)));	        
 	        boidR.add(new VelocityComponent());
 	        boidR.add(new SeekComponent());
@@ -80,6 +82,7 @@ public class MainScreen implements Screen {
 	        boidR.add(new BoidCenterComponent());
 	        boidR.add(new BoidDistanceComponent());
 	        boidR.add(new BoidMatchVelocityComponent());
+	        boidR.add(new RessourceComponent());
 	        //delete flowwing lines
 	        boidTest=boidR;
 	        engine.addEntity(boidR);
@@ -95,6 +98,7 @@ public class MainScreen implements Screen {
         this.game = game;   
         engine.addSystem(new MovementSystem());
         engine.addSystem(new RenderSystem(game.batch));
+        engine.addSystem(new RessourceSystem());
     }
 
 
@@ -122,7 +126,7 @@ public class MainScreen implements Screen {
         //TODO: Pfad auf allgemin anpassen an den Loader angepasst
         if(Gdx.input.isKeyJustPressed(Keys.S))
         {
-        	game.setScreen(new SkriptScreen(game));
+        	//game.setScreen(new SkriptScreen(game));
         	addScript();
         	
         }  

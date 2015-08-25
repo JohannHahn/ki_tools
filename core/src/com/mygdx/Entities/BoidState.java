@@ -21,7 +21,7 @@ public enum BoidState implements State<BoidEntity> {
 		private PursuitComponent pc;
 		@Override
 		public void enter(BoidEntity boid) {
-			Entity target = searchTarget(boid);
+			Entity target = boid.searchTarget();
 			if(target != null){
 				pc = new PursuitComponent();
 				pc.target = target;
@@ -33,7 +33,7 @@ public enum BoidState implements State<BoidEntity> {
 		
 		@Override		
         public void update(BoidEntity boid) {
-			Entity target = searchTarget(boid);
+			Entity target = boid.searchTarget();
 			if(target != null){				
 				pc = pm.get(boid);
 				if(pc == null){
@@ -58,7 +58,7 @@ public enum BoidState implements State<BoidEntity> {
 		private SeekComponent sc;
 		@Override
 		public void enter(BoidEntity boid) {
-			Entity target = searchTarget(boid);
+			Entity target = boid.searchTarget();
 			
 			sc = new SeekComponent();	
 			sc.target = mouseCoordinates();
@@ -74,7 +74,7 @@ public enum BoidState implements State<BoidEntity> {
 		
 		@Override		
         public void update(BoidEntity boid) {
-			Entity target = searchTarget(boid);
+			Entity target = boid.searchTarget();
 			if(target != null){				
 				ec = pm.get(boid);
 				if(ec == null){
@@ -148,31 +148,7 @@ public enum BoidState implements State<BoidEntity> {
 	
 	public Vector2 mouseCoordinates(){
 		return new Vector2(Gdx.input.getX(), Gdx.app.getGraphics().getHeight() - Gdx.input.getY());		
-	}
+	}	
 	
-	//Gibt Gegner Position zur√ueck, die am naechersten ist, falls keiner im Sichtfeld = null
-	public static Entity searchTarget(BoidEntity boid){
-		ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
-		Entity result = null;
-		
-		ImmutableArray<Entity> entities = boid.engine.getEntities();			
-		float smallestDistance = sightRadius * sightRadius;
-		
-		for(Entity entity : entities){			
-			if(entity.getComponent(BoidCenterComponent.class)==null)
-				continue;
-			
-			BoidEntity currentBoid = (BoidEntity)entity;
-			
-			float newDistance = pm.get(boid).position.dst2(pm.get(currentBoid).position);
-			//Checke falls Gegner in Sicht => pursue Gegner
-			if(boid.team != currentBoid.team && newDistance < smallestDistance){
-				smallestDistance = newDistance;
-				result = currentBoid;
-			}
-		}
-		
-		return result;
-	}
 
 }

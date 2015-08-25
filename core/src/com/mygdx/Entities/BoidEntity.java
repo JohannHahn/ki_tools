@@ -7,6 +7,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.fsm.StateMachine;
+import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.PositionComponent;
 
 public class BoidEntity extends Entity {
@@ -41,24 +42,27 @@ public class BoidEntity extends Entity {
 		}
 	}
 
-	public Entity searchTarget() {
-		ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
-
-		Entity result = null;
-
-		ImmutableArray<Entity> entities = this.engine.getEntities();
-		float smallestDistance = sightRadius * sightRadius;
-
-		for (Entity entity : entities) {
-			BoidEntity currentBoid = (BoidEntity) entity;
-			float newDistance = pm.get(this).position.dst2(pm.get(currentBoid).position);
-			// Checke falls Gegner in Sicht => pursue Gegner
-			if (this.team != currentBoid.team && newDistance < smallestDistance) {
-				smallestDistance = newDistance;
-				result = currentBoid;
+	//Gibt Gegner Position zur�ueck, die am naechersten ist, falls keiner im Sichtfeld = null
+		public Entity searchTarget(){
+			ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+			Entity result = null;			
+			ImmutableArray<Entity> entities = engine.getEntities();			
+			float smallestDistance = sightRadius * sightRadius;
+			
+			for(Entity entity : entities){			
+				if(entity.getComponent(BoidCenterComponent.class)==null)
+					continue;
+				
+				BoidEntity currentBoid = (BoidEntity)entity;
+				
+				float newDistance = pm.get(this).position.dst2(pm.get(currentBoid).position);
+				//Checke falls Gegner in Sicht => pursue Gegner
+				if(this.team != currentBoid.team && newDistance < smallestDistance){
+					smallestDistance = newDistance;
+					result = currentBoid;
+				}
 			}
+			
+			return result;
 		}
-
-		return result;
-	}
 }
