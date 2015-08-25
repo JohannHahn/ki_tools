@@ -19,7 +19,7 @@ public class LuaState implements State<BoidEntity> {
 
 	@Override
 	public void enter(BoidEntity entity) {		
-		
+		System.out.println("Entered" +  name);
 	}
 
 	@Override

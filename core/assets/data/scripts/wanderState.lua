@@ -2,16 +2,17 @@
 
 function init(name)
 	name="wanderState"
+	print(entity.team ,"entered State", name)
 end
 
 -- UPDATE --
 function update(entity)   	
-	print(entity.team)
+	
 	entity:setState("string");
-	if entity.team:toString()=="GREEN" then
-	print("true")
+	
+	
 	entity.stateMachine.changeState(BoidState.NO_TARGET);
-	end
+	
 end
 
 function setName(name)
