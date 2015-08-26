@@ -66,7 +66,7 @@ public class RenderSystem extends EntitySystem {
 			batch.begin();
 			if (renderComp.getTexture() != null) {
 				Texture tempTexture = renderComp.getTexture();
-				batch.draw(tempTexture, position.x, position.y, renderComp.getWidth(), renderComp.getHeight());
+				batch.draw(tempTexture, position.x - renderComp.getWidth() / 2, position.y - renderComp.getHeight() / 2, renderComp.getWidth(), renderComp.getHeight());
 				batch.flush();
 			} else {
 				if (entity.getComponent(VelocityComponent.class) != null) {

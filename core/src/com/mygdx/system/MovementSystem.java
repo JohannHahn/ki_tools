@@ -140,7 +140,7 @@ public class MovementSystem extends EntitySystem {
 			purComp.vectorPersuit = calculatePursuit(entity);
 		}
 		if(evadeComp != null){
-			evadeComp.vectorEvade = calculateEvade(entity);
+			evadeComp.vectorEvade = calculateEvade(entity).scl(1.3f);
 		}
 		if(wandComp != null){
 			wandComp.wanderVector = calculateWander(entity);
@@ -189,6 +189,7 @@ public class MovementSystem extends EntitySystem {
 	    Vector2 wanderForce = new Vector2();
 	    wanderForce = circleCenter.cpy();
 	    wanderForce.add(displacement);
+	    wanderForce.scl(0.1f);
 	    
 	    return wanderForce;
 	}
@@ -207,7 +208,7 @@ public class MovementSystem extends EntitySystem {
 		futureVelocity.scl(T);
 		futurePosition.add(futureVelocity);
 		
-		return vectorSeek(boid, futurePosition);
+		return vectorSeek(boid, futurePosition).scl(0.1f);
 	}
 	
 	private Vector2 calculateEvade(BoidEntity boid){
@@ -448,25 +449,25 @@ public class MovementSystem extends EntitySystem {
 	private void boundCoordinates(Vector2 pos){
 		if(pos.x > windowWidth)
 		{
-			pos.x -= windowWidth - BoidEntity.width;
+			pos.x -= windowWidth;
 			pos.y = windowHeight - pos.y;
 		}
 		
 		if(pos.x < 0)
 		{
-			pos.x += windowWidth - BoidEntity.width;
+			pos.x += windowWidth ;
 			pos.y = windowHeight - pos.y;
 		}
 		
 		if(pos.y > windowHeight)
 		{
-			pos.y -= windowHeight - BoidEntity.height;
+			pos.y -= windowHeight ;
 			pos.x = windowWidth - pos.x;
 		}
 		
 		if(pos.y < 0)
 		{
-			pos.y += windowHeight - BoidEntity.height;
+			pos.y += windowHeight ;
 			pos.x = windowWidth - pos.x;
 		}
 	}
