@@ -19,6 +19,7 @@ import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.RenderComponent;
+import com.mygdx.components.RessourceComponent;
 import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
 import com.mygdx.components.WanderComponent;
@@ -37,6 +38,7 @@ public class MovementSystem extends EntitySystem {
 	private ComponentMapper<PursuitComponent> purMapper = ComponentMapper.getFor(PursuitComponent.class);
 	private ComponentMapper<EvadeComponent> em = ComponentMapper.getFor(EvadeComponent.class);
 	private ComponentMapper<WanderComponent> wm = ComponentMapper.getFor(WanderComponent.class);
+	private ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
 	
 	private int windowWidth;
 	private int windowHeight;
@@ -71,6 +73,7 @@ public class MovementSystem extends EntitySystem {
 		EvadeComponent evadeComp = em.get(entity);
 		VelocityComponent velComp = vm.get(entity);
 		WanderComponent wandComp = wm.get(entity);
+		RessourceComponent resComp = rm.get(entity);
 		
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
@@ -104,7 +107,9 @@ public class MovementSystem extends EntitySystem {
 		
 		arrival(entity);	
 		
-		positionComp.position.add(velComp.vectorVelocity);	
+		if(resComp.fuel > 0){
+			positionComp.position.add(velComp.vectorVelocity);	
+		}
 		
 		//Clamp in screen
 		boundCoordinates(positionComp.position);		

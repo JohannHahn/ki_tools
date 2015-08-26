@@ -43,6 +43,7 @@ public class RenderSystem extends EntitySystem {
 		shapeRenderer = new ShapeRenderer();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(
 				Family.all(PositionComponent.class, RenderComponent.class).get());

@@ -19,13 +19,14 @@ public class BoidEntity extends Entity {
 		RED, GREEN
 	}
 
-	private static final int sightRadius = 150;
+	private static final int sightRadius = 200;
 	public Team team;
 	public StateMachine<BoidEntity> stateMachine;
 	public Engine engine;
 	public boolean enemyInSight = false;
 	public static int width = 8; 
 	public static int height = 16;
+	
 
 	public BoidEntity(Team team, Engine engine, State state) {
 		this.team = team;
@@ -79,7 +80,7 @@ public class BoidEntity extends Entity {
 		return result;
 	}
 
-	public ComponentMapper<PositionComponent> getPostionComponentMapper() {
+	public ComponentMapper<PositionComponent> getPositionComponentMapper() {
 
 		return ComponentMapper.getFor(PositionComponent.class);
 	}
@@ -89,9 +90,11 @@ public class BoidEntity extends Entity {
 		
 		if(sc == null){			
 			sc = new SeekComponent();
+			this.add(sc);
 		}
 		
-		sc.entityTarget = e;		
+		sc.entityTarget = e;
+		sc.target = getPositionComponentMapper().get(e).position;
 	}
 	
 	

@@ -47,7 +47,7 @@ public class MainScreen implements Screen {
 	Stage stage = new Stage();
 	Image img = new Image(text);
 	MyGdxGame game;
-	int boidTeamSize = 100;
+	int boidTeamSize = 10;
 	private int windowWidth = Gdx.graphics.getWidth();
 	private int windowHeight = Gdx.graphics.getHeight();
 	private LuaScript stateScript;
@@ -72,8 +72,6 @@ public class MainScreen implements Screen {
 			boidR.add(new PositionComponent(MathUtils.random(0, windowWidth / 4f),
 					MathUtils.random(0, windowHeight / 4f)));
 			boidR.add(new VelocityComponent());
-			// boidR.add(new SeekComponent());
-			// boidR.add(new FleeComponent());
 			boidR.add(new RenderComponent());
 			boidR.add(new BoidCenterComponent());
 			boidR.add(new BoidDistanceComponent());
@@ -104,7 +102,7 @@ public class MainScreen implements Screen {
 
 		// Add PointOfInterrest
 		final String PATH_TO_SKIN = "POI(tankestelle).png";
-		PointOfInterestEntity poiEntitity = new PointOfInterestEntity("Tankestelle");
+		PointOfInterestEntity poiEntitity = new PointOfInterestEntity("Tankstelle");
 		poiEntitity.add(new RenderComponent(new Texture(PATH_TO_SKIN), 70, 70));
 		poiEntitity.add(new PositionComponent(100, 100));
 		engine.addEntity(poiEntitity);
@@ -145,12 +143,11 @@ public class MainScreen implements Screen {
 		BoidEntity boidR = new BoidEntity(BoidEntity.Team.RED, engine, ScriptHolder.scriptStatesList.get(0));
 		boidR.add(new PositionComponent(MathUtils.random(0, 600), MathUtils.random(0, 600)));
 		boidR.add(new VelocityComponent());
-		boidR.add(new SeekComponent());
-		boidR.add(new FleeComponent());
 		boidR.add(new RenderComponent());
 		boidR.add(new BoidCenterComponent());
 		boidR.add(new BoidDistanceComponent());
 		boidR.add(new BoidMatchVelocityComponent());
+		boidR.add(new RessourceComponent());
 		engine.addEntity(boidR);
 
 	}
