@@ -90,12 +90,13 @@ public class RenderSystem extends EntitySystem {
 			}
 
 			// SHows the vectors of each boid //is not working
-			if (Gdx.input.isKeyPressed(Keys.V)) {
+			if (Gdx.input.isKeyPressed(Keys.D)) {
 				shapeRenderer.setAutoShapeType(true);
 				shapeRenderer.begin();
 				shapeRenderer.setColor(Color.GREEN);
 				float Scale = 10;
 				Vector2 v1, v2, v3, v4;
+				
 				v1 = new Vector2(position.x + entity.getComponent(BoidCenterComponent.class).vectorCenter.x,
 						positionComp.position.y + entity.getComponent(BoidCenterComponent.class).vectorCenter.y);
 				v2 = new Vector2(position.x + entity.getComponent(BoidDistanceComponent.class).vectorDistance.x,
@@ -107,6 +108,12 @@ public class RenderSystem extends EntitySystem {
 				v4 = new Vector2(position.x + entity.getComponent(VelocityComponent.class).vectorVelocity.x,
 						positionComp.position.y + entity.getComponent(VelocityComponent.class).vectorVelocity.y);
 
+				try {
+					
+				} finally {
+					// TODO: handle finally clause
+				}
+				shapeRenderer.circle(position.x, position.y, ((BoidEntity)entity).);
 				shapeRenderer.line(positionComp.position, v1);
 				shapeRenderer.setColor(Color.PURPLE);
 				shapeRenderer.line(positionComp.position, v2.scl(Scale));

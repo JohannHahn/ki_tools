@@ -83,7 +83,7 @@ public class ScriptHolder {
 			path = path.replace("\\", "/");
 
 			// Create LuaScript&LuaState
-			LuaScript newScript = new LuaScript(path);
+			LuaScript newScript = new LuaScript(absoulutPath);
 			if (newScript.canExecute())
 				ScriptHolder.scriptStatesList.add(new LuaState(newScript));
 		}

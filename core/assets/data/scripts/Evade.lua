@@ -9,7 +9,7 @@ end
 function update(entity)   	
 	
 	
-		entity.stateMachine.changeState(BoidState.EVADE);
+		entity:changeStatetoEvade()
 	
 	
 	
