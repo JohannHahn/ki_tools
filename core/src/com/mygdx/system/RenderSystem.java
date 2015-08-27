@@ -45,8 +45,7 @@ public class RenderSystem extends EntitySystem {
 
 	@SuppressWarnings("unchecked")
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(
-				Family.all(PositionComponent.class, RenderComponent.class).get());
+		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, RenderComponent.class).get());
 		System.out.println("Rendersystem added");
 
 	}
@@ -56,35 +55,37 @@ public class RenderSystem extends EntitySystem {
 		PositionComponent positionComp;
 		RenderComponent renderComp;
 		VelocityComponent velComp;
-		Color fillColor=Color.CYAN;
+		Color fillColor = Color.CYAN;
 		for (int i = 0; i < entities.size(); ++i) {
 			Entity entity = entities.get(i);
 			positionComp = pm.get(entity);
-			renderComp = rm.get(entity);			
-			
+			renderComp = rm.get(entity);
+
 			Vector2 position = positionComp.position;
 
 			batch.begin();
 			if (renderComp.getTexture() != null) {
 				Texture tempTexture = renderComp.getTexture();
-				batch.draw(tempTexture, position.x - renderComp.getWidth() / 2, position.y - renderComp.getHeight() / 2, renderComp.getWidth(), renderComp.getHeight());
+				batch.draw(tempTexture, position.x - renderComp.getWidth() / 2, position.y - renderComp.getHeight() / 2,
+						renderComp.getWidth(), renderComp.getHeight());
 				batch.flush();
 			} else {
 				if (entity.getComponent(VelocityComponent.class) != null) {
-					BoidEntity boid = (BoidEntity)entity;
+					BoidEntity boid = (BoidEntity) entity;
 					velComp = vm.get(entity);
 					rotation = up.angle(velComp.direction);
 					fillColor = boid.team == Team.GREEN ? Color.GREEN : Color.RED;
-					
+
 					shapeRenderer.setAutoShapeType(true);
 					shapeRenderer.begin();
-	
+
 					shapeRenderer.set(ShapeType.Filled);
 					shapeRenderer.identity();
 					shapeRenderer.translate(position.x, position.y, 0);
 					shapeRenderer.rotate(0f, 0f, 1f, rotation);
-					shapeRenderer.triangle(-boid.width / 2f, 0, boid.width / 2, 0, 0, boid.height, fillColor, fillColor, fillColor);
-	
+					shapeRenderer.triangle(-boid.width / 2f, 0, boid.width / 2, 0, 0, boid.height, fillColor, fillColor,
+							fillColor);
+
 					shapeRenderer.end();
 				}
 			}
@@ -93,34 +94,41 @@ public class RenderSystem extends EntitySystem {
 			if (Gdx.input.isKeyPressed(Keys.D)) {
 				shapeRenderer.setAutoShapeType(true);
 				shapeRenderer.begin();
-				shapeRenderer.setColor(Color.GREEN);
-				float Scale = 10;
-				Vector2 v1, v2, v3, v4;
-				
-				v1 = new Vector2(position.x + entity.getComponent(BoidCenterComponent.class).vectorCenter.x,
-						positionComp.position.y + entity.getComponent(BoidCenterComponent.class).vectorCenter.y);
-				v2 = new Vector2(position.x + entity.getComponent(BoidDistanceComponent.class).vectorDistance.x,
-						positionComp.position.y + entity.getComponent(BoidDistanceComponent.class).vectorDistance.y);
-				v3 = new Vector2(
-						position.x + entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.x,
-						positionComp.position.y
-								+ entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.y);
-				v4 = new Vector2(position.x + entity.getComponent(VelocityComponent.class).vectorVelocity.x,
-						positionComp.position.y + entity.getComponent(VelocityComponent.class).vectorVelocity.y);
-
+				/*
+				 * float Scale = 10;
+				 * 
+				 * Vector2 v1, v2, v3, v4;
+				 * 
+				 * v1 = new Vector2(position.x +
+				 * entity.getComponent(BoidCenterComponent.class).vectorCenter.
+				 * x, positionComp.position.y +
+				 * entity.getComponent(BoidCenterComponent.class).vectorCenter.y
+				 * ); v2 = new Vector2(position.x +
+				 * entity.getComponent(BoidDistanceComponent.class).
+				 * vectorDistance.x, positionComp.position.y +
+				 * entity.getComponent(BoidDistanceComponent.class).
+				 * vectorDistance.y); v3 = new Vector2( position.x +
+				 * entity.getComponent(BoidMatchVelocityComponent.class).
+				 * vectorMatchVelocity.x, positionComp.position.y +
+				 * entity.getComponent(BoidMatchVelocityComponent.class).
+				 * vectorMatchVelocity.y); v4 = new Vector2(position.x +
+				 * entity.getComponent(VelocityComponent.class).vectorVelocity.
+				 * x, positionComp.position.y +
+				 * entity.getComponent(VelocityComponent.class).vectorVelocity.y
+				 * );
+				 */
 				try {
-					
+					shapeRenderer.setColor(Color.BLUE);
+					shapeRenderer.circle(0, 0, ((BoidEntity) entity).sightRadius);
+					shapeRenderer.setColor(Color.RED);
+					shapeRenderer.circle(0, 0, MovementSystem.OPTIMAL_BOID_DISTANCE);
+				} catch (Exception e) {
+					if(e.getClass()!=ClassCastException.class)
+					System.out.println(e);
 				} finally {
-					// TODO: handle finally clause
+					shapeRenderer.end();
 				}
-				shapeRenderer.circle(position.x, position.y, ((BoidEntity)entity).);
-				shapeRenderer.line(positionComp.position, v1);
-				shapeRenderer.setColor(Color.PURPLE);
-				shapeRenderer.line(positionComp.position, v2.scl(Scale));
-				shapeRenderer.line(positionComp.position, v3);
-				shapeRenderer.setColor(Color.RED);
-				shapeRenderer.line(positionComp.position, v4);
-				shapeRenderer.end();
+
 			}
 			batch.end();
 		}

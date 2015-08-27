@@ -25,7 +25,7 @@ import com.mygdx.components.VelocityComponent;
 import com.mygdx.components.WanderComponent;
 public class MovementSystem extends EntitySystem {
 
-	private static final float OPTIMAL_BOID_DISTANCE = 40;
+	public static final float OPTIMAL_BOID_DISTANCE = 40;
 
 	private ImmutableArray<Entity> entities;
 

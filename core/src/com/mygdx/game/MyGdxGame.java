@@ -2,23 +2,15 @@ package com.mygdx.game;
 
 import java.util.ArrayList;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.ApplicationAdapter;
+
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.Script.ScriptHolder;
 
 public class MyGdxGame extends Game {
-	private static final String SCRIPTPATH_EVADE     = "data/scripts/Evade.lua";
-	private static final String SCRIPTPATH_PURSUIT   = "data/scripts/PursuitBehaviour.lua";
-	private static final String SCRIPTPATH_NO_TARGET = "data/scripts/No_Target.lua";
-	private static final String SCRIPTPATH_WANDER    = "data/scripts/Wander.lua";
+	
 	public SpriteBatch batch;
 	public Texture img;
 	public ArrayList<BoidEntity> boids= new ArrayList<BoidEntity>();
@@ -27,11 +19,7 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-		ScriptHolder.insertScript(SCRIPTPATH_EVADE);
-		ScriptHolder.insertScript(SCRIPTPATH_PURSUIT);
-		ScriptHolder.insertScript(SCRIPTPATH_NO_TARGET);
-		ScriptHolder.insertScript(SCRIPTPATH_WANDER);
+		ScriptHolder.loadDefault();
 		setScreen(new SplashScreen(this));
 	}
 	
