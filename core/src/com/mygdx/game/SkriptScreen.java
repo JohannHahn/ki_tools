@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -74,7 +75,21 @@ public class SkriptScreen implements Screen {
 		verticalGroup = new VerticalGroup();
 		table = new Table(defaultSkin);
 		table.setFillParent(true);
-
+		
+		HorizontalGroup hGroup= new HorizontalGroup();
+		Slider sliderGreen= new Slider(1, 30, 1,false, defaultSkin);
+		Label labelGreen= new Label("Anzahl gruene Boids", defaultSkin);
+		hGroup.addActor(labelGreen);
+		hGroup.addActor(sliderGreen);
+		
+		
+		Slider sliderRed= new Slider(1, 30, 1,false, defaultSkin);
+		Label labelRed= new Label("Anzahl rote Boids", defaultSkin);
+		hGroup.addActor(labelRed);
+		hGroup.addActor(sliderRed);
+		
+		verticalGroup.addActor(hGroup);
+		
 		for (int i = 0; i < ScriptHolder.size(); i++) {
 
 			HorizontalGroup hg = new HorizontalGroup();

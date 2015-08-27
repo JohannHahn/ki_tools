@@ -32,7 +32,7 @@ public class MyGdxGame extends Game {
 		ScriptHolder.insertScript(SCRIPTPATH_PURSUIT);
 		ScriptHolder.insertScript(SCRIPTPATH_NO_TARGET);
 		ScriptHolder.insertScript(SCRIPTPATH_WANDER);
-		setScreen(new MainScreen(this));
+		setScreen(new SplashScreen(this));
 	}
 	
 	
