@@ -101,12 +101,17 @@ public class MainScreen implements Screen {
 			engine.addEntity(boidR);
 		}
 
-		// Add PointOfInterrest
+		// Add Tankstellen
 		final String PATH_TO_SKIN = "POI(tankestelle).png";
-		PointOfInterestEntity poiEntitity = new PointOfInterestEntity("Tankstelle");
-		poiEntitity.add(new RenderComponent(new Texture(PATH_TO_SKIN), 70, 70));
-		poiEntitity.add(new PositionComponent(100, 100));
-		engine.addEntity(poiEntitity);
+		PointOfInterestEntity tankeGreen = new PointOfInterestEntity("Tankstelle-Green");
+		tankeGreen.add(new RenderComponent(new Texture(PATH_TO_SKIN), 70, 70));
+		tankeGreen.add(new PositionComponent(MathUtils.random(0, windowWidth), MathUtils.random(0, windowHeight)));
+		engine.addEntity(tankeGreen);
+		
+        PointOfInterestEntity tankeRed = new PointOfInterestEntity("Tankstelle-Red");
+        tankeRed.add(new RenderComponent(new Texture(PATH_TO_SKIN), 70, 70));
+        tankeRed.add(new PositionComponent(MathUtils.random(0, windowWidth), MathUtils.random(0, windowHeight)));
+        engine.addEntity(tankeRed);
 
 		this.game = game;
 		engine.addSystem(new MovementSystem());

@@ -120,10 +120,7 @@ public class MovementSystem extends EntitySystem {
 		//velComp.direction.nor();
 	}
 
-	private void updateVectors(BoidEntity entity, PositionComponent position) {
-		// NODES:
-		// Pseudocode Boid: http://www.kfish.org/boids/pseudocode.html
-		// Perfect example: https://processing.org/examples/flocking.html
+	private void updateVectors(BoidEntity entity, PositionComponent position) {		
 
 		// Vector in Component schreiben
 		entity.getComponent(BoidCenterComponent.class).vectorCenter = calculateVectorBoidCenter(entity, position);

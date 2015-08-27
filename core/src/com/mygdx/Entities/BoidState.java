@@ -245,10 +245,16 @@ public enum BoidState implements State<BoidEntity> {
 					if(e.getClass() == PointOfInterestEntity.class){						
 						tanke = (PointOfInterestEntity)e;
 						
-						if(tanke.toString() == "Tankstelle"){
-							boid.setPointOfInterest(tanke);
-							System.out.println("Low on fuel! New target : " + tanke.getComponent(PositionComponent.class).position);
-							break;
+						if(tanke.toString().contains("Tankstelle")){
+						    //Checke ob passende Tankstelle
+						    if( (tanke.toString().contains("Green") && boid.team == Team.GREEN) ||
+						        (tanke.toString().contains("Red") && boid.team == Team.RED) ) {
+						        boid.setPointOfInterest(tanke);
+						        
+						        System.out.println("Low on fuel! New target : " + tanke.getComponent(PositionComponent.class).position);
+						        break;
+						    }							
+							
 						}
 					}
 				}

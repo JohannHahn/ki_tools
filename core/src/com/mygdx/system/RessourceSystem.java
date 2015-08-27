@@ -30,7 +30,6 @@ public class RessourceSystem extends EntitySystem{
 	private float collisionDistance = 15f;
 	private ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
 	private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
-	private String[] pointOfInterestNames = {"Tankstelle" , "Heilstation"};
 	
 	@SuppressWarnings("unchecked")
 	public void addedToEngine(Engine engine) {
@@ -40,11 +39,10 @@ public class RessourceSystem extends EntitySystem{
 		for(Entity e : candidates){
 			if(e.getClass() == PointOfInterestEntity.class){
 				PointOfInterestEntity pie = (PointOfInterestEntity)e;
-				for(String s : pointOfInterestNames){
-					if(s.equals(pie.toString())){
-						interestPoints.add(pie);
-					}
+				if(pie.toString().contains("Tankstelle") || pie.toString().contains("Heilstation")) {
+				    interestPoints.add(pie);
 				}
+				
 			}
 		}
 		System.out.println("RessourceSystem added");
@@ -60,9 +58,16 @@ public class RessourceSystem extends EntitySystem{
 			
 			//Gewinne Sprit, falls an der Tanke, Leben falls an der Heilstation
 			for(PointOfInterestEntity pie : interestPoints){
-				if(pie.toString() == "Tankstelle" && pm.get(pie).position.dst2(pm.get(entity).position) < 80){
+			    float distance = pm.get(pie).position.dst2(pm.get(entity).position);
+			    
+				if(pie.toString().contains("Tankstelle") && distance < 80){
 					rc.fuel += 1;
+					System.out.println(rc.fuel);
 				}
+				
+				if(pie.toString().contains("Heilstation") && distance < 80){
+                    rc.health += 1;
+                }
 			}
 			
 			//Verliere Sprit jede Zeiteinheit
