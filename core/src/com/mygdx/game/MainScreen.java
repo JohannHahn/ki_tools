@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.Entities.BoidEntity;
+import com.mygdx.States.BoidState;
 import com.mygdx.States.EvadeState;
 import com.mygdx.States.LuaState;
 import com.mygdx.States.PursuitState;
@@ -56,8 +57,8 @@ public class MainScreen implements Screen {
 	private int windowHeight = Gdx.graphics.getHeight();
 	private LuaScript stateScript;
 	private BoidEntity boidTest;
-	public static LuaState startStateGreen;
-	public static LuaState startStateRed;
+	public static BoidState startStateGreen;
+	public static BoidState startStateRed;
 
 	public MainScreen(MyGdxGame game) {
 		stateScript = new LuaScript("data/scripts/wanderState.lua");
@@ -87,7 +88,7 @@ public class MainScreen implements Screen {
 		// Create Team Green
 		for (int i = 0; i < boidTeamSizeGreen; i++) {
 			BoidEntity boidR;
-			if (startStateRed == null) {
+			if (startStateGreen == null) {
 				boidR = new BoidEntity(BoidEntity.Team.GREEN, engine, new EvadeState());
 			} else {
 				boidR = new BoidEntity(BoidEntity.Team.GREEN, engine, startStateGreen);

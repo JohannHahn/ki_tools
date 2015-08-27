@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.Script.ScriptHolder;
+import com.mygdx.States.BoidState;
 
 public class SkriptScreen implements Screen {
 	private Stage stage;
@@ -136,10 +137,10 @@ public class SkriptScreen implements Screen {
 
 				int indexTemp = getSelectedCheckBoxIndex(checkBoxArrayListGreen);
 				if (indexTemp != -1)
-					MainScreen.startStateGreen = ScriptHolder.getLuaState(indexTemp);
+					MainScreen.startStateGreen = (BoidState) ScriptHolder.getBoidState(indexTemp);
 				indexTemp = getSelectedCheckBoxIndex(checkBoxArrayListRed);
 				if (indexTemp != -1)
-					MainScreen.startStateRed = ScriptHolder.getLuaState(indexTemp);
+					MainScreen.startStateRed = (BoidState) ScriptHolder.getBoidState(indexTemp);
 				
 				
 				MainScreen.boidTeamSizeGreen= (int) getInstance().sliderGreen.getValue();

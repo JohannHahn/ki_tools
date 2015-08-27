@@ -1,7 +1,7 @@
 -- INIT --
 
 function init(name)
-	name="StateExample1"
+	name="StateExample"
 	--print(entity.team ,"entered State", name)--
 end
 

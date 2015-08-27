@@ -4,7 +4,12 @@ import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
+import com.badlogic.gdx.ai.fsm.State;
+import com.mygdx.States.BoidState;
+import com.mygdx.States.EvadeState;
 import com.mygdx.States.LuaState;
+import com.mygdx.States.PursuitState;
+import com.mygdx.States.WanderState;
 
 public class ScriptHolder {
 
@@ -13,14 +18,14 @@ public class ScriptHolder {
 	private static final String SCRIPTPATH_NO_TARGET = "data/scripts/No_Target.lua";
 	private static final String SCRIPTPATH_WANDER    = "data/scripts/Wander.lua";
 	
-	public static ArrayList<LuaState> scriptStatesList= new ArrayList<LuaState>();
+	public static ArrayList<BoidState> scriptStatesList= new ArrayList<BoidState>();
 
 	//return indexofScript in ScripStateList
 	public static int getIndexOfScript(String name)
 	{
-		for (LuaState luaState : scriptStatesList) {
-			if(luaState.getName().equals(name))
-				return scriptStatesList.indexOf(luaState);
+		for (BoidState BoidState : scriptStatesList) {
+			if(BoidState.getName().equals(name))
+				return scriptStatesList.indexOf(BoidState);
 		} 
 		return -1;
 	}
@@ -34,15 +39,15 @@ public class ScriptHolder {
 		return scriptStatesList.get(index).getName();
 		
 	}
-	public static LuaState getLuaState(int index)
+	public static BoidState getBoidState(int index)
 	{
 		return scriptStatesList.get(index);
 	}
-	public static LuaState getLuaStateByName(String name)
+	public static BoidState getLuaStateByName(String name)
 	{
 		
 		
-		return getLuaState(getIndexOfScript(name));
+		return getBoidState(getIndexOfScript(name));
 		
 	}
 	
@@ -96,10 +101,15 @@ public class ScriptHolder {
 	}
 
 	public static void loadDefault() {
-		ScriptHolder.insertScript(SCRIPTPATH_EVADE);
-		ScriptHolder.insertScript(SCRIPTPATH_PURSUIT);
-		ScriptHolder.insertScript(SCRIPTPATH_NO_TARGET);
-		ScriptHolder.insertScript(SCRIPTPATH_WANDER);
+		ScriptHolder.addBoidState(new EvadeState());
+		ScriptHolder.addBoidState(new PursuitState());
+		ScriptHolder.addBoidState(new WanderState());
+		
+		
+	}
+
+	private static void addBoidState(BoidState State) {
+		scriptStatesList.add(State);
 		
 	}
 }

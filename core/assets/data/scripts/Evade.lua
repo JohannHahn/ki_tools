@@ -9,8 +9,8 @@ end
 function update(entity)   	
 	
 	
-	--	entity:changeStateByName("EVADE")--
-	entity:setTexture("C:\Users\Nik\git\ki_tools\core\assets\smiley.png");
+	--	entity:changeStateByName("StateExample")--
+	--entity:setTexture("C:\Users\Nik\git\ki_tools\core\assets\smiley.png");--
 	
 	
 	

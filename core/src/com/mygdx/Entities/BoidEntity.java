@@ -11,7 +11,10 @@ import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
+import com.mygdx.Entities.BoidEntity.Team;
 import com.mygdx.Script.ScriptHolder;
+import com.mygdx.States.BoidState;
+import com.mygdx.States.IState;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RenderComponent;
@@ -31,12 +34,14 @@ public class BoidEntity extends Entity {
 	public static int height = 16;
 	
 
-	public BoidEntity(Team team, Engine engine, State state) {
+	public BoidEntity(Team team, Engine engine, BoidState state) {
 		this.team = team;
 		this.engine = engine;
 		stateMachine = new DefaultStateMachine<BoidEntity>(this, state);
 
 	}
+
+	
 
 	public void update(float delta) {
 		stateMachine.update();
