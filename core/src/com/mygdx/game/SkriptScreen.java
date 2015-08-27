@@ -140,6 +140,8 @@ public class SkriptScreen implements Screen {
 				indexTemp = getSelectedCheckBoxIndex(checkBoxArrayListRed);
 				if (indexTemp != -1)
 					MainScreen.startStateRed = ScriptHolder.getLuaState(indexTemp);
+				
+				
 				MainScreen.boidTeamSizeGreen= (int) getInstance().sliderGreen.getValue();
 				MainScreen.boidTeamSizeRed= (int) getInstance().sliderRed.getValue();
 				game.setScreen(new MainScreen(game));

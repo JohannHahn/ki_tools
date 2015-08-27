@@ -31,17 +31,13 @@ public class SplashScreen implements Screen {
 	public void show() {
 		// The first method to be called, you need to initialize everything in
 		// here. It’s only called when the screen is set.
-		/*If your image is not the same size as your screen
-         *splashImage.setX(?);
-         *splashImage.setY(?);
-         */
 		
 		//Adding a sequence of actions
 		splashImage.addAction(Actions.sequence(Actions.alpha(0),Actions.fadeIn(0.5f),Actions.delay(delay),Actions.run(new Runnable() {
             @Override
             public void run() {
             	game.setScreen(new MainScreen((MyGdxGame) game));// call the GameProject class
-                //((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu(game));// call the GameProject class
+                
             }
         })));
 		table.setFillParent(true);

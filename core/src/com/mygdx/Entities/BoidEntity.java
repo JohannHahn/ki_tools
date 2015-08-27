@@ -9,9 +9,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.fsm.StateMachine;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
+import com.mygdx.Script.ScriptHolder;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.PositionComponent;
+import com.mygdx.components.RenderComponent;
 import com.mygdx.components.SeekComponent;
 
 public class BoidEntity extends Entity {
@@ -97,12 +100,20 @@ public class BoidEntity extends Entity {
 		sc.target = getPositionComponentMapper().get(e).position;
 	}
 	
-	public void changeStatetoEvade()
+	
+	//LUA Methodes:
+	
+	//TODO
+	public void changeStateByName(String state)
 	{
-		this.stateMachine.changeState(BoidState.EVADE);	
+		//example state==BoidState.EVADE
+		this.stateMachine.changeState(ScriptHolder.getLuaStateByName(state));	
 		
 	}
-	
+	public void setTexture(String path)
+	{
+		getComponent(RenderComponent.class).setTexture(new Texture(Gdx.files.external(path)));
+	}
 	
 
 }
