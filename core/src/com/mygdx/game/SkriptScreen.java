@@ -71,12 +71,14 @@ public class SkriptScreen implements Screen {
 		
 		HorizontalGroup hGroup= new HorizontalGroup();
 		sliderGreen= new Slider(1, 30, 1,false, defaultSkin);
+		sliderGreen.setValue(MainScreen.boidTeamSizeGreen);
 		labelGreen= new Label("Anzahl gruene Boids", defaultSkin);
 		hGroup.addActor(labelGreen);
 		hGroup.addActor(sliderGreen);
 		
 		
 		sliderRed= new Slider(1, 30, 1,false, defaultSkin);
+		sliderRed.setValue(MainScreen.boidTeamSizeRed);
 		labelRed= new Label("Anzahl rote Boids", defaultSkin);
 		hGroup.addActor(labelRed);
 		hGroup.addActor(sliderRed);
