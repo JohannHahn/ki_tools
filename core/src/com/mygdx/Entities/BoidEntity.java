@@ -19,7 +19,7 @@ public class BoidEntity extends Entity {
 		RED, GREEN
 	}
 
-	private static final int sightRadius = 200;
+	public static final int sightRadius = 200;
 	public Team team;
 	public StateMachine<BoidEntity> stateMachine;
 	public Engine engine;
