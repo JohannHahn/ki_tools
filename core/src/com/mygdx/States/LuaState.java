@@ -7,7 +7,7 @@ import com.badlogic.gdx.ai.msg.Telegram;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.Script.LuaScript;
 
-public class LuaState implements State<BoidEntity> {
+public class LuaState implements State<BoidEntity>, IState {
 	private LuaScript script;
 	private String name = "null";
     public LuaState(LuaScript script){

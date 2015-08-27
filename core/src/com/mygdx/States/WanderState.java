@@ -8,7 +8,7 @@ import com.mygdx.Entities.BoidEntity;
 import com.mygdx.Entities.BoidEntity.Team;
 import com.mygdx.components.WanderComponent;
 
-public class WanderState implements State<BoidEntity>{
+public class WanderState implements State<BoidEntity>, IState{
 
     private ComponentMapper<WanderComponent> pm = ComponentMapper.getFor(WanderComponent.class);
     private WanderComponent wc;
@@ -45,6 +45,11 @@ public class WanderState implements State<BoidEntity>{
     public boolean onMessage(BoidEntity entity, Telegram telegram) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public String getName() {
+        return "wanderState";
     }
 
 }

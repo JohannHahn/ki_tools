@@ -6,7 +6,7 @@ import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.EvadeComponent;
 import com.mygdx.components.RessourceComponent;
 
-public class EvadeAndRefuel extends EvadeState {
+public class EvadeAndRefuel extends EvadeState{
 
     private ComponentMapper<EvadeComponent> pm = ComponentMapper.getFor(EvadeComponent.class);
     private EvadeComponent ec;

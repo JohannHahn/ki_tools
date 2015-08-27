@@ -8,7 +8,7 @@ import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.EvadeComponent;
 import com.mygdx.components.RessourceComponent;
 
-public class EvadeState implements State<BoidEntity>{   
+public class EvadeState implements State<BoidEntity>, IState{   
 
     private ComponentMapper<EvadeComponent> pm = ComponentMapper.getFor(EvadeComponent.class);
     private EvadeComponent ec;
@@ -67,6 +67,11 @@ public class EvadeState implements State<BoidEntity>{
     public boolean onMessage(BoidEntity entity, Telegram telegram) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public String getName() {
+        return "evadeState";
     }
 
 }
