@@ -27,8 +27,6 @@ public class MovementSystem extends EntitySystem {
 
 	private static final float OPTIMAL_BOID_DISTANCE = 40;
 
-	private static final int GROUP_RANGE = 100;
-
 	private ImmutableArray<Entity> entities;
 
 	private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
@@ -276,7 +274,7 @@ public class MovementSystem extends EntitySystem {
 				boolean inSight = angle < 150 && angle > -150;
 				
 				// near enought?
-				if (GROUP_RANGE > distance(positionVectorBoid, pm.get(entities.get(i)).position)) {
+				if (currentEntity.sightRadius > distance(positionVectorBoid, pm.get(entities.get(i)).position)) {
 					// pvJ = pvJ + b.velocity
 					float d = distance(positionVectorBoid, pm.get(entities.get(i)).position);
 
@@ -393,7 +391,7 @@ public class MovementSystem extends EntitySystem {
 				boolean inSight = angle < 150 && angle > -150;
 				
 				// near enought?
-				if (GROUP_RANGE >= (d = distance(positionVectorBoid, pm.get(entities.get(i)).position))) {
+				if (entity.sightRadius >= (d = distance(positionVectorBoid, pm.get(entities.get(i)).position))) {
 
 					Vector2 diff= new Vector2();
 					diff=sub( pm.get(entities.get(i)).position , positionVectorBoid);
