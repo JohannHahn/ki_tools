@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.BoidCenterComponent;
@@ -18,8 +19,10 @@ import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.RenderComponent;
+import com.mygdx.components.RessourceComponent;
 import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
+import com.mygdx.components.WanderComponent;
 public class MovementSystem extends EntitySystem {
 
 	private static final float OPTIMAL_BOID_DISTANCE = 40;
@@ -34,6 +37,8 @@ public class MovementSystem extends EntitySystem {
 	private ComponentMapper<FleeComponent> fm = ComponentMapper.getFor(FleeComponent.class);
 	private ComponentMapper<PursuitComponent> purMapper = ComponentMapper.getFor(PursuitComponent.class);
 	private ComponentMapper<EvadeComponent> em = ComponentMapper.getFor(EvadeComponent.class);
+	private ComponentMapper<WanderComponent> wm = ComponentMapper.getFor(WanderComponent.class);
+	private ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
 	
 	private int windowWidth;
 	private int windowHeight;
@@ -67,6 +72,8 @@ public class MovementSystem extends EntitySystem {
 		PursuitComponent purComp = purMapper.get(entity);
 		EvadeComponent evadeComp = em.get(entity);
 		VelocityComponent velComp = vm.get(entity);
+		WanderComponent wandComp = wm.get(entity);
+		RessourceComponent resComp = rm.get(entity);
 		
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
@@ -86,6 +93,9 @@ public class MovementSystem extends EntitySystem {
 		if (evadeComp != null) {
 			velComp.vectorVelocity.add(evadeComp.vectorEvade);
 		}
+		if (wandComp != null) {
+			velComp.vectorVelocity.add(wandComp.wanderVector);
+		}
 
 		Vector2 boidVector = new Vector2();
 		boidVector.add(bCenter);
@@ -97,7 +107,9 @@ public class MovementSystem extends EntitySystem {
 		
 		arrival(entity);	
 		
-		positionComp.position.add(velComp.vectorVelocity);	
+		if(resComp.fuel > 0){
+			positionComp.position.add(velComp.vectorVelocity);	
+		}
 		
 		//Clamp in screen
 		boundCoordinates(positionComp.position);		
@@ -115,14 +127,15 @@ public class MovementSystem extends EntitySystem {
 
 		// Vector in Component schreiben
 		entity.getComponent(BoidCenterComponent.class).vectorCenter = calculateVectorBoidCenter(entity, position);
-		entity.getComponent(BoidDistanceComponent.class).vectorDistance = calculateVectorBoidDistance(entity, position);
+		entity.getComponent(BoidDistanceComponent.class).vectorDistance = calculateVectorBoidDistance(entity, position).scl(1.5f);
 		entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity = calculateVectorBoidMatchVc(entity,
-				position);
+				position).scl(1.5f);
 
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
 		PursuitComponent purComp = purMapper.get(entity);
 		EvadeComponent evadeComp = em.get(entity);
+		WanderComponent wandComp = wm.get(entity);
 
 		if (seekComp != null)
 			seekComp.vectorSeek = calculateVectorSeekFlee(entity, position);
@@ -130,10 +143,12 @@ public class MovementSystem extends EntitySystem {
 			fleeComp.vectorFlee = calculateVectorSeekFlee(entity, position);
 		if (purComp != null){
 			purComp.vectorPersuit = calculatePursuit(entity);
-			purComp.vectorPersuit.scl(3f);
 		}
 		if(evadeComp != null){
-			evadeComp.vectorEvade = calculateEvade(entity);
+			evadeComp.vectorEvade = calculateEvade(entity).scl(1.3f);
+		}
+		if(wandComp != null){
+			wandComp.wanderVector = calculateWander(entity).scl(0.1f);
 		}
 
 		// For debugging press D
@@ -153,32 +168,36 @@ public class MovementSystem extends EntitySystem {
 
 	}
 	
-	/*private Vector2 calculateWander(BoidEntity boid) {
-		   // Calculate the circle center
-		   Vector2 circleCenter;
-		   circleCenter = velocity.clone();
-		   circleCenter.normalize();
-		   circleCenter.scaleBy(CIRCLE_DISTANCE);
-		   //
-		   // Calculate the displacement force
-		   var displacement :Vector3D;
-		   displacement = new Vector3D(0, -1);
-		   displacement.scaleBy(CIRCLE_RADIUS);
-		   //
-		   // Randomly change the vector direction
-		   // by making it change its current angle
-		   setAngle(displacement, wanderAngle);
-		   //
-		   // Change wanderAngle just a bit, so it
-		   // won't have the same value in the
-		   // next game frame.
-		   wanderAngle += Math.random() * ANGLE_CHANGE - ANGLE_CHANGE * .5;
-		   //
-		   // Finally calculate and return the wander force
-		   var wanderForce :Vector3D;
-		   wanderForce = circleCenter.add(displacement);
-		   return wanderForce;
-		}*/
+	private Vector2 calculateWander(BoidEntity boid) {
+		// Calculate the circle center
+		VelocityComponent velComp = vm.get(boid);
+		WanderComponent wandComp = wm.get(boid);
+	    Vector2 circleCenter;
+	    circleCenter = velComp.vectorVelocity.cpy();
+	    circleCenter.nor();
+	    circleCenter.scl(wandComp.circleDistance);
+	    //
+	    // Calculate the displacement force
+	    Vector2 displacement = new Vector2(1, 0);
+	    displacement.scl(wandComp.circleRadius);
+	    //
+	    // Randomly change the vector direction
+	    // by making it change its current angle
+	    displacement.rotate(wandComp.wanderAngle);
+	    //
+	    // Change wanderAngle just a bit, so it
+	    // won't have the same value in the
+	    // next game frame.
+	    wandComp.wanderAngle += MathUtils.random() * wandComp.angleChange - wandComp.angleChange * .5;
+	    //
+	    // Finally calculate and return the wander force
+	    Vector2 wanderForce = new Vector2();
+	    wanderForce = circleCenter.cpy();
+	    wanderForce.add(displacement);
+	    wanderForce.scl(0.1f);
+	    
+	    return wanderForce;
+	}
 		 
 		
 
@@ -188,13 +207,13 @@ public class MovementSystem extends EntitySystem {
 		PositionComponent targetPos = pm.get(pc.target);
 		VelocityComponent targetVel = vm.get(pc.target);
 		
-		float T = targetPos.position.dst(pm.get(boid).position) / targetVel.maxVelocity;		
+		float T = targetPos.position.cpy().dst(pm.get(boid).position.cpy()) / targetVel.maxVelocity;		
 		Vector2 futurePosition  = targetPos.position.cpy();
 		Vector2 futureVelocity = targetVel.vectorVelocity.cpy();
 		futureVelocity.scl(T);
 		futurePosition.add(futureVelocity);
 		
-		return vectorSeek(boid, futurePosition);
+		return vectorSeek(boid, futurePosition).scl(0.1f);
 	}
 	
 	private Vector2 calculateEvade(BoidEntity boid){
@@ -202,14 +221,17 @@ public class MovementSystem extends EntitySystem {
 		PositionComponent targetPos = pm.get(ec.target);
 		VelocityComponent targetVel = vm.get(ec.target);
 		
-		float T = targetPos.position.dst(pm.get(boid).position) / targetVel.maxVelocity;		
+		float T = targetPos.position.cpy().dst(pm.get(boid).position.cpy()) / targetVel.maxVelocity;		
 		Vector2 futurePosition  = targetPos.position.cpy();
 		Vector2 futureVelocity = targetVel.vectorVelocity.cpy();
 		futureVelocity.scl(T);
 		futurePosition.add(futureVelocity);
+		
+		//Vector2 result = vectorSeek(boid, targetPos.position);
 		Vector2 result = vectorSeek(boid, futurePosition);
 		result.scl(-1);
 		return result;
+		
 	}
 	
 	private Vector2 calculateVectorSeekFlee(BoidEntity entity, PositionComponent positionComp) {
@@ -438,37 +460,41 @@ public class MovementSystem extends EntitySystem {
 		
 		if(pos.x < 0)
 		{
-			pos.x += windowWidth;
+			pos.x += windowWidth ;
 			pos.y = windowHeight - pos.y;
 		}
 		
 		if(pos.y > windowHeight)
 		{
-			pos.y -= windowHeight;
+			pos.y -= windowHeight ;
 			pos.x = windowWidth - pos.x;
 		}
 		
 		if(pos.y < 0)
 		{
-			pos.y += windowHeight;
+			pos.y += windowHeight ;
 			pos.x = windowWidth - pos.x;
 		}
 	}
 	
-	private Vector2 vectorSeek(Entity entity, Vector2 target){		
+	private Vector2 vectorSeek(Entity entity, Vector2 target){	
+		
 		Vector2 position = entity.getComponent(PositionComponent.class).position;		
 				
 		VelocityComponent velComp = vm.get(entity);
 		Vector2 velocity = velComp.vectorVelocity.cpy();		
 		
-		Vector2 desired_velocity = target.sub(position);		
+		Vector2 desired_velocity = target.cpy();
+		desired_velocity.sub(position);
 		desired_velocity.nor().scl(velComp.maxVelocity);
 		
-		Vector2 steering = desired_velocity.sub(velocity);
+		Vector2 steering = desired_velocity.cpy();
+		steering.sub(velocity);
 		steering = truncate(steering, velComp.maxForce);
 		
 		// steering = steering / mass
-		velocity = truncate(velocity.add(steering), velComp.maxSpeed);
+		velocity.add(steering);
+		velocity = truncate(velocity, velComp.maxSpeed);
 		return velocity;
 	}
 	
