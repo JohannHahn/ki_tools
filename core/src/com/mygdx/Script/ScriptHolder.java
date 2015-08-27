@@ -8,6 +8,11 @@ import com.mygdx.Entities.LuaState;
 
 public class ScriptHolder {
 
+	private static final String SCRIPTPATH_EVADE     = "data/scripts/Evade.lua";
+	private static final String SCRIPTPATH_PURSUIT   = "data/scripts/PursuitBehaviour.lua";
+	private static final String SCRIPTPATH_NO_TARGET = "data/scripts/No_Target.lua";
+	private static final String SCRIPTPATH_WANDER    = "data/scripts/Wander.lua";
+	
 	public static ArrayList<LuaState> scriptStatesList= new ArrayList<LuaState>();
 
 	//return indexofScript in ScripStateList
@@ -88,5 +93,13 @@ public class ScriptHolder {
 				ScriptHolder.scriptStatesList.add(new LuaState(newScript));
 		}
 
+	}
+
+	public static void loadDefault() {
+		ScriptHolder.insertScript(SCRIPTPATH_EVADE);
+		ScriptHolder.insertScript(SCRIPTPATH_PURSUIT);
+		ScriptHolder.insertScript(SCRIPTPATH_NO_TARGET);
+		ScriptHolder.insertScript(SCRIPTPATH_WANDER);
+		
 	}
 }

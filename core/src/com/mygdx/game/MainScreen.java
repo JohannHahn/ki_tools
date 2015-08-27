@@ -47,8 +47,8 @@ public class MainScreen implements Screen {
 	Stage stage = new Stage();
 	Image img = new Image(text);
 	MyGdxGame game;
-	int boidTeamSizeRed = 5;
-	int boidTeamSizeGreen= 5; 
+	public static int boidTeamSizeRed;
+	public static int boidTeamSizeGreen; 
 	private int windowWidth = Gdx.graphics.getWidth();
 	private int windowHeight = Gdx.graphics.getHeight();
 	private LuaScript stateScript;
