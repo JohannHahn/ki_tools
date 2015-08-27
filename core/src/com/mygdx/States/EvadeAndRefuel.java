@@ -24,7 +24,6 @@ public class EvadeAndRefuel extends EvadeState{
             boid.add(ec);       
         }     
         
-        BoidState.updateTarget(boid);
         BoidState.checkFuel(boid);          
         
         if(!rc.lowOnFuel) {
@@ -49,7 +48,6 @@ public class EvadeAndRefuel extends EvadeState{
             boid.remove(EvadeComponent.class);
         }      
         
-        BoidState.updateTarget(boid);
         BoidState.checkFuel(boid);          
         
         if(!rc.lowOnFuel) {
