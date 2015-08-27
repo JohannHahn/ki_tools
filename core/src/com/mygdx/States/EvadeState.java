@@ -27,6 +27,7 @@ public class EvadeState implements State<BoidEntity>{
         
         BoidState.updateTarget(boid);
         BoidState.checkFuel(boid);
+        
         if(rc.lowOnFuel){
             boid.stateMachine.changeState(new EvadeAndRefuel());
         }
@@ -38,6 +39,7 @@ public class EvadeState implements State<BoidEntity>{
         Entity target = boid.searchTarget();
         ec = pm.get(boid);
         rc = rm.get(boid);
+        
         if(ec == null){
             ec = new EvadeComponent();
             boid.add(ec);
@@ -58,7 +60,7 @@ public class EvadeState implements State<BoidEntity>{
     }
     
     public void exit(BoidEntity boid){
-        //boid.remove(EvadeComponent.class);
+        boid.remove(EvadeComponent.class);
     }
 
     @Override

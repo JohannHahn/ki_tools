@@ -1,9 +1,10 @@
-package com.mygdx.Entities;
+package com.mygdx.States;
 
 import org.luaj.vm2.LuaValue;
 
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
+import com.mygdx.Entities.BoidEntity;
 import com.mygdx.Script.LuaScript;
 
 public class LuaState implements State<BoidEntity> {

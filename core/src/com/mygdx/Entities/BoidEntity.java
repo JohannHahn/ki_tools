@@ -97,12 +97,6 @@ public class BoidEntity extends Entity {
 		sc.target = getPositionComponentMapper().get(e).position;
 	}
 	
-	public void changeStatetoEvade()
-	{
-		this.stateMachine.changeState(BoidState.EVADE);	
-		
-	}
-	
 	
 
 }

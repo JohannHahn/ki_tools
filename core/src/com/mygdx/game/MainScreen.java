@@ -11,8 +11,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.Entities.BoidEntity;
-import com.mygdx.Entities.BoidState;
-import com.mygdx.Entities.LuaState;
+import com.mygdx.States.EvadeState;
+import com.mygdx.States.LuaState;
+import com.mygdx.States.PursuitState;
 import com.mygdx.Entities.PointOfInterestEntity;
 import com.mygdx.Script.LuaScript;
 import com.mygdx.Script.ScriptHolder;
@@ -33,6 +34,8 @@ import com.sun.corba.se.spi.orbutil.fsm.State;
 import com.sun.org.apache.bcel.internal.generic.LUSHR;
 
 import javax.swing.JFileChooser;
+
+
 
 //new
 import org.luaj.*;
@@ -65,7 +68,7 @@ public class MainScreen implements Screen {
 		for (int i = 0; i < boidTeamSizeRed; i++) {
 			BoidEntity boidR;
 			if (startStateRed == null) {
-				boidR = new BoidEntity(BoidEntity.Team.RED, engine, BoidState.PURSUIT);
+				boidR = new BoidEntity(BoidEntity.Team.RED, engine, new PursuitState());
 				
 			} else {
 				boidR = new BoidEntity(BoidEntity.Team.RED, engine, startStateRed);
@@ -85,7 +88,7 @@ public class MainScreen implements Screen {
 		for (int i = 0; i < boidTeamSizeGreen; i++) {
 			BoidEntity boidR;
 			if (startStateRed == null) {
-				boidR = new BoidEntity(BoidEntity.Team.GREEN, engine, BoidState.EVADE);
+				boidR = new BoidEntity(BoidEntity.Team.GREEN, engine, new EvadeState());
 			} else {
 				boidR = new BoidEntity(BoidEntity.Team.GREEN, engine, startStateGreen);
 			}
