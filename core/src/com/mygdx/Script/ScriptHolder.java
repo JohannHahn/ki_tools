@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
-import com.mygdx.Entities.LuaState;
+import com.mygdx.States.LuaState;
 
 public class ScriptHolder {
 

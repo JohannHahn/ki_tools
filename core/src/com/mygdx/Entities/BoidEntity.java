@@ -100,6 +100,7 @@ public class BoidEntity extends Entity {
 		sc.target = getPositionComponentMapper().get(e).position;
 	}
 	
+
 	
 	//LUA Methodes:
 	

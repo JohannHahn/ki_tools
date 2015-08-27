@@ -62,7 +62,6 @@ public class RessourceSystem extends EntitySystem{
 			    
 				if(pie.toString().contains("Tankstelle") && distance < 80){
 					rc.fuel += 1;
-					System.out.println(rc.fuel);
 				}
 				
 				if(pie.toString().contains("Heilstation") && distance < 80){

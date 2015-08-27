@@ -13,7 +13,7 @@ import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.jse.*;
 
 import com.badlogic.gdx.Gdx;
-import com.mygdx.Entities.LuaState;
+import com.mygdx.States.LuaState;
 
 /*
  *  Lua script file loader and function executer
