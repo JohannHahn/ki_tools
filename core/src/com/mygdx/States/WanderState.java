@@ -8,7 +8,7 @@ import com.mygdx.Entities.BoidEntity;
 import com.mygdx.Entities.BoidEntity.Team;
 import com.mygdx.components.WanderComponent;
 
-public class WanderState implements State<BoidEntity>, IState{
+public class WanderState extends BoidState{
 
     private ComponentMapper<WanderComponent> pm = ComponentMapper.getFor(WanderComponent.class);
     private WanderComponent wc;

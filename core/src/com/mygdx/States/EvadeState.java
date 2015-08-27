@@ -2,13 +2,12 @@ package com.mygdx.States;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.EvadeComponent;
 import com.mygdx.components.RessourceComponent;
 
-public class EvadeState implements State<BoidEntity>, IState{   
+public class EvadeState extends BoidState{   
 
     private ComponentMapper<EvadeComponent> pm = ComponentMapper.getFor(EvadeComponent.class);
     private EvadeComponent ec;

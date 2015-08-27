@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.Entities.BoidEntity.Team;
@@ -16,7 +17,7 @@ import com.mygdx.components.PositionComponent;
 import com.mygdx.components.SeekComponent;
 
 //Default state system
-public class BoidState  {	
+public abstract class BoidState implements State<BoidEntity>, IState {	
 	
 	/*PURSUIT(){
 		private ComponentMapper<PursuitComponent> pm = ComponentMapper.getFor(PursuitComponent.class);

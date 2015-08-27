@@ -7,7 +7,7 @@ import com.badlogic.gdx.ai.msg.Telegram;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.PursuitComponent;
 
-public class PursuitState implements State<BoidEntity>, IState{
+public class PursuitState extends BoidState{
 
     private ComponentMapper<PursuitComponent> pm = ComponentMapper.getFor(PursuitComponent.class);
     private PursuitComponent pc;
