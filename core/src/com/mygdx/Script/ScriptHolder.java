@@ -16,7 +16,7 @@ public class ScriptHolder {
 	public static ArrayList<LuaState> scriptStatesList= new ArrayList<LuaState>();
 
 	//return indexofScript in ScripStateList
-	public int getIndexOfScript(String name)
+	public static int getIndexOfScript(String name)
 	{
 		for (LuaState luaState : scriptStatesList) {
 			if(luaState.getName().equals(name))
@@ -38,7 +38,7 @@ public class ScriptHolder {
 	{
 		return scriptStatesList.get(index);
 	}
-	public LuaState getLuaStateByName(String name)
+	public static LuaState getLuaStateByName(String name)
 	{
 		
 		
