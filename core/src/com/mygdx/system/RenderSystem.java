@@ -90,43 +90,60 @@ public class RenderSystem extends EntitySystem {
 				}
 			}
 
-			// SHows the vectors of each boid //is not working
+			// Shows the Areas
 			if (Gdx.input.isKeyPressed(Keys.D)) {
 				shapeRenderer.setAutoShapeType(true);
 				shapeRenderer.begin();
-				/*
-				 * float Scale = 10;
-				 * 
-				 * Vector2 v1, v2, v3, v4;
-				 * 
-				 * v1 = new Vector2(position.x +
-				 * entity.getComponent(BoidCenterComponent.class).vectorCenter.
-				 * x, positionComp.position.y +
-				 * entity.getComponent(BoidCenterComponent.class).vectorCenter.y
-				 * ); v2 = new Vector2(position.x +
-				 * entity.getComponent(BoidDistanceComponent.class).
-				 * vectorDistance.x, positionComp.position.y +
-				 * entity.getComponent(BoidDistanceComponent.class).
-				 * vectorDistance.y); v3 = new Vector2( position.x +
-				 * entity.getComponent(BoidMatchVelocityComponent.class).
-				 * vectorMatchVelocity.x, positionComp.position.y +
-				 * entity.getComponent(BoidMatchVelocityComponent.class).
-				 * vectorMatchVelocity.y); v4 = new Vector2(position.x +
-				 * entity.getComponent(VelocityComponent.class).vectorVelocity.
-				 * x, positionComp.position.y +
-				 * entity.getComponent(VelocityComponent.class).vectorVelocity.y
-				 * );
-				 */
+
 				try {
+
 					shapeRenderer.setColor(Color.BLUE);
 					shapeRenderer.circle(0, 0, ((BoidEntity) entity).sightRadius);
 					shapeRenderer.setColor(Color.RED);
 					shapeRenderer.circle(0, 0, MovementSystem.OPTIMAL_BOID_DISTANCE);
 				} catch (Exception e) {
-					if(e.getClass()!=ClassCastException.class)
-					System.out.println(e);
+					if (e.getClass() != ClassCastException.class)
+						System.out.println(e);
 				} finally {
 					shapeRenderer.end();
+				}
+
+			}
+			if (Gdx.input.isKeyPressed(Keys.V)) {
+				float Scale = 10;
+
+				Vector2 v1 = null, v2, v3, v4;
+				if (entity.getComponent(BoidCenterComponent.class) != null) {
+					BoidEntity boid = (BoidEntity) entity;
+					
+					v1 = new Vector2(entity.getComponent(BoidCenterComponent.class).vectorCenter.x,
+							entity.getComponent(BoidCenterComponent.class).vectorCenter.y);
+					v2 = new Vector2(entity.getComponent(BoidDistanceComponent.class).vectorDistance.x,
+							entity.getComponent(BoidDistanceComponent.class).vectorDistance.y);
+					v3 = new Vector2(entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.x,
+							entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.y);
+					v4 = new Vector2(entity.getComponent(VelocityComponent.class).vectorVelocity.x,
+							entity.getComponent(VelocityComponent.class).vectorVelocity.y);
+					try {
+						shapeRenderer.setAutoShapeType(true);
+						shapeRenderer.begin();
+						shapeRenderer.setColor(Color.GREEN);
+						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v1.scl(Scale).clamp(MovementSystem.OPTIMAL_BOID_DISTANCE,
+								MovementSystem.OPTIMAL_BOID_DISTANCE));
+						;
+						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v2.scl(Scale).clamp(MovementSystem.OPTIMAL_BOID_DISTANCE,
+								MovementSystem.OPTIMAL_BOID_DISTANCE));
+						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v3.scl(Scale).clamp(MovementSystem.OPTIMAL_BOID_DISTANCE,
+								MovementSystem.OPTIMAL_BOID_DISTANCE));
+						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v4.scl(Scale).clamp(MovementSystem.OPTIMAL_BOID_DISTANCE,
+								MovementSystem.OPTIMAL_BOID_DISTANCE));
+
+					} catch (Exception e) {
+						if (e.getClass() != ClassCastException.class)
+							System.out.println(e);
+					} finally {
+						shapeRenderer.end();
+					}
 				}
 
 			}
