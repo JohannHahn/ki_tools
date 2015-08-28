@@ -23,7 +23,7 @@ public class RessourceSystem extends EntitySystem{
 	private ArrayList<PointOfInterestEntity> interestPoints = new ArrayList<PointOfInterestEntity>();
 	private float elapsedTime = 0f;
 	private float loseFuelTime = 1f;
-	private int loseFuelAmount = 4;
+	private int loseFuelAmount = 5;
 	private int gainFuelAmount = 20;
 	private int loseHealthAmount = 1;
 	private boolean timeElapsed = false;
@@ -88,6 +88,8 @@ public class RessourceSystem extends EntitySystem{
 					//Collision = Distanz < collisionDistance // dst2 für Performance
 					if(pc.position.dst2(pm.get(enemy).position) < (collisionDistance * collisionDistance)){
 						rc.health -= loseHealthAmount;
+						entity.setHit(true);
+						
 						if(rc.health <= 0){
 							entity.engine.removeEntity(entity);
 						}

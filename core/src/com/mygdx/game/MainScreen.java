@@ -45,8 +45,8 @@ public class MainScreen implements Screen {
 	Stage stage = new Stage();
 	Image img = new Image(text);
 	MyGdxGame game;
-	public static int boidTeamSizeRed=2;
-	public static int boidTeamSizeGreen=2; 
+	public static int boidTeamSizeRed=1;
+	public static int boidTeamSizeGreen=1; 
 	private int windowWidth = Gdx.graphics.getWidth();
 	private int windowHeight = Gdx.graphics.getHeight();
 	private LuaScript stateScript;
@@ -55,8 +55,7 @@ public class MainScreen implements Screen {
 	public static BoidState startStateRed;
 
 	public MainScreen(MyGdxGame game) {
-		stateScript = new LuaScript("data/scripts/wanderState.lua");
-		System.out.println(stateScript.canExecute());
+		
 		engine = new Engine();
 		
 		// Create Team Red

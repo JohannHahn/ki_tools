@@ -22,13 +22,8 @@ public class EvadeAndRefuel extends EvadeState{
             ec = new EvadeComponent();              
             ec.target = target;
             boid.add(ec);       
-        }     
-        
-        BoidState.checkFuel(boid);          
-        
-        if(!rc.lowOnFuel) {
-            boid.stateMachine.changeState(new EvadeState());
-        }        
+        }    
+              
     }
     
     @Override       
@@ -36,7 +31,7 @@ public class EvadeAndRefuel extends EvadeState{
         Entity target = boid.searchTarget();
         ec = pm.get(boid);
         rc = rm.get(boid);
-        
+        sc = sm.get(boid);
         if(ec == null){
             ec = new EvadeComponent();
             boid.add(ec);
@@ -48,11 +43,10 @@ public class EvadeAndRefuel extends EvadeState{
             boid.remove(EvadeComponent.class);
         }      
         
-        BoidState.checkFuel(boid);          
-        
-        if(!rc.lowOnFuel) {
-            boid.stateMachine.changeState(new EvadeState());
-        }
+        if(BoidState.checkFuel(boid)) {
+        	sc.entityTarget = BoidState.getGlobalTarget(boid.engine);
+        	boid.stateMachine.changeState(new EvadeState());
+        }  
     }
     
     public void exit(BoidEntity boid){

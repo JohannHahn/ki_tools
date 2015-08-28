@@ -6,6 +6,7 @@ import com.badlogic.gdx.ai.msg.Telegram;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.EvadeComponent;
 import com.mygdx.components.RessourceComponent;
+import com.mygdx.components.SeekComponent;
 
 public class EvadeState extends BoidState{   
 
@@ -13,6 +14,8 @@ public class EvadeState extends BoidState{
     private EvadeComponent ec;
     ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
     RessourceComponent rc;
+    ComponentMapper<SeekComponent> sm = ComponentMapper.getFor(SeekComponent.class);
+	SeekComponent sc;
     
     @Override
     public void enter(BoidEntity boid) {
@@ -22,14 +25,7 @@ public class EvadeState extends BoidState{
             ec = new EvadeComponent();              
             ec.target = target;
             boid.add(ec);       
-        }     
-        
-        BoidState.updateTarget(boid);
-        BoidState.checkFuel(boid);
-        
-        if(rc.lowOnFuel){
-            boid.stateMachine.changeState(new EvadeAndRefuel());
-        }
+        } 
         
     }
     
@@ -38,11 +34,13 @@ public class EvadeState extends BoidState{
         Entity target = boid.searchTarget();
         ec = pm.get(boid);
         rc = rm.get(boid);
+        sc = sm.get(boid);
         
         if(ec == null){
             ec = new EvadeComponent();
             boid.add(ec);
         }
+        
         if(target != null){     
             ec.target = target;             
         }
@@ -50,8 +48,9 @@ public class EvadeState extends BoidState{
             boid.remove(EvadeComponent.class);
         }      
         
-        BoidState.updateTarget(boid);
+        BoidState.updateTarget(boid);        
         BoidState.checkFuel(boid);
+        
         if(rc.lowOnFuel){
             boid.stateMachine.changeState(new EvadeAndRefuel());
         }

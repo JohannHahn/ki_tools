@@ -6,6 +6,7 @@ import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.PursuitComponent;
+import com.mygdx.components.SeekComponent;
 
 public class PursuitState extends BoidState{
 
@@ -13,7 +14,7 @@ public class PursuitState extends BoidState{
     private PursuitComponent pc;
     @Override
     public void enter(BoidEntity boid) {
-        try{
+        
         Entity target = boid.searchTarget();
         if(target != null){
             pc = new PursuitComponent();
@@ -21,16 +22,18 @@ public class PursuitState extends BoidState{
             boid.add(pc);
         }else {
             boid.stateMachine.changeState(new WanderState());
-        }
-        }catch (Exception e){
-            System.out.println(e);
         }
        
     }           
     
     @Override       
     public void update(BoidEntity boid) {
-        try{
+    	
+    	if(BoidState.checkFuel(boid)){
+        	boid.remove(SeekComponent.class);
+        	boid.stateMachine.changeState(new WanderState());
+        }
+    	
         Entity target = boid.searchTarget();
         if(target != null){
             pc = new PursuitComponent();
@@ -39,10 +42,8 @@ public class PursuitState extends BoidState{
         }else {
             boid.stateMachine.changeState(new WanderState());
         }
-        BoidState.checkFuel(boid);
-        }catch (Exception e){
-            System.out.println(e);
-        }
+        
+        
         
        
     }

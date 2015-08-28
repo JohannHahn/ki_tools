@@ -16,9 +16,13 @@ import com.mygdx.Script.ScriptHolder;
 import com.mygdx.States.BoidState;
 import com.mygdx.States.IState;
 import com.mygdx.components.BoidCenterComponent;
+import com.mygdx.components.EvadeComponent;
+import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
+import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.RenderComponent;
 import com.mygdx.components.SeekComponent;
+import com.mygdx.components.WanderComponent;
 
 public class BoidEntity extends Entity {
 	public enum Team {
@@ -32,6 +36,7 @@ public class BoidEntity extends Entity {
 	public boolean enemyInSight = false;
 	public static int width = 8; 
 	public static int height = 16;
+	private boolean gotHit = false;
 	
 
 	public BoidEntity(Team team, Engine engine, BoidState state) {
@@ -111,8 +116,7 @@ public class BoidEntity extends Entity {
 	
 	//TODO
 	public void changeStateByName(String state)
-	{
-		//example state==BoidState.EVADE
+	{		
 		this.stateMachine.changeState(ScriptHolder.getLuaStateByName(state));	
 		
 	}
@@ -121,5 +125,107 @@ public class BoidEntity extends Entity {
 		getComponent(RenderComponent.class).setTexture(new Texture(Gdx.files.external(path)));
 	}
 	
+	public boolean gotHit(){
+		
+		if(this.gotHit){
+			this.gotHit = false;
+			return true;
+		}
+		return false;	
+	}
+	
+	public void setHit(boolean b) {
+		this.gotHit = b;
+	}
+	
+	public void addComponent(String name){
+		if(name.contains("Evade")) {
+			this.add(new EvadeComponent());
+		}
+		
+		if(name.contains("Wander")) {
+			this.add(new WanderComponent());
+		}
+		
+		if(name.contains("Pursuit")) {
+			this.add(new PursuitComponent());
+		}
+	}
+	
+	public void removeComponent(String name){
+		if(name.contains("Evade")) {
+			this.remove(EvadeComponent.class);
+		}
+		
+		if(name.contains("Wander")) {
+			this.remove(WanderComponent.class);
+		}
+		
+		if(name.contains("Pursuit")) {
+			this.remove(PursuitComponent.class);
+		}
+		
+		if(name.contains("Seek")) {
+			this.remove(SeekComponent.class);
+		}
+		
+		if(name.contains("Flee")) {
+			this.remove(FleeComponent.class);
+		}
+		
+		
+	}
+	
+	public boolean checkFuel(){
+		return BoidState.checkFuel(this);
+	}
+	
+	public PointOfInterestEntity getGlobalTarget(Engine engine){
+		return BoidState.getGlobalTarget(engine);
+	}
+	
+	//Sets target for pursuit or evade behaviors
+	public boolean setTarget(Entity target, String action){
+		if(target == null){
+			return false;
+			
+		} else{
+			
+			if(action.contains("Evade")){
+				ComponentMapper<EvadeComponent> em = ComponentMapper.getFor(EvadeComponent.class);
+				EvadeComponent ec = em.get(this);			
+				if(ec == null){
+					ec = new EvadeComponent();
+				}
+				ec.target = target;
+				this.add(ec);
+				return true;				
+			}
+			
+			else if(action.contains("Pursuit")){
+				ComponentMapper<PursuitComponent> pm = ComponentMapper.getFor(PursuitComponent.class);
+				PursuitComponent pc = pm.get(this);
+				
+				if(pc == null){
+					pc = new PursuitComponent();
+				}
+				pc.target = target;
+				this.add(pc);
+				return true;
+			}
+			return false;
+		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public boolean gotComponent(String name){
+		Class[] classes = {WanderComponent.class, EvadeComponent.class, PursuitComponent.class, SeekComponent.class, FleeComponent.class};
+		for(Class c : classes){
+			if(c.getName().contains(name)){
+				return this.getComponent(c) != null;
+			}
+		}
+		return false;
+	}
 
 }

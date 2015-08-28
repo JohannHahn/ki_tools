@@ -24,7 +24,7 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 		return new Vector2(Gdx.input.getX(), Gdx.app.getGraphics().getHeight() - Gdx.input.getY());		
 	}	
 	
-	//return: das aktuelle Ziel für alle grünen Boids, null falls keins
+	//return: das aktuelle Ziel fГјr alle grГјnen Boids, null falls keins
 	@SuppressWarnings("unchecked")
 	public static PointOfInterestEntity getGlobalTarget(Engine engine){
 		ImmutableArray<Entity> candidates = engine.getEntitiesFor(Family.all(RenderComponent.class, PositionComponent.class).get());
@@ -77,12 +77,12 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 		
 	}
 	
-	public static void checkFuel(BoidEntity boid){
+	//immer false außer, falls grade vollgetankt
+	public static boolean checkFuel(BoidEntity boid){
 		ComponentMapper<SeekComponent> sm = ComponentMapper.getFor(SeekComponent.class);
 		SeekComponent sc = sm.get(boid);
 		ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
 		RessourceComponent rc = rm.get(boid);
-		
 		if(!rc.lowOnFuel){
 			
 			if(rc.fuel < rc.fuelThreshold) {
@@ -116,14 +116,11 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 			if(rc.fuel == 100){
 				rc.lowOnFuel = false;
 				System.out.println("Aufgetankt!");
-				if(boid.team == Team.RED)
-					boid.remove(SeekComponent.class);
-				
-				else {
-					sc.entityTarget = getGlobalTarget(boid.engine);
-				}
+				return true;
 			}
 		}
+		
+		return false;
 	}
 	
 
