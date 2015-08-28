@@ -6,7 +6,6 @@ end
 
 function enter(entity)
 	entity:addComponent(name)
-	print(entity.team ,"entered State", name)
 end
 
 
@@ -15,7 +14,6 @@ function update(entity)
 	
 	if not entity:gotComponent(name) then
 		entity:addComponent(name)
-		print(entity.team ,"entered State in update", name)
 	end	
 	
 	local action = "Evade"
@@ -28,7 +26,6 @@ function update(entity)
 	end
 	
 	if entity:checkFuel() then
-		print("hi script here" , entity.team, "getankt")
 		entity:removeComponent("Seek")
 	end
 end

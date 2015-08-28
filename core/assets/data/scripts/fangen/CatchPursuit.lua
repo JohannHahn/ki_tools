@@ -4,8 +4,6 @@ function init()
 end
 
 function enter(entity)
-	print(entity.team ,"entered State", name)
-
 end
 
 -- UPDATE --

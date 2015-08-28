@@ -45,8 +45,8 @@ public class MainScreen implements Screen {
 	Stage stage = new Stage();
 	Image img = new Image(text);
 	MyGdxGame game;
-	public static int boidTeamSizeRed=1;
-	public static int boidTeamSizeGreen=1; 
+	public static int boidTeamSizeRed=0;
+	public static int boidTeamSizeGreen=2; 
 	private int windowWidth = Gdx.graphics.getWidth();
 	private int windowHeight = Gdx.graphics.getHeight();
 	private LuaScript stateScript;
@@ -57,7 +57,7 @@ public class MainScreen implements Screen {
 	public MainScreen(MyGdxGame game) {
 		
 		engine = new Engine();
-		
+		BoidState.globalTarget = null;
 		// Create Team Red
 		for (int i = 0; i < boidTeamSizeRed; i++) {
 			BoidEntity boidR;
@@ -89,7 +89,7 @@ public class MainScreen implements Screen {
 			boidR.add(new PositionComponent(MathUtils.random(windowWidth, windowWidth - windowWidth / 4f),
 					MathUtils.random(windowHeight, windowHeight - windowHeight / 4f)));
 			boidR.add(new VelocityComponent());
-			boidR.add(new SeekComponent());
+			//boidR.add(new SeekComponent());
 			boidR.add(new RenderComponent());
 			boidR.add(new BoidCenterComponent());
 			boidR.add(new BoidDistanceComponent());

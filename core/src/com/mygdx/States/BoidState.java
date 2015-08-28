@@ -19,6 +19,7 @@ import com.mygdx.components.SeekComponent;
 //Default state system
 public abstract class BoidState implements State<BoidEntity>, IState {		
 	
+	public static PointOfInterestEntity globalTarget;
 	
 	public static Vector2 mouseCoordinates(){
 		return new Vector2(Gdx.input.getX(), Gdx.app.getGraphics().getHeight() - Gdx.input.getY());		
@@ -27,7 +28,7 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 	//return: das aktuelle Ziel fГјr alle grГјnen Boids, null falls keins
 	@SuppressWarnings("unchecked")
 	public static PointOfInterestEntity getGlobalTarget(Engine engine){
-		ImmutableArray<Entity> candidates = engine.getEntitiesFor(Family.all(RenderComponent.class, PositionComponent.class).get());
+		ImmutableArray<Entity> candidates = engine.getEntities();
 		
 		for(Entity e : candidates){
 			if(e.getClass() == PointOfInterestEntity.class){
@@ -42,6 +43,7 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 	
 	@SuppressWarnings("unchecked")
 	public static void setGlobalTarget(PointOfInterestEntity pie, Engine engine){
+		
 		ImmutableArray<Entity> boids = engine.getEntitiesFor(Family.all(BoidCenterComponent.class).get());
 		
 		for(Entity b : boids){
@@ -60,21 +62,18 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 		if(sc == null)
 			sc = new SeekComponent();
 		if(sc.entityTarget == null){
+			
+			if(globalTarget == null){
+				globalTarget = getGlobalTarget(boid.engine);
+			}
 			PointOfInterestEntity target = getGlobalTarget(boid.engine);
 			
-			if(target == null){
-				target = PointOfInterestEntity.createTargetEntity(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-				boid.engine.addEntity(target);
-				setGlobalTarget(target, boid.engine);
-			}
-			
-			sc.entityTarget = target;			
+			if(globalTarget == null){
+				globalTarget = PointOfInterestEntity.createTargetEntity(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+				boid.engine.addEntity(globalTarget);
+				setGlobalTarget(globalTarget, boid.engine);
+			}		
 		}
-		PositionComponent targetPosition = pm.get(sc.entityTarget);
-		RenderComponent targetRender = rm.get(sc.entityTarget);
-		sc.target = targetPosition.position;
-		
-		
 	}
 	
 	//immer false außer, falls grade vollgetankt
@@ -100,8 +99,6 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 						    if( (tanke.toString().contains("Green") && boid.team == Team.GREEN) ||
 						        (tanke.toString().contains("Red") && boid.team == Team.RED) ) {
 						        boid.setPointOfInterest(tanke);
-						        
-						        System.out.println("Low on fuel! New target : " + tanke.getComponent(PositionComponent.class).position);
 						        break;
 						    }							
 							
@@ -115,7 +112,6 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 		else {
 			if(rc.fuel == 100){
 				rc.lowOnFuel = false;
-				System.out.println("Aufgetankt!");
 				return true;
 			}
 		}
