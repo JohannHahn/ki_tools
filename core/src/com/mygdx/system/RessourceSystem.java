@@ -15,6 +15,7 @@ import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RenderComponent;
 import com.mygdx.components.RessourceComponent;
+import com.mygdx.components.VelocityComponent;
 
 public class RessourceSystem extends EntitySystem{
 	
@@ -30,10 +31,11 @@ public class RessourceSystem extends EntitySystem{
 	private float collisionDistance = 25f;
 	private ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
 	private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
+	private ComponentMapper<VelocityComponent> vm = ComponentMapper.getFor(VelocityComponent.class);
 	
 	@SuppressWarnings("unchecked")
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.all(RessourceComponent.class, BoidCenterComponent.class, PositionComponent.class).get());
+		entities = engine.getEntitiesFor(Family.all(RessourceComponent.class, BoidCenterComponent.class, PositionComponent.class, VelocityComponent.class).get());
 		candidates = engine.getEntitiesFor(Family.all(RenderComponent.class, PositionComponent.class).get());
 		//Finde Tankstellen oder HeilStationen
 		for(Entity e : candidates){
@@ -51,11 +53,12 @@ public class RessourceSystem extends EntitySystem{
 	public void update(float deltaTime) {
 		elapsedTime += deltaTime;
 		timeElapsed = elapsedTime >= loseFuelTime;
+		VelocityComponent velComp;
 		
 		for (int i = 0; i < entities.size(); ++i) {
 			BoidEntity entity = (BoidEntity)entities.get(i);
 			RessourceComponent rc = rm.get(entity);
-			
+			velComp = vm.get(entity);
 			//Gewinne Sprit, falls an der Tanke, Leben falls an der Heilstation
 			for(PointOfInterestEntity pie : interestPoints){
 			    float distance = pm.get(pie).position.dst2(pm.get(entity).position);
@@ -76,6 +79,15 @@ public class RessourceSystem extends EntitySystem{
 			//Verliere Sprit jede Zeiteinheit
 			if(timeElapsed && rc.fuel > 0){				
 				rc.fuel -= loseFuelAmount;
+				
+				//Cut the speed if no fuel
+				if(rc.fuel > 0){
+					velComp.maxSpeed = 3;
+					
+				}
+				else{
+					velComp.maxSpeed = 1f;
+				}
 			}
 			
 			//Verliere Leben, falls im grünen Team und Kontakt mit Gegner

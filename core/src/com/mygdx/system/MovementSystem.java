@@ -93,16 +93,8 @@ public class MovementSystem extends EntitySystem {
 		}
 		if (wandComp != null) {
 			velComp.vectorVelocity.add(wandComp.wanderVector);
-		}
+		}		
 		
-		//Cut the speed if no fuel
-		if(resComp.fuel > 0){
-			velComp.maxSpeed = 3;
-			
-		}
-		else{
-			velComp.maxSpeed = 0.5f;
-		}
 
 		Vector2 boidVector = new Vector2();
 		boidVector.add(bCenter);

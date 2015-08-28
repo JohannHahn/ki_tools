@@ -4,11 +4,12 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.EvadeComponent;
+import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RessourceComponent;
 
 public class EvadeAndRefuel extends EvadeState{
 
-    private ComponentMapper<EvadeComponent> pm = ComponentMapper.getFor(EvadeComponent.class);
+    private ComponentMapper<EvadeComponent> em = ComponentMapper.getFor(EvadeComponent.class);
     private EvadeComponent ec;
     ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
     RessourceComponent rc;
@@ -29,7 +30,7 @@ public class EvadeAndRefuel extends EvadeState{
     @Override       
     public void update(BoidEntity boid) {
         Entity target = boid.searchTarget();
-        ec = pm.get(boid);
+        ec = em.get(boid);
         rc = rm.get(boid);
         sc = sm.get(boid);
         if(ec == null){
@@ -45,6 +46,7 @@ public class EvadeAndRefuel extends EvadeState{
         
         if(BoidState.checkFuel(boid)) {
         	sc.entityTarget = BoidState.getGlobalTarget(boid.engine);
+        	sc.target = sc.entityTarget.getComponent(PositionComponent.class).position;
         	boid.stateMachine.changeState(new EvadeState());
         }  
     }
