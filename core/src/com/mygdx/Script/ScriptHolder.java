@@ -1,5 +1,7 @@
 package com.mygdx.Script;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
@@ -59,6 +61,16 @@ public class ScriptHolder {
 	public static void addScript(int index) {
 		// Create a file chooser
 		final JFileChooser fc = new JFileChooser();
+		
+
+		//Set default directory to assets
+		File currentDirFile = new File("");
+		String helper = currentDirFile.getAbsolutePath();
+		int cut = helper.indexOf("test") + 4 ;
+		String defaultPath = helper.substring(0, cut);
+		defaultPath += "\\core\\assets\\data\\scripts";
+		currentDirFile = new File(defaultPath);
+		fc.setCurrentDirectory(currentDirFile);
 
 		// In response to a button click:
 		int returnVal = fc.showOpenDialog(null);
@@ -66,7 +78,7 @@ public class ScriptHolder {
 			// Pfad ANpassen
 			String path;
 			String absoulutPath = fc.getSelectedFile().getAbsolutePath();
-			int cut = absoulutPath.indexOf("assets\\") + 7;// "assets//"=8
+			cut = absoulutPath.indexOf("assets\\") + 7;// "assets//"=8
 			path = absoulutPath.substring(cut);
 			path = path.replace("\\", "/");
 
@@ -80,7 +92,16 @@ public class ScriptHolder {
 	public static void addScript() {
 		// Create a file chooser
 		final JFileChooser fc = new JFileChooser();
-
+		
+		//Set default directory to assets
+		File currentDirFile = new File("");
+		String helper = currentDirFile.getAbsolutePath();
+		int cut = helper.indexOf("test") + 4 ;
+		String defaultPath = helper.substring(0, cut);
+		defaultPath += "\\core\\assets\\data\\scripts";
+		currentDirFile = new File(defaultPath);
+		fc.setCurrentDirectory(currentDirFile);
+		
 		// In response to a button click:
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -88,7 +109,7 @@ public class ScriptHolder {
 			// Pfad ANpassen
 			String path;
 			String absoulutPath = fc.getSelectedFile().getAbsolutePath();
-			int cut = absoulutPath.indexOf("assets\\") + 7;// "assets//"=8
+			cut = absoulutPath.indexOf("assets\\") + 7;// "assets//"=8
 			path = absoulutPath.substring(cut);
 			path = path.replace("\\", "/");
 
