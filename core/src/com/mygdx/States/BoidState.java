@@ -96,8 +96,7 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 						
 						if(tanke.toString().contains("Tankstelle")){
 						    //Checke ob passende Tankstelle
-						    if( (tanke.toString().contains("Green") && boid.team == Team.GREEN) ||
-						        (tanke.toString().contains("Red") && boid.team == Team.RED) ) {
+						    if(tanke.toString().contains(boid.team.name())) {
 						        boid.setPointOfInterest(tanke);
 						        break;
 						    }							

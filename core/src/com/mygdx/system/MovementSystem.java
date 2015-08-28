@@ -94,6 +94,15 @@ public class MovementSystem extends EntitySystem {
 		if (wandComp != null) {
 			velComp.vectorVelocity.add(wandComp.wanderVector);
 		}
+		
+		//Cut the speed if no fuel
+		if(resComp.fuel > 0){
+			velComp.maxSpeed = 3;
+			
+		}
+		else{
+			velComp.maxSpeed = 0.5f;
+		}
 
 		Vector2 boidVector = new Vector2();
 		boidVector.add(bCenter);
@@ -105,9 +114,9 @@ public class MovementSystem extends EntitySystem {
 		
 		arrival(entity);	
 		
-		if(resComp.fuel > 0){
-			positionComp.position.add(velComp.vectorVelocity);	
-		}
+		positionComp.position.add(velComp.vectorVelocity);	
+		
+		
 		
 		//Clamp in screen
 		boundCoordinates(positionComp.position);		
@@ -121,7 +130,7 @@ public class MovementSystem extends EntitySystem {
 	private void updateVectors(BoidEntity entity, PositionComponent position) {		
 
 		// Vector in Component schreiben
-		entity.getComponent(BoidCenterComponent.class).vectorCenter = calculateVectorBoidCenter(entity, position).scl(0.1f);
+		entity.getComponent(BoidCenterComponent.class).vectorCenter = calculateVectorBoidCenter(entity, position).scl(0.5f);
 		entity.getComponent(BoidDistanceComponent.class).vectorDistance = calculateVectorBoidDistance(entity, position);
 		entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity = calculateVectorBoidMatchVc(entity,
 				position).scl(0.5f);

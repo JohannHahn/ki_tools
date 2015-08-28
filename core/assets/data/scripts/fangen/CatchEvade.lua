@@ -17,6 +17,7 @@ function update(entity)
 	if entity:gotHit() then
 		entity:switchTeams()
 		entity:changeStateByName("Pursuit")
+		entity:resetRessources()
 	end	
 	
 	if entity:checkFuel() then

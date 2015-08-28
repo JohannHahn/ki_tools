@@ -21,6 +21,7 @@ import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.RenderComponent;
+import com.mygdx.components.RessourceComponent;
 import com.mygdx.components.SeekComponent;
 import com.mygdx.components.WanderComponent;
 
@@ -226,6 +227,14 @@ public class BoidEntity extends Entity {
 			}
 		}
 		return false;
+	}
+	
+	public void resetRessources(){
+		ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
+		RessourceComponent rc = rm.get(this);
+		
+		rc.fuel = 100;
+		rc.health = 100;
 	}
 
 }

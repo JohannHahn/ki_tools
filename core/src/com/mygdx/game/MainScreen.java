@@ -45,7 +45,7 @@ public class MainScreen implements Screen {
 	Stage stage = new Stage();
 	Image img = new Image(text);
 	MyGdxGame game;
-	public static int boidTeamSizeRed=0;
+	public static int boidTeamSizeRed=2;
 	public static int boidTeamSizeGreen=2; 
 	private int windowWidth = Gdx.graphics.getWidth();
 	private int windowHeight = Gdx.graphics.getHeight();
@@ -100,12 +100,12 @@ public class MainScreen implements Screen {
 
 		// Add Tankstellen
 		final String PATH_TO_SKIN = "POI(tankestelle).png";
-		PointOfInterestEntity tankeGreen = new PointOfInterestEntity("Tankstelle-Green");
+		PointOfInterestEntity tankeGreen = new PointOfInterestEntity("Tankstelle-GREEN");
 		tankeGreen.add(new RenderComponent(new Texture(PATH_TO_SKIN), 70, 70));
 		tankeGreen.add(new PositionComponent(MathUtils.random(0, windowWidth), MathUtils.random(0, windowHeight)));
 		engine.addEntity(tankeGreen);
 		
-        PointOfInterestEntity tankeRed = new PointOfInterestEntity("Tankstelle-Red");
+        PointOfInterestEntity tankeRed = new PointOfInterestEntity("Tankstelle-RED");
         tankeRed.add(new RenderComponent(new Texture(PATH_TO_SKIN), 70, 70));
         tankeRed.add(new PositionComponent(MathUtils.random(0, windowWidth), MathUtils.random(0, windowHeight)));
         engine.addEntity(tankeRed);
@@ -143,7 +143,7 @@ public class MainScreen implements Screen {
 
 	private void addBoidEntity() {
 
-		BoidEntity boidR = new BoidEntity(BoidEntity.Team.RED, engine, ScriptHolder.scriptStatesList.get(0));
+		BoidEntity boidR = new BoidEntity(BoidEntity.Team.RED, engine, ScriptHolder.scriptStatesList.get(2));
 		boidR.add(new PositionComponent(MathUtils.random(0, 600), MathUtils.random(0, 600)));
 		boidR.add(new VelocityComponent());
 		boidR.add(new RenderComponent());

@@ -27,7 +27,7 @@ public class RessourceSystem extends EntitySystem{
 	private int gainFuelAmount = 20;
 	private int loseHealthAmount = 1;
 	private boolean timeElapsed = false;
-	private float collisionDistance = 15f;
+	private float collisionDistance = 25f;
 	private ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
 	private ComponentMapper<PositionComponent> pm = ComponentMapper.getFor(PositionComponent.class);
 	
