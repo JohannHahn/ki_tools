@@ -61,11 +61,15 @@ public class RessourceSystem extends EntitySystem{
 			    float distance = pm.get(pie).position.dst2(pm.get(entity).position);
 			    
 				if(pie.toString().contains("Tankstelle") && distance < 80){
-					rc.fuel += 1;
+					rc.fuel += 10;
+					if(rc.fuel > 100)
+						rc.fuel = 100;
 				}
 				
 				if(pie.toString().contains("Heilstation") && distance < 80){
-                    rc.health += 1;
+                    rc.health += 10;
+                    if(rc.health > 100)
+						rc.health = 100;
                 }
 			}
 			

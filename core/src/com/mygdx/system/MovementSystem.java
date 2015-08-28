@@ -121,10 +121,10 @@ public class MovementSystem extends EntitySystem {
 	private void updateVectors(BoidEntity entity, PositionComponent position) {		
 
 		// Vector in Component schreiben
-		entity.getComponent(BoidCenterComponent.class).vectorCenter = calculateVectorBoidCenter(entity, position);
-		entity.getComponent(BoidDistanceComponent.class).vectorDistance = calculateVectorBoidDistance(entity, position).scl(1.5f);
+		entity.getComponent(BoidCenterComponent.class).vectorCenter = calculateVectorBoidCenter(entity, position).scl(0.1f);
+		entity.getComponent(BoidDistanceComponent.class).vectorDistance = calculateVectorBoidDistance(entity, position);
 		entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity = calculateVectorBoidMatchVc(entity,
-				position).scl(1.5f);
+				position).scl(0.5f);
 
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
@@ -137,10 +137,10 @@ public class MovementSystem extends EntitySystem {
 		if (fleeComp != null)
 			fleeComp.vectorFlee = calculateVectorSeekFlee(entity, position);
 		if (purComp != null){
-			purComp.vectorPersuit = calculatePursuit(entity);
+			purComp.vectorPersuit = calculatePursuit(entity).scl(2);
 		}
 		if(evadeComp != null){
-			evadeComp.vectorEvade = calculateEvade(entity).scl(1.3f);
+			evadeComp.vectorEvade = calculateEvade(entity).scl(1.1f);
 		}
 		if(wandComp != null){
 			wandComp.wanderVector = calculateWander(entity).scl(0.1f);

@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -13,16 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.States.BoidState;
 import com.mygdx.States.EvadeState;
-import com.mygdx.States.LuaState;
 import com.mygdx.States.PursuitState;
 import com.mygdx.Entities.PointOfInterestEntity;
 import com.mygdx.Script.LuaScript;
 import com.mygdx.Script.ScriptHolder;
-import com.mygdx.Script.ScriptManager;
 import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.BoidDistanceComponent;
 import com.mygdx.components.BoidMatchVelocityComponent;
-import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RenderComponent;
 import com.mygdx.components.RessourceComponent;
@@ -31,8 +27,6 @@ import com.mygdx.components.VelocityComponent;
 import com.mygdx.system.MovementSystem;
 import com.mygdx.system.RenderSystem;
 import com.mygdx.system.RessourceSystem;
-import com.sun.corba.se.spi.orbutil.fsm.State;
-import com.sun.org.apache.bcel.internal.generic.LUSHR;
 
 import javax.swing.JFileChooser;
 
