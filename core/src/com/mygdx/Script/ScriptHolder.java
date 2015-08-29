@@ -137,4 +137,9 @@ public class ScriptHolder {
 		path = path.replace("\\", "/");
 		return path;
 	}
+
+	public static void removeScriptByIndex(int index) {
+		scriptStatesList.remove(index);
+		
+	}
 }
