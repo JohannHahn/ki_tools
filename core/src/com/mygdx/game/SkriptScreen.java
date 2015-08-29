@@ -99,13 +99,14 @@ public class SkriptScreen implements Screen {
 			checkBoxArrayListGreen.add(cbGreen);
 			checkBoxArrayListRed.add(cbRed);
 			bt.addListener(new ClickListenerWithIndex(i, ta));
-			//TODO
-			//removeButton.addListener(new ClickListenerWithIndex(i, null));
+			
+			removeButton.addListener(new ClickListenerWithindexDelete(i,this));
 			hg.addActor(labelNumber);
 			hg.addActor(ta);
 			hg.addActor(bt);
 			hg.addActor(cbGreen);
 			hg.addActor(cbRed);
+			hg.addActor(removeButton);
 			verticalGroup.addActor(hg);
 		}
 
