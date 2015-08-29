@@ -66,7 +66,6 @@ public abstract class BoidState implements State<BoidEntity>, IState {
 			if(globalTarget == null){
 				globalTarget = getGlobalTarget(boid.engine);
 			}
-			PointOfInterestEntity target = getGlobalTarget(boid.engine);
 			
 			if(globalTarget == null){
 				globalTarget = PointOfInterestEntity.createTargetEntity(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

@@ -11,7 +11,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.Script.ScriptHolder;
 import com.mygdx.States.BoidState;
+import com.mygdx.States.EvadeState;
 import com.mygdx.components.BoidCenterComponent;
+import com.mygdx.components.BoidDistanceComponent;
+import com.mygdx.components.BoidMatchVelocityComponent;
 import com.mygdx.components.EvadeComponent;
 import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
@@ -19,7 +22,6 @@ import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.RenderComponent;
 import com.mygdx.components.RessourceComponent;
 import com.mygdx.components.SeekComponent;
-
 import com.mygdx.components.VelocityComponent;
 import com.mygdx.components.WanderComponent;
 
@@ -69,11 +71,29 @@ public class BoidEntity extends Entity {
 		float collisionDistance = 30f;
 
 		for (Entity entity : entities) {
-			//If reached target -> set a new target
+		    
+			//check if entity is a point of interest
 			if(entity.getClass() == PointOfInterestEntity.class){
 				PointOfInterestEntity pie = (PointOfInterestEntity)entity;
-				if(team == Team.GREEN && pie.toString() == "target" && pm.get(pie).position.dst2(pm.get(this).position) <= (collisionDistance * collisionDistance)){
-					pm.get(pie).position.set(MathUtils.random(0, Gdx.graphics.getWidth()), MathUtils.random(0, Gdx.graphics.getHeight()));
+				PositionComponent piePosition = pm.get(pie);
+				
+				//if the POI is a target and the distance < collision distance => collision
+				if(team == Team.GREEN && pie.toString() == "target" && piePosition.position.dst2(pm.get(this).position) <= (collisionDistance * collisionDistance)){
+				    //add a new green boid entity
+    			    BoidEntity boidR = new BoidEntity(BoidEntity.Team.GREEN, engine, new EvadeState());
+    		        boidR.add(new PositionComponent());
+    		        pm.get(boidR).position = piePosition.position.cpy();
+    		        boidR.add(new VelocityComponent());
+    		        boidR.add(new RenderComponent());
+    		        boidR.add(new BoidCenterComponent());
+    		        boidR.add(new BoidDistanceComponent());
+    		        boidR.add(new BoidMatchVelocityComponent());
+    		        boidR.add(new RessourceComponent());
+    		        engine.addEntity(boidR);
+    		        //heal the boid that collected the cross
+    		        this.resetRessources();
+    		        //set new target position
+    			    piePosition.position.set(MathUtils.random(0, Gdx.graphics.getWidth()), MathUtils.random(0, Gdx.graphics.getHeight()));
 				}
 			}
 			if (entity.getComponent(BoidCenterComponent.class) == null)
