@@ -1,8 +1,12 @@
 package com.mygdx.Script;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
+
+import org.luaj.vm2.ast.Str;
 
 import com.badlogic.gdx.ai.fsm.State;
 import com.mygdx.States.BoidState;
@@ -59,18 +63,24 @@ public class ScriptHolder {
 	public static void addScript(int index) {
 		// Create a file chooser
 		final JFileChooser fc = new JFileChooser();
+		
+
+		//Set default directory to assets
+		File currentDirFile = new File("");
+		String helper = currentDirFile.getAbsolutePath();
+		int cut = helper.indexOf("test") + 4 ;
+		String defaultPath = helper.substring(0, cut);
+		defaultPath += "\\core\\assets\\data\\scripts";
+		currentDirFile = new File(defaultPath);
+		fc.setCurrentDirectory(currentDirFile);
 
 		// In response to a button click:
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			// Pfad ANpassen
 			String absoulutPath = fc.getSelectedFile().getAbsolutePath();
-			/*String path;
+
 			
-			int cut = absoulutPath.indexOf("assets\\") + 7;// "assets//"=8
-			path = absoulutPath.substring(cut);
-			path = path.replace("\\", "/");
-*/
 			// Create LuaScript&LuaState
 			LuaScript newScript = new LuaScript(absoulutPath);
 			if (newScript.canExecute())
@@ -81,20 +91,23 @@ public class ScriptHolder {
 	public static void addScript() {
 		// Create a file chooser
 		final JFileChooser fc = new JFileChooser();
-
+		
+		//Set default directory to assets
+		File currentDirFile = new File("");
+		String helper = currentDirFile.getAbsolutePath();
+		int cut = helper.indexOf("test") + 4 ;
+		String defaultPath = helper.substring(0, cut);
+		defaultPath += "\\core\\assets\\data\\scripts";
+		currentDirFile = new File(defaultPath);
+		fc.setCurrentDirectory(currentDirFile);
+		
 		// In response to a button click:
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 			// Pfad ANpassen
 			String absoulutPath = fc.getSelectedFile().getAbsolutePath();
-			/*
-			String path;
 			
-			int cut = absoulutPath.indexOf("assets\\") + 7;// "assets//"=8
-			path = absoulutPath.substring(cut);
-			path = path.replace("\\", "/");
-*/
 			// Create LuaScript&LuaState
 			LuaScript newScript = new LuaScript(absoulutPath);
 			if (newScript.canExecute())
@@ -114,5 +127,14 @@ public class ScriptHolder {
 	private static void addBoidState(BoidState State) {
 		scriptStatesList.add(State);
 		
+	}
+	private String getRelativPfad(String absoulutPath)
+	{
+		String path;
+		
+		int cut = absoulutPath.indexOf("assets\\") + 7;
+		path = absoulutPath.substring(cut);
+		path = path.replace("\\", "/");
+		return path;
 	}
 }

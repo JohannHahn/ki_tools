@@ -32,8 +32,9 @@ public class SkriptScreen implements Screen {
 	private ArrayList<CheckBox> checkBoxArrayListGreen = new ArrayList<CheckBox>();
 	private ArrayList<CheckBox> checkBoxArrayListRed = new ArrayList<CheckBox>();
 	private TextButton textButtonDefault;
-	private Slider sliderGreen,sliderRed;
-	private Label labelGreen,labelRed;
+	private Slider sliderGreen, sliderRed;
+	private Label labelGreen, labelRed;
+
 	public SkriptScreen(MyGdxGame game) {
 		this.game = game;
 
@@ -69,36 +70,37 @@ public class SkriptScreen implements Screen {
 		verticalGroup = new VerticalGroup();
 		table = new Table(defaultSkin);
 		table.setFillParent(true);
-		
-		HorizontalGroup hGroup= new HorizontalGroup();
-		sliderGreen= new Slider(1, 30, 1,false, defaultSkin);
+
+		HorizontalGroup hGroup = new HorizontalGroup();
+		sliderGreen = new Slider(0, 30, 1, false, defaultSkin);
 		sliderGreen.setValue(MainScreen.boidTeamSizeGreen);
-		labelGreen= new Label("Anzahl gruene Boids", defaultSkin);
+		labelGreen = new Label("Anzahl gruene Boids", defaultSkin);
 		hGroup.addActor(labelGreen);
 		hGroup.addActor(sliderGreen);
-		
-		
-		sliderRed= new Slider(1, 30, 1,false, defaultSkin);
+
+		sliderRed = new Slider(0, 30, 1, false, defaultSkin);
 		sliderRed.setValue(MainScreen.boidTeamSizeRed);
-		labelRed= new Label("Anzahl rote Boids", defaultSkin);
+		labelRed = new Label("Anzahl rote Boids", defaultSkin);
 		hGroup.addActor(labelRed);
 		hGroup.addActor(sliderRed);
-		
+
 		verticalGroup.addActor(hGroup);
-		
-		//Setup Item of Scripts
+
+		// Setup Item of Scripts
 		for (int i = 0; i < ScriptHolder.size(); i++) {
 
 			HorizontalGroup hg = new HorizontalGroup();
 			Label labelNumber = new Label(i + ",   ", defaultSkin);
 			TextArea ta = new TextArea(ScriptHolder.getName(i), defaultSkin);
 			TextButton bt = new TextButton("Change State", defaultSkin);
+			TextButton removeButton=new TextButton("remove", defaultSkin);
 			CheckBox cbGreen = new CheckBox("State Green", defaultSkin);
 			CheckBox cbRed = new CheckBox("State Red", defaultSkin);
 			checkBoxArrayListGreen.add(cbGreen);
 			checkBoxArrayListRed.add(cbRed);
 			bt.addListener(new ClickListenerWithIndex(i, ta));
-
+			//TODO
+			//removeButton.addListener(new ClickListenerWithIndex(i, null));
 			hg.addActor(labelNumber);
 			hg.addActor(ta);
 			hg.addActor(bt);
@@ -107,7 +109,7 @@ public class SkriptScreen implements Screen {
 			verticalGroup.addActor(hg);
 		}
 
-		//TextButton
+		// TextButton
 		textButtonAddScript = new TextButton("Add Script", defaultSkin);
 		textButtonAddScript.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
@@ -117,7 +119,7 @@ public class SkriptScreen implements Screen {
 		});
 		verticalGroup.addActor(textButtonAddScript);
 
-		//TextButton
+		// TextButton
 		textButtonDefault = new TextButton("Default behaviour", defaultSkin);
 		textButtonDefault.addListener(new ClickListener() {
 			// Set the Start states for MainScreen
@@ -129,8 +131,8 @@ public class SkriptScreen implements Screen {
 		});
 		verticalGroup.addActor(textButtonDefault);
 
-		//TextButton Back
-		textButtonBack = new TextButton("Back", defaultSkin);
+		// TextButton Back
+		textButtonBack = new TextButton("Start", defaultSkin);
 		textButtonBack.addListener(new ClickListener() {
 			// Set the Start states for MainScreen
 			public void clicked(InputEvent event, float x, float y) {
@@ -141,12 +143,11 @@ public class SkriptScreen implements Screen {
 				indexTemp = getSelectedCheckBoxIndex(checkBoxArrayListRed);
 				if (indexTemp != -1)
 					MainScreen.startStateRed = (BoidState) ScriptHolder.getBoidState(indexTemp);
-				
-				
-				MainScreen.boidTeamSizeGreen= (int) getInstance().sliderGreen.getValue();
-				MainScreen.boidTeamSizeRed= (int) getInstance().sliderRed.getValue();
+
+				MainScreen.boidTeamSizeGreen = (int) getInstance().sliderGreen.getValue();
+				MainScreen.boidTeamSizeRed = (int) getInstance().sliderRed.getValue();
 				game.setScreen(new MainScreen(game));
-				
+
 			}
 		});
 		verticalGroup.addActor(textButtonBack);
@@ -164,8 +165,8 @@ public class SkriptScreen implements Screen {
 		}
 		return -1;
 	}
-	public SkriptScreen getInstance()
-	{
+
+	public SkriptScreen getInstance() {
 		return this;
 	}
 

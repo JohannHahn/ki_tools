@@ -4,11 +4,12 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.components.EvadeComponent;
+import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RessourceComponent;
 
 public class EvadeAndRefuel extends EvadeState{
 
-    private ComponentMapper<EvadeComponent> pm = ComponentMapper.getFor(EvadeComponent.class);
+    private ComponentMapper<EvadeComponent> em = ComponentMapper.getFor(EvadeComponent.class);
     private EvadeComponent ec;
     ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
     RessourceComponent rc;
@@ -22,21 +23,16 @@ public class EvadeAndRefuel extends EvadeState{
             ec = new EvadeComponent();              
             ec.target = target;
             boid.add(ec);       
-        }     
-        
-        BoidState.checkFuel(boid);          
-        
-        if(!rc.lowOnFuel) {
-            boid.stateMachine.changeState(new EvadeState());
-        }        
+        }    
+              
     }
     
     @Override       
     public void update(BoidEntity boid) {
         Entity target = boid.searchTarget();
-        ec = pm.get(boid);
+        ec = em.get(boid);
         rc = rm.get(boid);
-        
+        sc = sm.get(boid);
         if(ec == null){
             ec = new EvadeComponent();
             boid.add(ec);
@@ -48,11 +44,11 @@ public class EvadeAndRefuel extends EvadeState{
             boid.remove(EvadeComponent.class);
         }      
         
-        BoidState.checkFuel(boid);          
-        
-        if(!rc.lowOnFuel) {
-            boid.stateMachine.changeState(new EvadeState());
-        }
+        if(BoidState.checkFuel(boid)) {
+        	sc.entityTarget = BoidState.getGlobalTarget(boid.engine);
+        	sc.target = sc.entityTarget.getComponent(PositionComponent.class).position;
+        	boid.stateMachine.changeState(new EvadeState());
+        }  
     }
     
     public void exit(BoidEntity boid){

@@ -1,25 +1,27 @@
 package com.mygdx.Entities;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.DefaultStateMachine;
-import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
-import com.mygdx.Entities.BoidEntity.Team;
 import com.mygdx.Script.ScriptHolder;
 import com.mygdx.States.BoidState;
-import com.mygdx.States.IState;
 import com.mygdx.components.BoidCenterComponent;
+import com.mygdx.components.EvadeComponent;
+import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
+import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.RenderComponent;
+import com.mygdx.components.RessourceComponent;
 import com.mygdx.components.SeekComponent;
+
 import com.mygdx.components.VelocityComponent;
+import com.mygdx.components.WanderComponent;
 
 public class BoidEntity extends Entity {
 	public enum Team {
@@ -33,6 +35,7 @@ public class BoidEntity extends Entity {
 	public boolean enemyInSight = false;
 	public static int width = 8; 
 	public static int height = 16;
+	private boolean gotHit = false;
 	
 
 	public BoidEntity(Team team, Engine engine, BoidState state) {
@@ -110,11 +113,18 @@ public class BoidEntity extends Entity {
 	
 	//LUA Methodes:
 	
-	//DONE
+	
 	public void changeStateByName(String state)
+
 	{
 		//example state==EVADE
-		this.stateMachine.changeState(ScriptHolder.getLuaStateByName(state));	
+
+	try {this.stateMachine.changeState(ScriptHolder.getLuaStateByName(state));
+		
+	} catch (Exception e) {
+		System.out.println("Kein State gefunden.");
+	}
+			
 		
 	}
 	public void setTexture(String path)
@@ -125,10 +135,9 @@ public class BoidEntity extends Entity {
 	{
 		System.out.println(x +"/" + y);
 		PositionComponent pC=getComponent(PositionComponent.class);
-		this.getComponent(VelocityComponent.class).maxVelocity=0;
-		this.getComponent(VelocityComponent.class).maxForce=0;
-		this.getComponent(VelocityComponent.class).maxSpeed=0;
-		pC.position.add(x, y*100);
+		
+		pC.position.set(x, y);
+		
 		System.out.println(pC.position);
 	}
 
@@ -136,5 +145,116 @@ public class BoidEntity extends Entity {
 
 	
 	
+	public boolean gotHit(){
+		
+		if(this.gotHit){
+			this.gotHit = false;
+			return true;
+		}
+		return false;	
+	}
+	
+	public void setHit(boolean b) {
+		this.gotHit = b;
+	}
+	
+	public void addComponent(String name){
+		if(name.contains("Evade")) {
+			this.add(new EvadeComponent());
+		}
+		
+		if(name.contains("Wander")) {
+			this.add(new WanderComponent());
+		}
+		
+		if(name.contains("Pursuit")) {
+			this.add(new PursuitComponent());
+		}
+	}
+	
+	public void removeComponent(String name){
+		if(name.contains("Evade")) {
+			this.remove(EvadeComponent.class);
+		}
+		
+		if(name.contains("Wander")) {
+			this.remove(WanderComponent.class);
+		}
+		
+		if(name.contains("Pursuit")) {
+			this.remove(PursuitComponent.class);
+		}
+		
+		if(name.contains("Seek")) {
+			this.remove(SeekComponent.class);
+		}
+		
+		if(name.contains("Flee")) {
+			this.remove(FleeComponent.class);
+		}
+		
+		
+	}
+	
+	public boolean checkFuel(){
+		return BoidState.checkFuel(this);
+	}
+	
+	public PointOfInterestEntity getGlobalTarget(Engine engine){
+		return BoidState.getGlobalTarget(engine);
+	}
+	
+	//Sets target for pursuit or evade behaviors
+	public boolean setTarget(Entity target, String action){
+		if(target == null){
+			return false;
+			
+		} else{
+			
+			if(action.contains("Evade")){
+				ComponentMapper<EvadeComponent> em = ComponentMapper.getFor(EvadeComponent.class);
+				EvadeComponent ec = em.get(this);			
+				if(ec == null){
+					ec = new EvadeComponent();
+				}
+				ec.target = target;
+				this.add(ec);
+				return true;				
+			}
+			
+			else if(action.contains("Pursuit")){
+				ComponentMapper<PursuitComponent> pm = ComponentMapper.getFor(PursuitComponent.class);
+				PursuitComponent pc = pm.get(this);
+				
+				if(pc == null){
+					pc = new PursuitComponent();
+				}
+				pc.target = target;
+				this.add(pc);
+				return true;
+			}
+			return false;
+		}
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public boolean gotComponent(String name){
+		
+		Class[] classes = {WanderComponent.class, EvadeComponent.class, PursuitComponent.class, SeekComponent.class, FleeComponent.class};
+		for(Class c : classes){
+			if(c.getName().contains(name)){
+				return this.getComponent(c) != null;
+			}
+		}
+		return false;
+	}
+	
+	public void resetRessources(){
+		ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
+		RessourceComponent rc = rm.get(this);
+		
+		rc.fuel = 100;
+		rc.health = 100;
+	}
 
 }

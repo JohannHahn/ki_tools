@@ -20,7 +20,7 @@ public class LuaState extends BoidState{
 
 	@Override
 	public void enter(BoidEntity entity) {		
-		System.out.println("Entered" +  name);
+		script.executeFunction("enter", entity);
 	}
 
 	@Override

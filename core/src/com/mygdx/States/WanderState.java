@@ -6,6 +6,7 @@ import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.Entities.BoidEntity.Team;
+import com.mygdx.components.SeekComponent;
 import com.mygdx.components.WanderComponent;
 
 public class WanderState extends BoidState{
@@ -32,7 +33,10 @@ public class WanderState extends BoidState{
         if(target != null){             
             boid.stateMachine.changeState(boid.team == Team.GREEN ? new EvadeState() : new PursuitState());               
         }
-        BoidState.checkFuel(boid);
+        
+        if(BoidState.checkFuel(boid)){
+        	boid.remove(SeekComponent.class);
+        }
     }
     
     public void exit(BoidEntity boid){

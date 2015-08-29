@@ -17,6 +17,7 @@ public class ClickListenerWithIndex extends ClickListener {
 	}
 	public void clicked(InputEvent event, float x, float y) {
 		ScriptHolder.addScript(indexToAdd);
+		if(textArea!=null)
 		textArea.setText(ScriptHolder.getName(indexToAdd));
 		
 	}
