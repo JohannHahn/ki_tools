@@ -21,7 +21,7 @@ public class PointOfInterestEntity extends Entity {
 	public static PointOfInterestEntity createTargetEntity(int windowWidth, int windowHeight){
 		
 		PointOfInterestEntity result = new PointOfInterestEntity("target");
-		final String PATH_TO_SKIN = "smiley.png";
+		final String PATH_TO_SKIN = "green-cross-icon.png";
 		result.add(new RenderComponent(new Texture(PATH_TO_SKIN), 50, 50));
 		result.add(new PositionComponent(MathUtils.random(0, (float)windowWidth), MathUtils.random(0, (float)windowHeight)));
 		

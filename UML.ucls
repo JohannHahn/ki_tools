@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.8" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="com.mygdx.components.BoidDistanceComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/BoidDistanceComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3999" y="2132"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.mygdx.States.WanderState" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/States/WanderState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="240" x="3263" y="776"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.mygdx.components.WanderComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/WanderComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="140" x="3263" y="1329"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="4" language="java" name="com.mygdx.States.IState" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/States/IState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="81" width="107" x="3543" y="776"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="5" language="java" name="com.mygdx.States.EvadeState" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/States/EvadeState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="225" width="253" x="3690" y="776"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="6" language="java" name="com.mygdx.Entities" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Entities" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2490" y="93"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="7" language="java" name="com.mygdx.components.FleeComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/FleeComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3016" y="2579"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="com.mygdx.components.PursuitComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/PursuitComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="134" x="4297" y="1329"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.mygdx.States.EvadeAndRefuel" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/States/EvadeAndRefuel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="253" x="3504" y="1329"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="com.mygdx.components.BoidMatchVelocityComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/BoidMatchVelocityComponent.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3852" y="2239"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="com.mygdx.Script.ScriptManager" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Script/ScriptManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4499" y="2422"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="com.mygdx.States.LuaState" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/States/LuaState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="223" x="4279" y="776"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="com.mygdx.components.BoidCenterComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/BoidCenterComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3832" y="2133"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="com.mygdx.components.EvadeComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/EvadeComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="131" x="3778" y="1702"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="15" language="java" name="com.mygdx.Entities.BoidEntity.Team" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Entities/BoidEntity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="119" x="4812" y="1329"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="16" language="java" name="com.mygdx.game.ClickListenerWithIndex" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/game/ClickListenerWithIndex.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4420" y="2111"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="17" language="java" name="com.mygdx.system" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/system" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3089" y="1955"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="18" language="java" name="com.mygdx.components.RenderComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/RenderComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3580" y="2357"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="com.mygdx.Script.ExecuteScript" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Script/ExecuteScript.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2693" y="126"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="com.mygdx.Entities.BoidEntity" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Entities/BoidEntity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="513" width="372" x="4628" y="776"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="com.mygdx.States.BoidState" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/States/BoidState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="263" x="3964" y="565"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="com.mygdx.components.SeekComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/SeekComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="125" x="3818" y="1329"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="com.mygdx.States.PursuitState" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/States/PursuitState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="235" x="4004" y="776"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="com.mygdx.system.RenderSystem" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/system/RenderSystem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3143" y="2137"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="25" language="java" name="com.mygdx.game" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/game" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="50" width="125" x="2695" y="-96"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="26" language="java" name="com.mygdx.Script.ExecuteScript.ExecuteScriptImplementation" 
+    project="my-gdx-game-core" file="/my-gdx-game-core/src/com/mygdx/Script/ExecuteScript.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2717" y="778"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="com.mygdx.Script.LuaScript" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Script/LuaScript.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="297" width="301" x="4471" y="1329"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="28" language="java" name="com.mygdx.States" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/States" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="50" width="130" x="2860" y="-96"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="29" language="java" name="com.mygdx.components.RessourceComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/RessourceComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="166" x="3464" y="1702"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="com.mygdx.Entities.PointOfInterestEntity" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Entities/PointOfInterestEntity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="246" x="3964" y="1702"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="31" language="java" name="com.mygdx.Script" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Script" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3321" y="703"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="32" language="java" name="com.mygdx.components.VelocityComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/VelocityComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4025" y="2275"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="com.mygdx.game.SplashScreen" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/game/SplashScreen.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="351" width="134" x="3376" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="34" language="java" name="com.mygdx.system.MovementSystem" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/system/MovementSystem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="621" width="354" x="3550" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="35" language="java" name="com.mygdx.game.MainScreen" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/game/MainScreen.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="369" width="153" x="4607" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="36" language="java" name="com.mygdx.game.MyGdxGame" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/game/MyGdxGame.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="115" x="4731" y="565"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="37" language="java" name="com.mygdx.Script.Script" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Script/Script.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="135" width="223" x="4471" y="1702"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="38" language="java" name="com.mygdx.game.SkriptScreen" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/game/SkriptScreen.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="513" width="286" x="4800" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="39" language="java" name="com.mygdx.system.RessourceSystem" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/system/RessourceSystem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="333" width="253" x="4004" y="1329"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="40" language="java" name="com.mygdx.components.PositionComponent" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components/PositionComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3574" y="2151"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <package id="41" language="java" name="com.mygdx.components" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/components" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3569" y="2061"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="42" language="java" name="com.mygdx.Script.ScriptHolder" project="my-gdx-game-core" 
+    file="/my-gdx-game-core/src/com/mygdx/Script/ScriptHolder.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="351" width="209" x="3944" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="43">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="44" name="entityTarget"/>      
+      <multiplicity id="45" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="30" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="46">    
+    <bendpoint x="3973" y="776"/>    
+    <bendpoint x="3973" y="1329"/>    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="47" name="globalTarget"/>      
+      <multiplicity id="48" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="30" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="49">    
+    <bendpoint x="4637" y="565"/>    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="50" name="boid5"/>      
+      <multiplicity id="51" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="52">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="53" name="pc"/>      
+      <multiplicity id="54" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="55">    
+    <bendpoint x="4616" y="565"/>    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="56" name="boidTest"/>      
+      <multiplicity id="57" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="58">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="59" name="rc"/>      
+      <multiplicity id="60" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="61">    
+    <end type="SOURCE" refId="39" navigable="false">      
+      <attribute id="62" name="interestPoints"/>      
+      <multiplicity id="63" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="30" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="64">    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="65" name="startStateRed"/>      
+      <multiplicity id="66" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="67">    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="68" name="game"/>      
+      <multiplicity id="69" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="36" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="70">    
+    <bendpoint x="4595" y="565"/>    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="71" name="boid4"/>      
+      <multiplicity id="72" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="73">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="4"/>  
+  </realization>  
+  <association id="74">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="75" name="team"/>      
+      <multiplicity id="76" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="77">    
+    <bendpoint x="3473" y="1329"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="78" name="rc"/>      
+      <multiplicity id="79" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="80">    
+    <bendpoint x="4574" y="565"/>    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="81" name="boid2"/>      
+      <multiplicity id="82" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="83">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="84" name="game"/>      
+      <multiplicity id="85" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="36" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="86">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <generalization id="87">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <association id="88">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="89" name="boids"/>      
+      <multiplicity id="90" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="91">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <association id="92">    
+    <bendpoint x="4658" y="565"/>    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="93" name="boid7"/>      
+      <multiplicity id="94" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="95">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="96" name="sc"/>      
+      <multiplicity id="97" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="98">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="15"/>  
+  </nesting>  
+  <association id="99">    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="100" name="startStateGreen"/>      
+      <multiplicity id="101" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="102">    
+    <end type="SOURCE" refId="42" navigable="false">      
+      <attribute id="103" name="scriptStatesList"/>      
+      <multiplicity id="104" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="105">    
+    <bendpoint x="4532" y="565"/>    
+    <bendpoint x="4532" y="776"/>    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="106" name="stateScript"/>      
+      <multiplicity id="107" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="108">    
+    <bendpoint x="3787" y="1329"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="109" name="ec"/>      
+      <multiplicity id="110" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="111">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="112" name="ec"/>      
+      <multiplicity id="113" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="114">    
+    <bendpoint x="4553" y="565"/>    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="115" name="boid3"/>      
+      <multiplicity id="116" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="117">    
+    <bendpoint x="4679" y="565"/>    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="118" name="boid6"/>      
+      <multiplicity id="119" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="120">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <generalization id="121">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <association id="122">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="123" name="instance"/>      
+      <multiplicity id="124" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="125">    
+    <bendpoint x="4700" y="565"/>    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="126" name="boid"/>      
+      <multiplicity id="127" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="128">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="37"/>  
+  </realization>  
+  <nesting id="129">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="26"/>  
+  </nesting>  
+  <association id="130">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="131" name="script"/>      
+      <multiplicity id="132" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="27" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="133">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="134" name="wc"/>      
+      <multiplicity id="135" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
