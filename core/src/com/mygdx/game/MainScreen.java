@@ -46,21 +46,29 @@ import org.luaj.vm2.LuaValue;
 public class MainScreen implements Screen {
 
 	Engine engine;
+	//delete?
 	BoidEntity boid, boid2, boid3, boid4, boid5, boid6, boid7;
 	Texture text = new Texture("smiley.png");
-	Stage stage = new Stage();
 	Image img = new Image(text);
+	//
+	
+	
+	Stage stage = new Stage();
+	
 	MyGdxGame game;
 	public static int boidTeamSizeRed=2;
 	public static int boidTeamSizeGreen=2; 
 	private int windowWidth = Gdx.graphics.getWidth();
 	private int windowHeight = Gdx.graphics.getHeight();
+	//delete?
 	private LuaScript stateScript;
 	private BoidEntity boidTest;
+	//
 	public static BoidState startStateGreen;
 	public static BoidState startStateRed;
 
 	public MainScreen(MyGdxGame game) {
+		//delete?
 		stateScript = new LuaScript("data/scripts/wanderState.lua");
 		System.out.println(stateScript.canExecute());
 		engine = new Engine();

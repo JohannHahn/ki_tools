@@ -12,7 +12,7 @@ import com.mygdx.Script.ScriptHolder;
 public class MyGdxGame extends Game {
 	
 	public SpriteBatch batch;
-	public Texture img;
+	
 	public ArrayList<BoidEntity> boids= new ArrayList<BoidEntity>();
 	
 	

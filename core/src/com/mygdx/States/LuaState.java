@@ -25,7 +25,13 @@ public class LuaState extends BoidState{
 
 	@Override
 	public void update(BoidEntity entity) {
-		script.executeFunction("update", entity);		
+		/*
+		LuaValue returnValue = script.callForReturn("update", entity);
+		System.out.println(returnValue.toint());
+		*/
+		
+		script.executeFunction("update", entity);	
+		
 	}
 
 	@Override

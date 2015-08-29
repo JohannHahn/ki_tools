@@ -64,14 +64,15 @@ public class ScriptHolder {
 		int returnVal = fc.showOpenDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			// Pfad ANpassen
-			String path;
 			String absoulutPath = fc.getSelectedFile().getAbsolutePath();
+			/*String path;
+			
 			int cut = absoulutPath.indexOf("assets\\") + 7;// "assets//"=8
 			path = absoulutPath.substring(cut);
 			path = path.replace("\\", "/");
-
+*/
 			// Create LuaScript&LuaState
-			LuaScript newScript = new LuaScript(path);
+			LuaScript newScript = new LuaScript(absoulutPath);
 			if (newScript.canExecute())
 				ScriptHolder.scriptStatesList.set(index, new LuaState(newScript));
 		}
@@ -86,12 +87,14 @@ public class ScriptHolder {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 
 			// Pfad ANpassen
-			String path;
 			String absoulutPath = fc.getSelectedFile().getAbsolutePath();
+			/*
+			String path;
+			
 			int cut = absoulutPath.indexOf("assets\\") + 7;// "assets//"=8
 			path = absoulutPath.substring(cut);
 			path = path.replace("\\", "/");
-
+*/
 			// Create LuaScript&LuaState
 			LuaScript newScript = new LuaScript(absoulutPath);
 			if (newScript.canExecute())

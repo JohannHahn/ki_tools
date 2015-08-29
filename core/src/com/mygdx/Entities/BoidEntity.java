@@ -19,6 +19,7 @@ import com.mygdx.components.BoidCenterComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.RenderComponent;
 import com.mygdx.components.SeekComponent;
+import com.mygdx.components.VelocityComponent;
 
 public class BoidEntity extends Entity {
 	public enum Team {
@@ -109,10 +110,10 @@ public class BoidEntity extends Entity {
 	
 	//LUA Methodes:
 	
-	//TODO
+	//DONE
 	public void changeStateByName(String state)
 	{
-		//example state==BoidState.EVADE
+		//example state==EVADE
 		this.stateMachine.changeState(ScriptHolder.getLuaStateByName(state));	
 		
 	}
@@ -120,6 +121,20 @@ public class BoidEntity extends Entity {
 	{
 		getComponent(RenderComponent.class).setTexture(new Texture(Gdx.files.external(path)));
 	}
+	public void setRealtivPostion(float x,float y)
+	{
+		System.out.println(x +"/" + y);
+		PositionComponent pC=getComponent(PositionComponent.class);
+		this.getComponent(VelocityComponent.class).maxVelocity=0;
+		this.getComponent(VelocityComponent.class).maxForce=0;
+		this.getComponent(VelocityComponent.class).maxSpeed=0;
+		pC.position.add(x, y*100);
+		System.out.println(pC.position);
+	}
+
+
+
+	
 	
 
 }

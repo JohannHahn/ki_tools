@@ -330,6 +330,7 @@ public class MovementSystem extends EntitySystem {
 				boolean inSight = angle < 150 && angle > -150;
 				
 				// near enought?
+				
 				if (OPTIMAL_BOID_DISTANCE > (d=distance(positionVectorBoid, pm.get(entities.get(i)).position))) {
 
 					int entityIWith = entities.get(i).getComponent(RenderComponent.class).getWidth();
