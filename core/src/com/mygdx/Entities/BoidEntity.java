@@ -89,6 +89,7 @@ public class BoidEntity extends Entity {
     		        boidR.add(new BoidDistanceComponent());
     		        boidR.add(new BoidMatchVelocityComponent());
     		        boidR.add(new RessourceComponent());
+    		        boidR.setPointOfInterest(pie);
     		        engine.addEntity(boidR);
     		        //heal the boid that collected the cross
     		        this.resetRessources();
