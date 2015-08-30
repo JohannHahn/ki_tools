@@ -46,7 +46,6 @@ public class MovementSystem extends EntitySystem {
 
 	@SuppressWarnings("unchecked")
 	public void addedToEngine(Engine engine) {
-		// TODO: attache family rendercomponent
 		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, VelocityComponent.class, BoidCenterComponent.class,
 						BoidDistanceComponent.class, BoidMatchVelocityComponent.class, RenderComponent.class).get());
 		System.out.println("MovementSystem added");
@@ -114,7 +113,7 @@ public class MovementSystem extends EntitySystem {
 		//rotate to velocity direction
 		float angle = velComp.direction.angle(velComp.vectorVelocity);
 		velComp.direction.rotate(angle);
-		//velComp.direction.nor();
+		velComp.direction.nor();
 	}
 
 	private void updateVectors(BoidEntity entity, PositionComponent position) {		

@@ -148,10 +148,12 @@ public class BoidEntity extends Entity {
 			
 		
 	}
+	
 	public void setTexture(String path)
 	{
 		getComponent(RenderComponent.class).setTexture(new Texture(Gdx.files.external(path)));
 	}
+	
 	public void setRealtivPostion(float x,float y)
 	{
 		System.out.println(x +"/" + y);
@@ -161,10 +163,6 @@ public class BoidEntity extends Entity {
 		
 		System.out.println(pC.position);
 	}
-
-
-
-	
 	
 	public boolean gotHit(){
 		
