@@ -132,8 +132,7 @@ public class ScriptHolder {
 		scriptStatesList.add(State);
 		
 	}
-	private String getRelativPfad(String absoulutPath)
-	{
+	private String getRelativPfad(String absoulutPath){
 		String path;
 		
 		int cut = absoulutPath.indexOf("assets\\") + 7;

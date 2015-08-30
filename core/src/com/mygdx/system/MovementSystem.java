@@ -19,7 +19,6 @@ import com.mygdx.components.FleeComponent;
 import com.mygdx.components.PositionComponent;
 import com.mygdx.components.PursuitComponent;
 import com.mygdx.components.RenderComponent;
-import com.mygdx.components.RessourceComponent;
 import com.mygdx.components.SeekComponent;
 import com.mygdx.components.VelocityComponent;
 import com.mygdx.components.WanderComponent;
@@ -36,7 +35,6 @@ public class MovementSystem extends EntitySystem {
 	private ComponentMapper<PursuitComponent> purMapper = ComponentMapper.getFor(PursuitComponent.class);
 	private ComponentMapper<EvadeComponent> em = ComponentMapper.getFor(EvadeComponent.class);
 	private ComponentMapper<WanderComponent> wm = ComponentMapper.getFor(WanderComponent.class);
-	private ComponentMapper<RessourceComponent> rm = ComponentMapper.getFor(RessourceComponent.class);
 	
 	private int windowWidth;
 	private int windowHeight;
@@ -46,8 +44,8 @@ public class MovementSystem extends EntitySystem {
 		windowHeight = Gdx.graphics.getHeight();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addedToEngine(Engine engine) {
-		// TODO: attache family rendercomponent
 		entities = engine.getEntitiesFor(Family.all(PositionComponent.class, VelocityComponent.class, BoidCenterComponent.class,
 						BoidDistanceComponent.class, BoidMatchVelocityComponent.class, RenderComponent.class).get());
 		System.out.println("MovementSystem added");
@@ -71,7 +69,6 @@ public class MovementSystem extends EntitySystem {
 		EvadeComponent evadeComp = em.get(entity);
 		VelocityComponent velComp = vm.get(entity);
 		WanderComponent wandComp = wm.get(entity);
-		RessourceComponent resComp = rm.get(entity);
 		
 		Vector2 bCenter = entity.getComponent(BoidCenterComponent.class).vectorCenter.cpy();
 		Vector2 bMV = entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.cpy();
@@ -116,7 +113,7 @@ public class MovementSystem extends EntitySystem {
 		//rotate to velocity direction
 		float angle = velComp.direction.angle(velComp.vectorVelocity);
 		velComp.direction.rotate(angle);
-		//velComp.direction.nor();
+		velComp.direction.nor();
 	}
 
 	private void updateVectors(BoidEntity entity, PositionComponent position) {		
@@ -232,11 +229,8 @@ public class MovementSystem extends EntitySystem {
 	
 	private Vector2 calculateVectorSeekFlee(BoidEntity entity, PositionComponent positionComp) {
 		Vector2 result = new Vector2();
-		Vector2 position = positionComp.position;
 		SeekComponent seekComp = sm.get(entity);
 		FleeComponent fleeComp = fm.get(entity);
-		VelocityComponent velComp = vm.get(entity);
-		Vector2 velocity = velComp.vectorVelocity.cpy();
 		Vector2 target;
 		
 		//Seek
@@ -268,16 +262,10 @@ public class MovementSystem extends EntitySystem {
 			
 			//Betrachte nur andere Boids und nur aus dem selben Team
 			if (!entity.equals(currentEntity) && entity.team == currentEntity.team) {
-				//Im Sichtfeld?
-				Vector2 connectionVector = new Vector2(positionComp.position);
-				connectionVector.sub(pm.get(entities.get(i)).position).scl(-1);
-				float angle	= connectionVector.angle(vm.get(entity).direction);
-				boolean inSight = angle < 150 && angle > -150;
 				
 				// near enought?
-				if (currentEntity.sightRadius > distance(positionVectorBoid, pm.get(entities.get(i)).position)) {
+				if (BoidEntity.sightRadius > distance(positionVectorBoid, pm.get(entities.get(i)).position)) {
 					// pvJ = pvJ + b.velocity
-					float d = distance(positionVectorBoid, pm.get(entities.get(i)).position);
 
 					Vector2 entitiesVelocity = entities.get(i).getComponent(VelocityComponent.class).vectorVelocity;
 
@@ -323,15 +311,9 @@ public class MovementSystem extends EntitySystem {
 			BoidEntity currentEntity = (BoidEntity)entities.get(i);
 			
 			//Betrachte nur andere Boids und nur aus dem selben Team			
-			if (!entity.equals(currentEntity) && entity.team == currentEntity.team){				
-				//Im Sichtfeld?
-				Vector2 connectionVector = new Vector2(position.position);
-				connectionVector.sub(pm.get(entities.get(i)).position).scl(-1);
-				float angle	= connectionVector.angle(vm.get(entity).direction);
-				boolean inSight = angle < 150 && angle > -150;
+			if (!entity.equals(currentEntity) && entity.team == currentEntity.team){			
 				
-				// near enought?
-				
+				// near enought?				
 				if (OPTIMAL_BOID_DISTANCE > (d=distance(positionVectorBoid, pm.get(entities.get(i)).position))) {
 
 					int entityIWith = entities.get(i).getComponent(RenderComponent.class).getWidth();
@@ -386,14 +368,8 @@ public class MovementSystem extends EntitySystem {
 				int entityIWith = entities.get(i).getComponent(RenderComponent.class).getWidth();
 				int entityIHeight = entities.get(i).getComponent(RenderComponent.class).getHeight();
 				
-				//Im Sichtfeld?
-				Vector2 connectionVector = new Vector2(position.position);
-				connectionVector.sub(pm.get(entities.get(i)).position).scl(-1);
-				float angle	= connectionVector.angle(vm.get(entity).direction);
-				boolean inSight = angle < 150 && angle > -150;
-				
 				// near enought?
-				if (entity.sightRadius >= (d = distance(positionVectorBoid, pm.get(entities.get(i)).position))) {
+				if (BoidEntity.sightRadius >= (d = distance(positionVectorBoid, pm.get(entities.get(i)).position))) {
 
 					Vector2 diff= new Vector2();
 					diff=sub( pm.get(entities.get(i)).position , positionVectorBoid);
