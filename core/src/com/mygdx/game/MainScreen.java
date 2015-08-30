@@ -63,8 +63,11 @@ public class MainScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// AddBoidEntity
-		if (Gdx.input.isKeyPressed(Keys.B)) {
-			addBoidEntity();
+		if (Gdx.input.isKeyPressed(Keys.R)) {
+			addBoidEntity(BoidEntity.Team.RED);
+		}
+		if (Gdx.input.isKeyPressed(Keys.G)) {
+			addBoidEntity(BoidEntity.Team.GREEN);
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.S)) {
@@ -75,9 +78,9 @@ public class MainScreen implements Screen {
 		engine.update(delta);
 	}
 
-	private void addBoidEntity() {
+	private void addBoidEntity(BoidEntity.Team team) {
 
-		BoidEntity boidR = new BoidEntity(BoidEntity.Team.RED, engine, ScriptHolder.scriptStatesList.get(2));
+		BoidEntity boidR = new BoidEntity(team, engine, ScriptHolder.scriptStatesList.get(2));
 		boidR.add(new PositionComponent(MathUtils.random(0, 600), MathUtils.random(0, 600)));
 		boidR.add(new VelocityComponent());
 		boidR.add(new RenderComponent());

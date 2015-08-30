@@ -1,5 +1,5 @@
 
-name = "Wander"
+name = "Catch Wander"
 
 function init()
 end
@@ -16,9 +16,9 @@ function update(entity)
 		entity:addComponent(name)
 	end	
 	
-	local action = "Evade"
+	local action = "Catch Evade"
 	if entity.team:toString() == "RED" then
-		action = "Pursuit"
+		action = "Catch Pursuit"
 	end
 	
 	if entity:setTarget(entity:searchTarget(), action) then		

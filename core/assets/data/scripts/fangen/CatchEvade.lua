@@ -1,5 +1,5 @@
 
-name = "Evade"
+name = " Catch Evade"
 
 function init()
 end
@@ -16,7 +16,7 @@ function update(entity)
 	
 	if entity:gotHit() then
 		entity:switchTeams()
-		entity:changeStateByName("Pursuit")
+		entity:changeStateByName("Catch Pursuit")
 		entity:resetRessources()
 	end	
 	

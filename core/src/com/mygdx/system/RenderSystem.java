@@ -109,6 +109,7 @@ public class RenderSystem extends EntitySystem {
 				}
 
 			}
+			/*
 			if (Gdx.input.isKeyPressed(Keys.V)) {
 				float Scale = 10;
 
@@ -145,6 +146,7 @@ public class RenderSystem extends EntitySystem {
 				}
 
 			}
+			*/
 			batch.end();
 		}
 	}

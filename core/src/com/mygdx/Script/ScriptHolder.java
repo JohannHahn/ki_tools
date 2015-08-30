@@ -9,6 +9,8 @@ import javax.swing.JFileChooser;
 import org.luaj.vm2.ast.Str;
 
 import com.badlogic.gdx.ai.fsm.State;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.mygdx.Entities.BoidEntity;
 import com.mygdx.States.BoidState;
 import com.mygdx.States.EvadeState;
 import com.mygdx.States.LuaState;
@@ -120,7 +122,9 @@ public class ScriptHolder {
 		ScriptHolder.addBoidState(new EvadeState());
 		ScriptHolder.addBoidState(new PursuitState());
 		ScriptHolder.addBoidState(new WanderState());
-		
+		ScriptHolder.scriptStatesList.add(new LuaState(new LuaScript("data/scripts/fangen/CatchEvade.lua")));
+		ScriptHolder.scriptStatesList.add(new LuaState(new LuaScript("data/scripts/fangen/CatchPursuit.lua")));
+		ScriptHolder.scriptStatesList.add(new LuaState(new LuaScript("data/scripts/fangen/CatchWander.lua")));
 		
 	}
 

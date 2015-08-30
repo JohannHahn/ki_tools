@@ -1,5 +1,5 @@
 
-name = "Pursuit"
+name = "Catch Pursuit"
 function init()
 end
 
@@ -10,7 +10,7 @@ end
 function update(entity)   	
 	
 	if not entity:setTarget(entity:searchTarget(), name) then
-		entity:changeStateByName("Wander")
+		entity:changeStateByName("Catch Wander")
 	end	
 	
 	if entity:checkFuel() then
