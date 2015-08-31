@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.Entities.BoidEntity;
 import com.mygdx.Entities.BoidEntity.Team;
@@ -83,7 +82,7 @@ public class RenderSystem extends EntitySystem {
 					shapeRenderer.identity();
 					shapeRenderer.translate(position.x, position.y, 0);
 					shapeRenderer.rotate(0f, 0f, 1f, rotation);
-					shapeRenderer.triangle(-boid.width / 2f, 0, boid.width / 2, 0, 0, boid.height, fillColor, fillColor,
+					shapeRenderer.triangle(-BoidEntity.width / 2f, 0, BoidEntity.width / 2, 0, 0, BoidEntity.height, fillColor, fillColor,
 							fillColor);
 
 					shapeRenderer.end();
@@ -98,7 +97,7 @@ public class RenderSystem extends EntitySystem {
 				try {
 
 					shapeRenderer.setColor(Color.BLUE);
-					shapeRenderer.circle(0, 0, ((BoidEntity) entity).sightRadius);
+					shapeRenderer.circle(0, 0, BoidEntity.sightRadius);
 					shapeRenderer.setColor(Color.RED);
 					shapeRenderer.circle(0, 0, MovementSystem.OPTIMAL_BOID_DISTANCE);
 				} catch (Exception e) {
@@ -114,9 +113,7 @@ public class RenderSystem extends EntitySystem {
 				float Scale = 10;
 
 				Vector2 v1 = null, v2, v3, v4;
-				if (entity.getComponent(BoidCenterComponent.class) != null) {
-					BoidEntity boid = (BoidEntity) entity;
-					
+				if (entity.getComponent(BoidCenterComponent.class) != null) {					
 					try {
 						v1 = new Vector2(entity.getComponent(BoidCenterComponent.class).vectorCenter.x,
 								entity.getComponent(BoidCenterComponent.class).vectorCenter.y);
@@ -131,12 +128,12 @@ public class RenderSystem extends EntitySystem {
 						shapeRenderer.begin();
 						shapeRenderer.setColor(Color.GREEN);
 						//.clamp(MovementSystem.OPTIMAL_BOID_DISTANCE,MovementSystem.OPTIMAL_BOID_DISTANCE))
-						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v1.scl(Scale));
+						shapeRenderer.line(new Vector2(BoidEntity.width/2,BoidEntity.height/2), v1.scl(Scale));
 						;
 						shapeRenderer.setColor(Color.RED);
-						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v2.scl(Scale));
-						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v3.scl(Scale));
-						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v4.scl(Scale));
+						shapeRenderer.line(new Vector2(BoidEntity.width/2,BoidEntity.height/2), v2.scl(Scale));
+						shapeRenderer.line(new Vector2(BoidEntity.width/2,BoidEntity.height/2), v3.scl(Scale));
+						shapeRenderer.line(new Vector2(BoidEntity.width/2,BoidEntity.height/2), v4.scl(Scale));
 
 					} catch (Exception e) {
 						//if (e.getClass() != ClassCastException.class)

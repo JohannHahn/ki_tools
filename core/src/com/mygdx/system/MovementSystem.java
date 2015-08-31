@@ -138,7 +138,7 @@ public class MovementSystem extends EntitySystem {
 			purComp.vectorPersuit = calculatePursuit(entity).scl(2);
 		}
 		if(evadeComp != null){
-			evadeComp.vectorEvade = calculateEvade(entity).scl(1.1f);
+			evadeComp.vectorEvade = calculateEvade(entity).scl(1.3f);
 		}
 		if(wandComp != null){
 			wandComp.wanderVector = calculateWander(entity).scl(0.1f);
