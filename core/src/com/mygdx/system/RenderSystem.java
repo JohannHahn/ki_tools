@@ -122,21 +122,22 @@ public class RenderSystem extends EntitySystem {
 								entity.getComponent(BoidCenterComponent.class).vectorCenter.y);
 						v2 = new Vector2(entity.getComponent(BoidDistanceComponent.class).vectorDistance.x,
 								entity.getComponent(BoidDistanceComponent.class).vectorDistance.y);
-						v3 = new Vector2(entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.x,
-								entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.y);
-						v4 = new Vector2(entity.getComponent(VelocityComponent.class).vectorVelocity.x,
+						v3 = new Vector2(entity.getComponent(VelocityComponent.class).vectorVelocity.x,
 								entity.getComponent(VelocityComponent.class).vectorVelocity.y);
 					
 						shapeRenderer.setAutoShapeType(true);
 						shapeRenderer.begin();
-						shapeRenderer.setColor(Color.GREEN);
+						//Center
+						shapeRenderer.setColor(Color.OLIVE);
 						//.clamp(MovementSystem.OPTIMAL_BOID_DISTANCE,MovementSystem.OPTIMAL_BOID_DISTANCE))
-						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v1.scl(Scale));
-						;
+						shapeRenderer.line(new Vector2(0,boid.height/2), v1.scl(Scale));
+						//Distance
 						shapeRenderer.setColor(Color.RED);
-						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v2.scl(Scale));
-						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v3.scl(Scale));
-						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v4.scl(Scale));
+						shapeRenderer.line(new Vector2(0,boid.height/2), v2.scl(Scale));
+						//Velocity
+						shapeRenderer.setColor(Color.BLUE);
+						shapeRenderer.line(new Vector2(0,boid.height/2), v3.scl(Scale));
+						
 
 					} catch (Exception e) {
 						//if (e.getClass() != ClassCastException.class)
