@@ -131,7 +131,7 @@ public class RenderSystem extends EntitySystem {
 						//Center
 						shapeRenderer.setColor(Color.OLIVE);
 						//.clamp(MovementSystem.OPTIMAL_BOID_DISTANCE,MovementSystem.OPTIMAL_BOID_DISTANCE))
-						shapeRenderer.line(new Vector2(0,boid.height/2), v1.scl(Scale).rotate(degrees));
+						shapeRenderer.line(new Vector2(0,boid.height/2), v1.scl(Scale).rotate(rotation));
 						//Distance
 						shapeRenderer.setColor(Color.RED);
 						shapeRenderer.line(new Vector2(0,boid.height/2), v2.scl(Scale));
