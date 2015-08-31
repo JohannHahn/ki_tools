@@ -117,15 +117,16 @@ public class RenderSystem extends EntitySystem {
 				if (entity.getComponent(BoidCenterComponent.class) != null) {
 					BoidEntity boid = (BoidEntity) entity;
 					
-					v1 = new Vector2(entity.getComponent(BoidCenterComponent.class).vectorCenter.x,
-							entity.getComponent(BoidCenterComponent.class).vectorCenter.y);
-					v2 = new Vector2(entity.getComponent(BoidDistanceComponent.class).vectorDistance.x,
-							entity.getComponent(BoidDistanceComponent.class).vectorDistance.y);
-					v3 = new Vector2(entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.x,
-							entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.y);
-					v4 = new Vector2(entity.getComponent(VelocityComponent.class).vectorVelocity.x,
-							entity.getComponent(VelocityComponent.class).vectorVelocity.y);
 					try {
+						v1 = new Vector2(entity.getComponent(BoidCenterComponent.class).vectorCenter.x,
+								entity.getComponent(BoidCenterComponent.class).vectorCenter.y);
+						v2 = new Vector2(entity.getComponent(BoidDistanceComponent.class).vectorDistance.x,
+								entity.getComponent(BoidDistanceComponent.class).vectorDistance.y);
+						v3 = new Vector2(entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.x,
+								entity.getComponent(BoidMatchVelocityComponent.class).vectorMatchVelocity.y);
+						v4 = new Vector2(entity.getComponent(VelocityComponent.class).vectorVelocity.x,
+								entity.getComponent(VelocityComponent.class).vectorVelocity.y);
+					
 						shapeRenderer.setAutoShapeType(true);
 						shapeRenderer.begin();
 						shapeRenderer.setColor(Color.GREEN);
@@ -138,8 +139,8 @@ public class RenderSystem extends EntitySystem {
 						shapeRenderer.line(new Vector2(boid.width/2,boid.height/2), v4.scl(Scale));
 
 					} catch (Exception e) {
-						if (e.getClass() != ClassCastException.class)
-							System.out.println(e);
+						//if (e.getClass() != ClassCastException.class)
+							//System.out.println(e);
 					} finally {
 						shapeRenderer.end();
 					}
