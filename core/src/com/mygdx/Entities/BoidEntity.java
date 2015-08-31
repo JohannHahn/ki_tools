@@ -258,10 +258,11 @@ public class BoidEntity extends Entity {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean gotComponent(String name){
-		
 		Class[] classes = {WanderComponent.class, EvadeComponent.class, PursuitComponent.class, SeekComponent.class, FleeComponent.class};
 		for(Class c : classes){
-			if(c.getName().contains(name)){
+			
+			String className = c.getSimpleName().substring(0, c.getSimpleName().indexOf("Component"));
+			if(name.contains(className)){
 				return this.getComponent(c) != null;
 			}
 		}

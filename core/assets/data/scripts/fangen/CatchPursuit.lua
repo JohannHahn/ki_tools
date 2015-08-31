@@ -15,7 +15,7 @@ function update(entity)
 	
 	if entity:checkFuel() then
 		entity:removeComponent("Seek")
-		entity:changeStateByName("Wander")
+		entity:changeStateByName("Catch Wander")
 	end
 	
 end
