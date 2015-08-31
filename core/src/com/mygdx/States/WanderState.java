@@ -34,6 +34,11 @@ public class WanderState extends BoidState{
             boid.stateMachine.changeState(boid.team == Team.GREEN ? new EvadeState() : new PursuitState());               
         }
         
+        if(boid.getComponent(WanderComponent.class) == null)
+        {
+        	boid.add(new WanderComponent());
+        }
+        
         if(BoidState.checkFuel(boid)){
         	boid.remove(SeekComponent.class);
         }

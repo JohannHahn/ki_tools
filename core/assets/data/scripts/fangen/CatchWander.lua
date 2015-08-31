@@ -14,6 +14,7 @@ function update(entity)
 	
 	if not entity:gotComponent(name) then
 		entity:addComponent(name)
+		print(entity:gotComponent(name))
 	end	
 	
 	local action = "Catch Evade"
