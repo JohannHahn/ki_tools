@@ -112,12 +112,11 @@ public class RenderSystem extends EntitySystem {
 			//Shows the Vectors
 			if (Gdx.input.isKeyPressed(Keys.V)) {
 				float Scale = 20;
-				velComp = vm.get(entity);
+			
 				
 				Vector2 v1 = null, v2, v3, v4;
 				if (entity.getComponent(BoidCenterComponent.class) != null) {
 					BoidEntity boid = (BoidEntity) entity;
-					rotation = new Vector2(0, 1).angle(velComp.direction);
 					try {
 						v1 = new Vector2(entity.getComponent(BoidCenterComponent.class).vectorCenter.x,
 								entity.getComponent(BoidCenterComponent.class).vectorCenter.y);
@@ -131,13 +130,13 @@ public class RenderSystem extends EntitySystem {
 						//Center
 						shapeRenderer.setColor(Color.OLIVE);
 						//.clamp(MovementSystem.OPTIMAL_BOID_DISTANCE,MovementSystem.OPTIMAL_BOID_DISTANCE))
-						shapeRenderer.line(new Vector2(0,boid.height/2), v1.scl(Scale).rotate(degrees));
+						shapeRenderer.line(new Vector2(0,boid.height/2), v1.scl(-Scale));
 						//Distance
 						shapeRenderer.setColor(Color.RED);
 						shapeRenderer.line(new Vector2(0,boid.height/2), v2.scl(Scale));
 						//Velocity
 						shapeRenderer.setColor(Color.BLUE);
-						shapeRenderer.line(new Vector2(0,boid.height/2), v3.scl(-Scale).rotate(rotation));
+						shapeRenderer.line(new Vector2(0,boid.height/2), v3.scl(Scale));
 						
 
 					} catch (Exception e) {
